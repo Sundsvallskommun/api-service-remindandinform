@@ -1,0 +1,39 @@
+logging:
+    level:
+        root: INFO
+openapi:
+    name: ${spring.application.name}
+    title: ${spring.application.name}
+    version: '@project.version@'
+reminder:
+    message: 'Hej!%nDet här är en påminnelse från Mina sidor Företag. Du eller någon annan på företaget har gjort en anteckning på ärende %s med påminnelsedatum idag.%nLogga in på https://minasidor.foretagscentersundsvall.se.%n%nHälsningar%nSundsvalls kommun'
+    emailMessage: 'Hej!%n%nDet här är en påminnelse från Mina sidor Företag. Du eller någon annan på företaget har gjort en anteckning med påminnelsedatum idag.%n%nPåminnelse: %s%n%nDet gäller ärende: %s%n%nLogga in och läs mer på: <a href="https://minasidor.foretagscentersundsvall.se">https://minasidor.foretagscentersundsvall.se</a>%n%nVänliga hälsningar,%nSundsvalls kommun'
+    senderEmailAddress: noreply@sundsvall.se
+    senderEmailName: Sundsvalls Kommun
+    senderSmsName: Sundsvall
+    subject: Påminnelse
+sendReminders:
+    cron:
+        expr: 0 0 8 * * ?
+spring:
+    application:
+        name: api-remindandinform
+    datasource:
+        driver-class-name: org.mariadb.jdbc.Driver
+    jpa:
+        open-in-view: false
+        database-platform: org.hibernate.dialect.MariaDB106Dialect
+        properties:
+            javax:
+                persistence:
+                    schema-generation:
+                        database:
+                            action: none
+# Circuit breaker settings
+resilience4j.circuitbreaker:
+        instances:
+            messaging:
+                ignoreExceptions: se.sundsvall.dept44.exception.ClientProblem
+springdoc:
+    swagger-ui:
+        operationsSorter: method

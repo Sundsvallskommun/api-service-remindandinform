@@ -1,0 +1,14 @@
+{
+	"action": "${json-unit.any-string}",
+	"note": "Lorem ipsum 2",
+	"externalCaseId": "externalCaseId2",
+	"caseType": "caseType2",
+	"caseId": "caseId2",
+	"caseLink": "caseLink2",
+	"partyId": "fbfbd90c-4c47-11ec-81d3-0242ac130001",
+	"reminderDate": "2021-12-24",
+	"reminderId": "R-fbfbd90c-4c47-11ec-81d3-0242ac130002",
+	"created":"2021-12-24T00:00:00.001+01:00",
+	"createdBy":"Jultomten"
+}
+  

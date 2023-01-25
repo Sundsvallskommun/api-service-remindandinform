@@ -1,0 +1,43 @@
+integration:
+    messaging:
+        url: http://localhost:${wiremock.server.port:}/api-messaging
+reminder:
+    message: TestSmsMessageÅÄÖåäö
+    emailMessage: TestEmailMessageÅÄÖåäö
+    senderEmailAddress: TestEmailAddressÅÄÖåäö
+    senderEmailName: TestEmailNameÅÄÖåäö
+    senderSmsName: TestSmsNameÅÄÖåäö
+    subject: TestSubjectÅÄÖåäö
+spring:
+    datasource:
+        driver-class-name: org.testcontainers.jdbc.ContainerDatabaseDriver
+        url: jdbc:tc:mariadb:10.6.4:///
+    jpa:
+        properties:
+            hibernate:
+                format_sql: true
+                hbm2ddl:
+                    schema-generation:
+                        script:
+                            append: false
+            javax:
+                persistence:
+                    schema-generation:
+                        create-source: metadata
+                        database:
+                            action: update
+                        scripts:
+                            action: create
+                            create-target: target/database/generated-schema.sql
+    security:
+        oauth2:
+            client:
+                provider:
+                    messaging:
+                        token-uri: http://localhost:${wiremock.server.port:}/api-messaging/token
+                registration:
+                    messaging:
+                        authorization-grant-type: client_credentials
+                        client-id: the-client-id
+                        client-secret: the-client-secret
+                        provider: messaging

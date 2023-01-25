@@ -1,0 +1,53 @@
+version: "3"
+services:
+  ms-remindandinform-sandbox:
+    # TODO add correct name matching nexus repository also add build number parameter as suffix
+    container_name: ms-remindandinform-sandbox
+    image: 'ms-remindandinform:sandbox'
+    network_mode: bridge
+    links:
+      - 'ms-remindandinform-wiremock-sandbox:wiremock'
+      - 'ms-remindandinform-db-sandbox:mariadb'
+    restart: always
+    build:
+      context: ../../..
+      dockerfile: src/main/docker/Dockerfile
+    ports:
+      - '9080:8080'
+    environment:
+      INTEGRATION_MESSAGING_URL: 'http://wiremock:8080/api-messaging'
+      SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_MESSAGING_TOKEN-URI: 'http://wiremock:8080/api-gateway/token'
+      SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_MESSAGING_AUTHORIZATION-GRANT-TYPE: 'client_credentials'
+      SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_MESSAGING_CLIENT-ID: 'clientId'
+      SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_MESSAGING_CLIENT-SECRET: 'clientSecret'
+      SPRING_PROFILES_ACTIVE: 'sandbox'
+      SPRING_JPA_HIBERNATE_DDL_AUTO: 'update'
+      SPRING_DATASOURCE_URL: 'jdbc:mariadb://mariadb:3306/dev-reminder'
+      SPRING_DATASOURCE_USERNAME: 'dev-user'
+      SPRING_DATASOURCE_PASSWORD: 'dev-password'
+
+    depends_on:
+      - ms-remindandinform-db-sandbox
+      - ms-remindandinform-wiremock-sandbox
+
+  ms-remindandinform-db-sandbox:
+    container_name: ms-remindandinform-db-sandbox
+    image: 'mariadb:10.6.4'
+    network_mode: bridge
+    environment:
+      MARIADB_RANDOM_ROOT_PASSWORD : 'yes'
+      MARIADB_DATABASE: 'dev-reminder'
+      MARIADB_USER: 'dev-user'
+      MARIADB_PASSWORD: 'dev-password'
+    expose:
+      - '3306'
+
+  ms-remindandinform-wiremock-sandbox:
+    container_name: ms-remindandinform-wiremock-sandbox
+    image: wiremock/wiremock
+    network_mode: bridge
+    restart: always
+    expose:
+      - '8080'
+    volumes:
+      - $PWD/src/test/resources/sandbox:/home/wiremock
