@@ -7,9 +7,12 @@
 			{
 				"equalToJson": {
 					"messages" : [ {
+						
 						"party" : {
-							"partyId" : "fbfbd90c-4c47-11ec-81d3-0242ac130003"
+							"partyId" : "fbfbd90c-4c47-11ec-81d3-0242ac130003",
+							"externalReferences" : [ ]
 						},
+						"headers": [],
 						"sender" : {
 							"sms" : {
 								"name" : "TestSmsNameÅÄÖåäö"
@@ -24,8 +27,10 @@
 						"htmlMessage" : "VGVzdEVtYWlsTWVzc2FnZcOFw4TDlsOlw6TDtg=="
 					}, {
 						"party" : {
-							"partyId" : "fbfbd90c-4c47-11ec-81d3-0242ac130001"
+							"partyId" : "fbfbd90c-4c47-11ec-81d3-0242ac130001",
+							"externalReferences" : [ ]
 						},
+						"headers": [],
 						"sender" : {
 							"sms" : {
 								"name" : "TestSmsNameÅÄÖåäö"
@@ -40,8 +45,10 @@
 						"htmlMessage" : "VGVzdEVtYWlsTWVzc2FnZcOFw4TDlsOlw6TDtg=="
 					}, {
 						"party" : {
-							"partyId" : "fbfbd90c-4c47-11ec-81d3-0242ac130002"
+							"partyId" : "fbfbd90c-4c47-11ec-81d3-0242ac130002",
+							"externalReferences" : [ ]
 						},
+						"headers": [],
 						"sender" : {
 							"sms" : {
 								"name" : "TestSmsNameÅÄÖåäö"
