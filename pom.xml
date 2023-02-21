@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>se.sundsvall.dept44</groupId>
 		<artifactId>dept44-service-parent</artifactId>
-		<version>1.26</version>
+		<version>1.28</version>
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>se.sundsvall</groupId>
@@ -16,7 +16,7 @@
 	<description>Service for handling and sending reminders</description>
 	<properties>
 		<testcontainers.version>1.17.6</testcontainers.version>
-		<openapi-generator-maven-plugin>6.3.0</openapi-generator-maven-plugin>
+		<openapi-generator-maven-plugin>6.4.0</openapi-generator-maven-plugin>
 		<generated-sources-path>${project.build.directory}/generated-sources</generated-sources-path>
 		<generated-sources-java-path>src/main/java</generated-sources-java-path>
 		<!-- CI/CD properties -->
