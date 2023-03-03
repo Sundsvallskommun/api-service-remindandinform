@@ -18,9 +18,9 @@ public interface ApiMessagingClient {
 	/**
 	 * Send messages as email or SMS to list of recipients.
 	 * 
-	 * @param messageRequest with a list of messages.
-	 * @return a MessageStatusResponse
-	 * @throws org.zalando.problem.ThrowableProblem
+	 * @param messageRequest with a list of messages
+	 * @return messageStatusResponse containing status for transaction
+	 * @throws org.zalando.problem.ThrowableProblem when called service responds with error code
 	 */
 	@PostMapping(path = "/messages", produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
 	MessageStatusResponse sendMessage(@RequestBody MessageRequest messageRequest) ;
