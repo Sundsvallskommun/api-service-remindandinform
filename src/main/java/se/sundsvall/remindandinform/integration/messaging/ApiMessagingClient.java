@@ -1,19 +1,18 @@
 package se.sundsvall.remindandinform.integration.messaging;
 
-import generated.se.sundsvall.messaging.MessageRequest;
-import generated.se.sundsvall.messaging.MessageStatusResponse;
-import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
-import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import se.sundsvall.remindandinform.integration.messaging.configuration.MessagingConfiguration;
-
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static se.sundsvall.remindandinform.integration.messaging.configuration.MessagingConfiguration.CLIENT_REGISTRATION_ID;
 
+import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+
+import generated.se.sundsvall.messaging.MessageRequest;
+import generated.se.sundsvall.messaging.MessageStatusResponse;
+import se.sundsvall.remindandinform.integration.messaging.configuration.MessagingConfiguration;
+
 
 @FeignClient(name = CLIENT_REGISTRATION_ID, url = "${integration.messaging.url}", configuration = MessagingConfiguration.class)
-@CircuitBreaker(name = CLIENT_REGISTRATION_ID)
 public interface ApiMessagingClient {
 
 	/**
