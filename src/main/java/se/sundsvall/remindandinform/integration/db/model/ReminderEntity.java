@@ -1,5 +1,12 @@
 package se.sundsvall.remindandinform.integration.db.model;
 
+import java.io.Serializable;
+import java.time.LocalDate;
+import java.time.OffsetDateTime;
+import java.time.ZoneId;
+import java.time.temporal.ChronoUnit;
+import java.util.Objects;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -10,11 +17,6 @@ import javax.persistence.Lob;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
-import java.io.Serializable;
-import java.time.LocalDate;
-import java.time.OffsetDateTime;
-import java.time.temporal.ChronoUnit;
-import java.util.Objects;
 
 @Entity
 @Table(name = "reminder", indexes = {
@@ -75,12 +77,12 @@ public class ReminderEntity implements Serializable {
 
 	@PrePersist
 	protected void onCreate() {
-		created = OffsetDateTime.now().truncatedTo(ChronoUnit.MILLIS);
+		created = OffsetDateTime.now(ZoneId.systemDefault()).truncatedTo(ChronoUnit.MILLIS);
 	}
 
 	@PreUpdate
 	protected void onUpdate() {
-		modified = OffsetDateTime.now().truncatedTo(ChronoUnit.MILLIS);
+		modified = OffsetDateTime.now(ZoneId.systemDefault()).truncatedTo(ChronoUnit.MILLIS);
 	}
 
 	public long getId() {
