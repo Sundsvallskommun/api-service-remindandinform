@@ -6,62 +6,59 @@
 		"bodyPatterns": [
 			{
 				"equalToJson": {
-					"messages" : [ {
-						
-						"party" : {
-							"partyId" : "fbfbd90c-4c47-11ec-81d3-0242ac130003",
-							"externalReferences" : [ ]
-						},
-						"headers": [],
-						"sender" : {
-							"sms" : {
-								"name" : "TestSmsNameÅÄÖåäö"
+					"messages": [
+						{
+							"party": {
+								"partyId": "fbfbd90c-4c47-11ec-81d3-0242ac130003"
 							},
-							"email" : {
-								"name" : "TestEmailNameÅÄÖåäö",
-								"address" : "TestEmailAddressÅÄÖåäö"
-							}
-						},
-						"subject" : "TestSubjectÅÄÖåäö",
-						"message" : "TestSmsMessageÅÄÖåäö",
-						"htmlMessage" : "VGVzdEVtYWlsTWVzc2FnZcOFw4TDlsOlw6TDtg=="
-					}, {
-						"party" : {
-							"partyId" : "fbfbd90c-4c47-11ec-81d3-0242ac130001",
-							"externalReferences" : [ ]
-						},
-						"headers": [],
-						"sender" : {
-							"sms" : {
-								"name" : "TestSmsNameÅÄÖåäö"
+							"sender": {
+								"sms": {
+									"name": "TestSmsNameÅÄÖåäö"
+								},
+								"email": {
+									"name": "TestEmailNameÅÄÖåäö",
+									"address": "TestEmailAddressÅÄÖåäö"
+								}
 							},
-							"email" : {
-								"name" : "TestEmailNameÅÄÖåäö",
-								"address" : "TestEmailAddressÅÄÖåäö"
-							}
+							"subject": "TestSubjectÅÄÖåäö",
+							"message": "TestSmsMessageÅÄÖåäö",
+							"htmlMessage": "VGVzdEVtYWlsTWVzc2FnZcOFw4TDlsOlw6TDtg=="
 						},
-						"subject" : "TestSubjectÅÄÖåäö",
-						"message" : "TestSmsMessageÅÄÖåäö",
-						"htmlMessage" : "VGVzdEVtYWlsTWVzc2FnZcOFw4TDlsOlw6TDtg=="
-					}, {
-						"party" : {
-							"partyId" : "fbfbd90c-4c47-11ec-81d3-0242ac130002",
-							"externalReferences" : [ ]
-						},
-						"headers": [],
-						"sender" : {
-							"sms" : {
-								"name" : "TestSmsNameÅÄÖåäö"
+						{
+							"party": {
+								"partyId": "fbfbd90c-4c47-11ec-81d3-0242ac130001"
 							},
-							"email" : {
-								"name" : "TestEmailNameÅÄÖåäö",
-								"address" : "TestEmailAddressÅÄÖåäö"
-							}
+							"sender": {
+								"sms": {
+									"name": "TestSmsNameÅÄÖåäö"
+								},
+								"email": {
+									"name": "TestEmailNameÅÄÖåäö",
+									"address": "TestEmailAddressÅÄÖåäö"
+								}
+							},
+							"subject": "TestSubjectÅÄÖåäö",
+							"message": "TestSmsMessageÅÄÖåäö",
+							"htmlMessage": "VGVzdEVtYWlsTWVzc2FnZcOFw4TDlsOlw6TDtg=="
 						},
-						"subject" : "TestSubjectÅÄÖåäö",
-						"message" : "TestSmsMessageÅÄÖåäö",
-						"htmlMessage" : "VGVzdEVtYWlsTWVzc2FnZcOFw4TDlsOlw6TDtg=="
-					} ]
+						{
+							"party": {
+								"partyId": "fbfbd90c-4c47-11ec-81d3-0242ac130002"
+							},
+							"sender": {
+								"sms": {
+									"name": "TestSmsNameÅÄÖåäö"
+								},
+								"email": {
+									"name": "TestEmailNameÅÄÖåäö",
+									"address": "TestEmailAddressÅÄÖåäö"
+								}
+							},
+							"subject": "TestSubjectÅÄÖåäö",
+							"message": "TestSmsMessageÅÄÖåäö",
+							"htmlMessage": "VGVzdEVtYWlsTWVzc2FnZcOFw4TDlsOlw6TDtg=="
+						}
+					]
 				}
 			}
 		]
