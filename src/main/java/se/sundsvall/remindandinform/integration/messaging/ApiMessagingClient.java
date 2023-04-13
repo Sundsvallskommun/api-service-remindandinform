@@ -8,20 +8,19 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import generated.se.sundsvall.messaging.MessageRequest;
-import generated.se.sundsvall.messaging.MessageStatusResponse;
+import generated.se.sundsvall.messaging.MessageResult;
 import se.sundsvall.remindandinform.integration.messaging.configuration.MessagingConfiguration;
-
 
 @FeignClient(name = CLIENT_REGISTRATION_ID, url = "${integration.messaging.url}", configuration = MessagingConfiguration.class)
 public interface ApiMessagingClient {
 
 	/**
 	 * Send messages as email or SMS to list of recipients.
-	 * 
+	 *
 	 * @param messageRequest with a list of messages
 	 * @return messageStatusResponse containing status for transaction
 	 * @throws org.zalando.problem.ThrowableProblem when called service responds with error code
 	 */
-	@PostMapping(path = "/messages", produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
-	MessageStatusResponse sendMessage(@RequestBody MessageRequest messageRequest) ;
+	@PostMapping(path = "/messages?async=true", produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
+	MessageResult sendMessage(@RequestBody MessageRequest messageRequest);
 }

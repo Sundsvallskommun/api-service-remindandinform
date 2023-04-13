@@ -1,27 +1,30 @@
 package se.sundsvall.remindandinform.service.mapper;
 
+import static java.util.UUID.randomUUID;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.when;
+
+import java.time.LocalDate;
+import java.util.List;
+
+import javax.xml.bind.DatatypeConverter;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+
 import se.sundsvall.remindandinform.api.model.Reminder;
 import se.sundsvall.remindandinform.api.model.ReminderRequest;
 import se.sundsvall.remindandinform.api.model.UpdateReminderRequest;
 import se.sundsvall.remindandinform.integration.db.model.ReminderEntity;
 import se.sundsvall.remindandinform.service.mapper.configuration.ReminderMessageProperties;
 
-import javax.xml.bind.DatatypeConverter;
-import java.time.LocalDate;
-import java.util.List;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.when;
-
 @ExtendWith(MockitoExtension.class)
 class ReminderMapperTest {
 
 	@Mock
-    private ReminderMessageProperties reminderMessagePropertiesMock;
+	private ReminderMessageProperties reminderMessagePropertiesMock;
 
 	@Test
 	void toReminderSuccess() {
@@ -157,7 +160,7 @@ class ReminderMapperTest {
 			.withCaseId("caseId")
 			.withAction("action")
 			.withNote("note")
-			.withPartyId("partyId");
+			.withPartyId(randomUUID().toString());
 		when(reminderMessagePropertiesMock.getMessage()).thenReturn("message");
 		when(reminderMessagePropertiesMock.getEmailMessage()).thenReturn("emailMessage");
 		when(reminderMessagePropertiesMock.getSubject()).thenReturn("subject");
@@ -167,9 +170,9 @@ class ReminderMapperTest {
 
 		final var message = ReminderMapper.toMessage(reminder, reminderMessagePropertiesMock);
 
-		assertThat(message.getParty().getPartyId()).isEqualTo(reminder.getPartyId());
+		assertThat(message.getParty().getPartyId().toString()).isEqualTo(reminder.getPartyId());
 		assertThat(message.getMessage()).isEqualTo("message");
-		//htmlMessage is Base64Encoded
+		// htmlMessage is Base64Encoded
 		assertThat(new String(DatatypeConverter.parseBase64Binary((message.getHtmlMessage())))).isEqualTo("emailMessage");
 		assertThat(message.getSubject()).isEqualTo("subject");
 		assertThat(message.getSender().getEmail().getName()).isEqualTo("email-name");
