@@ -3,6 +3,11 @@
 	"request": {
 		"urlPath": "/api-messaging/messages",
 		"method": "POST",
+        "queryParameters": {
+            "async": {
+                "equalTo": "true"
+            }
+        },
 		"bodyPatterns": [
 			{
 				"equalToJson": {

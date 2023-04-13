@@ -1,30 +1,32 @@
 package se.sundsvall.remindandinform.service.mapper;
 
+import static java.lang.String.format;
+import static java.util.Optional.ofNullable;
+
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
+import java.util.List;
+import java.util.Objects;
+import java.util.UUID;
+
+import org.springframework.web.util.HtmlUtils;
+
 import generated.se.sundsvall.messaging.Email;
 import generated.se.sundsvall.messaging.Message;
-import generated.se.sundsvall.messaging.Party;
-import generated.se.sundsvall.messaging.Sender;
+import generated.se.sundsvall.messaging.MessageParty;
+import generated.se.sundsvall.messaging.MessageSender;
 import generated.se.sundsvall.messaging.Sms;
-import org.springframework.web.util.HtmlUtils;
 import se.sundsvall.remindandinform.api.model.Reminder;
 import se.sundsvall.remindandinform.api.model.ReminderRequest;
 import se.sundsvall.remindandinform.api.model.UpdateReminderRequest;
 import se.sundsvall.remindandinform.integration.db.model.ReminderEntity;
 import se.sundsvall.remindandinform.service.mapper.configuration.ReminderMessageProperties;
 
-import java.nio.charset.StandardCharsets;
-import java.util.Base64;
-import java.util.List;
-import java.util.Objects;
-
-import static java.lang.String.format;
-import static java.util.Optional.ofNullable;
-
 public class ReminderMapper {
 
 	private ReminderMapper() {}
 
-	public static Reminder toReminder(ReminderEntity reminderEntity) {
+	public static Reminder toReminder(final ReminderEntity reminderEntity) {
 		return Reminder.create()
 			.withAction(reminderEntity.getAction())
 			.withCaseId(reminderEntity.getCaseId())
@@ -41,7 +43,7 @@ public class ReminderMapper {
 			.withReminderId(reminderEntity.getReminderId());
 	}
 
-	public static ReminderEntity toReminderEntity(ReminderRequest reminderRequest, String reminderId) {
+	public static ReminderEntity toReminderEntity(final ReminderRequest reminderRequest, final String reminderId) {
 		final var reminderEntity = new ReminderEntity();
 		reminderEntity.setReminderId(reminderId);
 		reminderEntity.setPartyId(reminderRequest.getPartyId());
@@ -57,7 +59,7 @@ public class ReminderMapper {
 		return reminderEntity;
 	}
 
-	public static ReminderEntity toReminderEntity(UpdateReminderRequest updateReminderRequest, String reminderId) {
+	public static ReminderEntity toReminderEntity(final UpdateReminderRequest updateReminderRequest, final String reminderId) {
 		final var reminderEntity = new ReminderEntity();
 		reminderEntity.setReminderId(reminderId);
 		reminderEntity.setPartyId(updateReminderRequest.getPartyId());
@@ -73,7 +75,7 @@ public class ReminderMapper {
 		return reminderEntity;
 	}
 
-	public static ReminderEntity toMergedReminderEntity(ReminderEntity oldEntity, ReminderEntity newEntity) {
+	public static ReminderEntity toMergedReminderEntity(final ReminderEntity oldEntity, final ReminderEntity newEntity) {
 		ofNullable(newEntity.getPartyId()).ifPresent(oldEntity::setPartyId);
 		ofNullable(newEntity.getCaseId()).ifPresent(oldEntity::setCaseId);
 		ofNullable(newEntity.getCaseType()).ifPresent(oldEntity::setCaseType);
@@ -84,22 +86,22 @@ public class ReminderMapper {
 		ofNullable(newEntity.getReminderDate()).ifPresent(oldEntity::setReminderDate);
 		ofNullable(newEntity.getCreatedBy()).ifPresent(oldEntity::setCreatedBy);
 		ofNullable(newEntity.getModifiedBy()).ifPresent(oldEntity::setModifiedBy);
-		
+
 		return oldEntity;
 	}
 
-	public static List<Reminder> toReminders(List<ReminderEntity> reminderEntities) {
+	public static List<Reminder> toReminders(final List<ReminderEntity> reminderEntities) {
 		return reminderEntities.stream().filter(Objects::nonNull)
 			.map(ReminderMapper::toReminder)
 			.toList();
 	}
 
-	public static Message toMessage(Reminder reminder, ReminderMessageProperties reminderMessageProperties) {
+	public static Message toMessage(final Reminder reminder, final ReminderMessageProperties reminderMessageProperties) {
 
 		final var messageText = format(reminderMessageProperties.getMessage(), reminder.getCaseId());
 		final var emailMessageText = format(decodeSpecialChars(reminderMessageProperties.getEmailMessage()), HtmlUtils.htmlEscape(reminder.getAction()), reminder.getCaseId());
 
-		final var sender = new Sender().email(toEmail(reminderMessageProperties.getSenderEmailName(), reminderMessageProperties.getSenderEmailAddress()))
+		final var sender = new MessageSender().email(toEmail(reminderMessageProperties.getSenderEmailName(), reminderMessageProperties.getSenderEmailAddress()))
 			.sms(toSms(reminderMessageProperties.getSenderSmsName()));
 
 		return new Message()
@@ -110,23 +112,23 @@ public class ReminderMapper {
 			.subject(reminderMessageProperties.getSubject());
 	}
 
-	private static Email toEmail(String senderEmailName, String senderEmailAddress) {
+	private static Email toEmail(final String senderEmailName, final String senderEmailAddress) {
 		return new Email()
-				.name(senderEmailName)
-				.address(senderEmailAddress);
+			.name(senderEmailName)
+			.address(senderEmailAddress);
 	}
 
-	private static Sms toSms(String senderSmsName) {
+	private static Sms toSms(final String senderSmsName) {
 		return new Sms()
-				.name(senderSmsName);
+			.name(senderSmsName);
 	}
 
-	private static Party toParty(String partyId) {
-		return new Party()
-				.partyId(partyId);
+	private static MessageParty toParty(final String partyId) {
+		return new MessageParty()
+			.partyId(UUID.fromString(partyId));
 	}
 
-	private static String decodeSpecialChars(String stringToConvert) {
+	private static String decodeSpecialChars(final String stringToConvert) {
 		return stringToConvert.replace("%n", "<br>");
 	}
 }
