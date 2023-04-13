@@ -1,34 +1,38 @@
 package se.sundsvall.remindandinform.service.logic;
 
-import generated.se.sundsvall.messaging.MessageStatusResponse;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
-import se.sundsvall.remindandinform.integration.db.ReminderRepository;
-import se.sundsvall.remindandinform.integration.db.model.ReminderEntity;
-import se.sundsvall.remindandinform.integration.messaging.ApiMessagingClient;
-import se.sundsvall.remindandinform.service.mapper.configuration.ReminderMessageProperties;
-
-import java.time.LocalDate;
-import java.util.Collections;
-import java.util.List;
-
-import static generated.se.sundsvall.messaging.MessageStatusResponse.StatusEnum.FAILED;
-import static generated.se.sundsvall.messaging.MessageStatusResponse.StatusEnum.SENT;
+import static generated.se.sundsvall.messaging.MessageStatus.SENT;
+import static generated.se.sundsvall.messaging.MessageType.MESSAGE;
+import static java.util.UUID.randomUUID;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.time.LocalDate;
+import java.util.Collections;
+import java.util.List;
+import java.util.UUID;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import generated.se.sundsvall.messaging.DeliveryResult;
+import generated.se.sundsvall.messaging.MessageResult;
+import se.sundsvall.remindandinform.integration.db.ReminderRepository;
+import se.sundsvall.remindandinform.integration.db.model.ReminderEntity;
+import se.sundsvall.remindandinform.integration.messaging.ApiMessagingClient;
+import se.sundsvall.remindandinform.service.mapper.configuration.ReminderMessageProperties;
+
 @ExtendWith(MockitoExtension.class)
 class SendRemindersLogicTest {
 
-	private static final String partyId1 = "partyId1";
-	private static final String partyId2 = "partyId2";
+	private static final UUID partyId1 = UUID.randomUUID();
+	private static final UUID partyId2 = UUID.randomUUID();
 	private static final String reminderId1 = "reminderId1";
 	private static final String reminderId2 = "reminderId2";
 	private static final String action1 = "action1";
@@ -53,19 +57,17 @@ class SendRemindersLogicTest {
 	@InjectMocks
 	private SendRemindersLogic sendRemindersLogic;
 
-
-
 	@BeforeEach
 	void setup() {
 		// Parameters
 		reminderEntity1.setReminderId(reminderId1);
-		reminderEntity1.setPartyId(partyId1);
+		reminderEntity1.setPartyId(partyId1.toString());
 		reminderEntity1.setAction(action1);
 		reminderEntity1.setCaseId(caseId1);
 		reminderEntity1.setCaseLink(caseLink1);
 
 		reminderEntity2.setReminderId(reminderId2);
-		reminderEntity2.setPartyId(partyId2);
+		reminderEntity2.setPartyId(partyId2.toString());
 		reminderEntity2.setAction(action2);
 		reminderEntity2.setCaseId(caseId2);
 		reminderEntity2.setCaseLink(caseLink2);
@@ -78,7 +80,7 @@ class SendRemindersLogicTest {
 
 		when(reminderRepositoryMock.findByReminderDateLessThanEqualAndSentFalse(LocalDate.now())).thenReturn(List.of(reminderEntity1, reminderEntity2));
 
-		when(apiMessagingClientMock.sendMessage(any())).thenReturn(new MessageStatusResponse().status(SENT));
+		when(apiMessagingClientMock.sendMessage(any())).thenReturn(new MessageResult().deliveries(List.of(new DeliveryResult().status(SENT).messageType(MESSAGE))));
 
 		sendRemindersLogic.sendReminders();
 
@@ -104,7 +106,7 @@ class SendRemindersLogicTest {
 
 		when(reminderRepositoryMock.findByReminderDateLessThanEqualAndSentFalse(LocalDate.now())).thenReturn(List.of(reminderEntity1, reminderEntity2));
 
-		when(apiMessagingClientMock.sendMessage(any())).thenReturn(new MessageStatusResponse().status(FAILED).messageId("messageId"));
+		when(apiMessagingClientMock.sendMessage(any())).thenReturn(new MessageResult().messageId(randomUUID()).deliveries(List.of(new DeliveryResult().status(SENT).messageType(MESSAGE))));
 
 		sendRemindersLogic.sendReminders();
 
