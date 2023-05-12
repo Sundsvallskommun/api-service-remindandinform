@@ -91,7 +91,7 @@ public class ReminderEntity implements Serializable {
 		return id;
 	}
 
-	public void setId(final long id) {
+	public void setId(long id) {
 		this.id = id;
 	}
 
@@ -99,7 +99,7 @@ public class ReminderEntity implements Serializable {
 		return reminderId;
 	}
 
-	public void setReminderId(final String reminderId) {
+	public void setReminderId(String reminderId) {
 		this.reminderId = reminderId;
 	}
 
@@ -107,7 +107,7 @@ public class ReminderEntity implements Serializable {
 		return partyId;
 	}
 
-	public void setPartyId(final String partyId) {
+	public void setPartyId(String partyId) {
 		this.partyId = partyId;
 	}
 
@@ -115,7 +115,7 @@ public class ReminderEntity implements Serializable {
 		return action;
 	}
 
-	public void setAction(final String action) {
+	public void setAction(String action) {
 		this.action = action;
 	}
 
@@ -123,7 +123,7 @@ public class ReminderEntity implements Serializable {
 		return note;
 	}
 
-	public void setNote(final String note) {
+	public void setNote(String note) {
 		this.note = note;
 	}
 
@@ -131,7 +131,7 @@ public class ReminderEntity implements Serializable {
 		return caseId;
 	}
 
-	public void setCaseId(final String caseId) {
+	public void setCaseId(String caseId) {
 		this.caseId = caseId;
 	}
 
@@ -139,7 +139,7 @@ public class ReminderEntity implements Serializable {
 		return caseLink;
 	}
 
-	public void setCaseLink(final String caseLink) {
+	public void setCaseLink(String caseLink) {
 		this.caseLink = caseLink;
 	}
 
@@ -147,7 +147,7 @@ public class ReminderEntity implements Serializable {
 		return externalCaseId;
 	}
 
-	public void setExternalCaseId(final String externalCaseId) {
+	public void setExternalCaseId(String externalCaseId) {
 		this.externalCaseId = externalCaseId;
 	}
 
@@ -155,7 +155,7 @@ public class ReminderEntity implements Serializable {
 		return caseType;
 	}
 
-	public void setCaseType(final String caseType) {
+	public void setCaseType(String caseType) {
 		this.caseType = caseType;
 	}
 
@@ -163,7 +163,7 @@ public class ReminderEntity implements Serializable {
 		return reminderDate;
 	}
 
-	public void setReminderDate(final LocalDate reminderDate) {
+	public void setReminderDate(LocalDate reminderDate) {
 		this.reminderDate = reminderDate;
 	}
 
@@ -171,7 +171,7 @@ public class ReminderEntity implements Serializable {
 		return sent;
 	}
 
-	public void setSent(final boolean sent) {
+	public void setSent(boolean sent) {
 		this.sent = sent;
 	}
 
@@ -179,7 +179,7 @@ public class ReminderEntity implements Serializable {
 		return created;
 	}
 
-	public void setCreated(final OffsetDateTime created) {
+	public void setCreated(OffsetDateTime created) {
 		this.created = created;
 	}
 
@@ -187,7 +187,7 @@ public class ReminderEntity implements Serializable {
 		return createdBy;
 	}
 
-	public void setCreatedBy(final String createdBy) {
+	public void setCreatedBy(String createdBy) {
 		this.createdBy = createdBy;
 	}
 
@@ -195,7 +195,7 @@ public class ReminderEntity implements Serializable {
 		return modified;
 	}
 
-	public void setModified(final OffsetDateTime modified) {
+	public void setModified(OffsetDateTime modified) {
 		this.modified = modified;
 	}
 
@@ -203,7 +203,7 @@ public class ReminderEntity implements Serializable {
 		return modifiedBy;
 	}
 
-	public void setModifiedBy(final String modifiedBy) {
+	public void setModifiedBy(String modifiedBy) {
 		this.modifiedBy = modifiedBy;
 	}
 
@@ -213,7 +213,7 @@ public class ReminderEntity implements Serializable {
 	}
 
 	@Override
-	public boolean equals(final Object obj) {
+	public boolean equals(Object obj) {
 		if (this == obj) {
 			return true;
 		}

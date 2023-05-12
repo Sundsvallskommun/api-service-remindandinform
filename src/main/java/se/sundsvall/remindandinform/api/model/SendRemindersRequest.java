@@ -23,11 +23,11 @@ public class SendRemindersRequest {
 		return reminderDate;
 	}
 
-	public void setReminderDate(final LocalDate reminderDate) {
+	public void setReminderDate(LocalDate reminderDate) {
 		this.reminderDate = reminderDate;
 	}
 
-	public SendRemindersRequest withReminderDate(final LocalDate reminderDate) {
+	public SendRemindersRequest withReminderDate(LocalDate reminderDate) {
 		this.reminderDate = reminderDate;
 		return this;
 	}
@@ -38,7 +38,7 @@ public class SendRemindersRequest {
 	}
 
 	@Override
-	public boolean equals(final Object o) {
+	public boolean equals(Object o) {
 		if (this == o) {
 			return true;
 		}
