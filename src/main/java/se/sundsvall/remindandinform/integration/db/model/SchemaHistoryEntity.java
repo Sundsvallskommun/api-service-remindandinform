@@ -1,12 +1,13 @@
 package se.sundsvall.remindandinform.integration.db.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
 import java.io.Serializable;
 import java.time.OffsetDateTime;
 import java.util.Objects;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "schema_history")
@@ -49,23 +50,24 @@ public class SchemaHistoryEntity implements Serializable {
 	}
 
 	@Override
-	public int hashCode() { return Objects.hash(applied, comment, schemaVersion); }
+	public int hashCode() {
+		return Objects.hash(applied, comment, schemaVersion);
+	}
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
+		if (this == obj) {
 			return true;
-		if (obj == null)
+		}
+		if (!(obj instanceof SchemaHistoryEntity other)) {
 			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		SchemaHistoryEntity other = (SchemaHistoryEntity) obj;
+		}
 		return Objects.equals(applied, other.applied) && Objects.equals(comment, other.comment) && Objects.equals(schemaVersion, other.schemaVersion);
 	}
 
 	@Override
 	public String toString() {
-		StringBuilder builder = new StringBuilder();
+		final StringBuilder builder = new StringBuilder();
 		builder.append("SchemaHistoryEntity [schemaVersion=").append(schemaVersion).append(", comment=").append(comment).append(", applied=").append(applied).append("]");
 		return builder.toString();
 	}

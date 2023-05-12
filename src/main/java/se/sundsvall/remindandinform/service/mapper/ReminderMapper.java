@@ -91,7 +91,8 @@ public class ReminderMapper {
 	}
 
 	public static List<Reminder> toReminders(final List<ReminderEntity> reminderEntities) {
-		return reminderEntities.stream().filter(Objects::nonNull)
+		return reminderEntities.stream()
+			.filter(Objects::nonNull)
 			.map(ReminderMapper::toReminder)
 			.toList();
 	}

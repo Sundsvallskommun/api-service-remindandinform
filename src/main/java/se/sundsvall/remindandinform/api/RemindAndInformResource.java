@@ -5,12 +5,11 @@ import static org.springframework.http.HttpHeaders.LOCATION;
 import static org.springframework.http.MediaType.ALL_VALUE;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.http.MediaType.APPLICATION_PROBLEM_JSON_VALUE;
+import static org.springframework.http.ResponseEntity.created;
+import static org.springframework.http.ResponseEntity.noContent;
+import static org.springframework.http.ResponseEntity.ok;
 
 import java.util.List;
-
-import javax.validation.Valid;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -35,6 +34,9 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import se.sundsvall.dept44.common.validators.annotation.ValidUuid;
 import se.sundsvall.remindandinform.api.model.Reminder;
 import se.sundsvall.remindandinform.api.model.ReminderRequest;
@@ -60,13 +62,12 @@ public class RemindAndInformResource {
 	@ApiResponse(responseCode = "201", headers = @Header(name = LOCATION, schema = @Schema(type = "string")), description = "Created")
 	@ApiResponse(responseCode = "400", description = "Bad request", content = @Content(mediaType = APPLICATION_PROBLEM_JSON_VALUE, schema = @Schema(oneOf = { Problem.class, ConstraintViolationProblem.class })))
 	@ApiResponse(responseCode = "500", description = "Internal Server error", content = @Content(mediaType = APPLICATION_PROBLEM_JSON_VALUE, schema = @Schema(implementation = Problem.class)))
-	public ResponseEntity<Void> createReminder(UriComponentsBuilder uriComponentsBuilder, @RequestBody @NotNull @Valid ReminderRequest body) {
+	public ResponseEntity<Void> createReminder(final UriComponentsBuilder uriComponentsBuilder, @RequestBody @NotNull @Valid final ReminderRequest body) {
 
-		var reminder = reminderService.createReminder(body);
-		return ResponseEntity
-				.created(uriComponentsBuilder.path("{reminderId}").buildAndExpand(reminder.getReminderId()).toUri())
-				.header(CONTENT_TYPE, ALL_VALUE)
-				.build();
+		final var reminder = reminderService.createReminder(body);
+		return created(uriComponentsBuilder.path("{reminderId}").buildAndExpand(reminder.getReminderId()).toUri())
+			.header(CONTENT_TYPE, ALL_VALUE)
+			.build();
 	}
 
 	@PostMapping(path = "/send", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_PROBLEM_JSON_VALUE)
@@ -74,35 +75,35 @@ public class RemindAndInformResource {
 	@ApiResponse(responseCode = "204", description = "Successful operation")
 	@ApiResponse(responseCode = "400", description = "Bad request", content = @Content(mediaType = APPLICATION_PROBLEM_JSON_VALUE, schema = @Schema(oneOf = { Problem.class, ConstraintViolationProblem.class })))
 	@ApiResponse(responseCode = "500", description = "Internal Server error", content = @Content(mediaType = APPLICATION_PROBLEM_JSON_VALUE, schema = @Schema(implementation = Problem.class)))
-	public ResponseEntity<Void> sendReminders(@RequestBody @NotNull @Valid SendRemindersRequest body) {
+	public ResponseEntity<Void> sendReminders(@RequestBody @NotNull @Valid final SendRemindersRequest body) {
 
 		sendRemindersLogic.sendReminders(body.getReminderDate());
-		return ResponseEntity.noContent().build();
+		return noContent().build();
 	}
 
-	@GetMapping(path = "/parties/{partyId}", produces = {APPLICATION_JSON_VALUE, APPLICATION_PROBLEM_JSON_VALUE})
+	@GetMapping(path = "/parties/{partyId}", produces = { APPLICATION_JSON_VALUE, APPLICATION_PROBLEM_JSON_VALUE })
 	@Operation(summary = "Returns all reminders for a person or an organization.")
 	@ApiResponse(responseCode = "200", description = "Successful operation", content = @Content(mediaType = APPLICATION_JSON_VALUE, array = @ArraySchema(schema = @Schema(implementation = Reminder.class))))
 	@ApiResponse(responseCode = "400", description = "Bad request", content = @Content(mediaType = APPLICATION_PROBLEM_JSON_VALUE, schema = @Schema(oneOf = { Problem.class, ConstraintViolationProblem.class })))
 	@ApiResponse(responseCode = "404", description = "Not Found", content = @Content(mediaType = APPLICATION_PROBLEM_JSON_VALUE, schema = @Schema(implementation = Problem.class)))
 	@ApiResponse(responseCode = "500", description = "Internal Server error", content = @Content(mediaType = APPLICATION_PROBLEM_JSON_VALUE, schema = @Schema(implementation = Problem.class)))
 	public ResponseEntity<List<Reminder>> getRemindersByPartyId(
-		@Parameter(name = "partyId", description = "Party ID", example = "81471222-5798-11e9-ae24-57fa13b361e1") @ValidUuid @PathVariable(name = "partyId") String partyId) {
+		@Parameter(name = "partyId", description = "Party ID", example = "81471222-5798-11e9-ae24-57fa13b361e1") @ValidUuid @PathVariable(name = "partyId") final String partyId) {
 
-		return ResponseEntity.ok(reminderService.findRemindersByPartyId(partyId));
+		return ok(reminderService.findRemindersByPartyId(partyId));
 	}
 
-	@PatchMapping(path = "/{reminderId}", consumes = APPLICATION_JSON_VALUE, produces = {APPLICATION_JSON_VALUE, APPLICATION_PROBLEM_JSON_VALUE})
+	@PatchMapping(path = "/{reminderId}", consumes = APPLICATION_JSON_VALUE, produces = { APPLICATION_JSON_VALUE, APPLICATION_PROBLEM_JSON_VALUE })
 	@Operation(summary = "Manage updates of a reminder.")
 	@ApiResponse(responseCode = "200", description = "Successful operation", content = @Content(mediaType = APPLICATION_JSON_VALUE, schema = @Schema(implementation = Reminder.class)))
 	@ApiResponse(responseCode = "400", description = "Bad request", content = @Content(mediaType = APPLICATION_PROBLEM_JSON_VALUE, schema = @Schema(oneOf = { Problem.class, ConstraintViolationProblem.class })))
 	@ApiResponse(responseCode = "404", description = "Not Found", content = @Content(mediaType = APPLICATION_PROBLEM_JSON_VALUE, schema = @Schema(implementation = Problem.class)))
 	@ApiResponse(responseCode = "500", description = "Internal Server error", content = @Content(mediaType = APPLICATION_PROBLEM_JSON_VALUE, schema = @Schema(implementation = Problem.class)))
 	public ResponseEntity<Reminder> updateReminder(
-		@Parameter(name = "reminderId", description = "Reminder ID", example = "R-81471222-5798-11e9-ae24-57fa13b361e1") @NotBlank @PathVariable("reminderId") String reminderId,
-		@RequestBody @NotNull @Valid UpdateReminderRequest body) {
+		@Parameter(name = "reminderId", description = "Reminder ID", example = "R-81471222-5798-11e9-ae24-57fa13b361e1") @NotBlank @PathVariable("reminderId") final String reminderId,
+		@RequestBody @NotNull @Valid final UpdateReminderRequest body) {
 
-		return ResponseEntity.ok(reminderService.updateReminder(body, reminderId));
+		return ok(reminderService.updateReminder(body, reminderId));
 	}
 
 	@DeleteMapping(path = "/{reminderId}", produces = APPLICATION_PROBLEM_JSON_VALUE)
@@ -112,21 +113,21 @@ public class RemindAndInformResource {
 	@ApiResponse(responseCode = "404", description = "Not Found", content = @Content(mediaType = APPLICATION_PROBLEM_JSON_VALUE, schema = @Schema(implementation = Problem.class)))
 	@ApiResponse(responseCode = "500", description = "Internal Server error", content = @Content(mediaType = APPLICATION_PROBLEM_JSON_VALUE, schema = @Schema(implementation = Problem.class)))
 	public ResponseEntity<Void> deleteReminder(
-		@Parameter(name = "reminderId", description = "Reminder ID", example = "R-81471222-5798-11e9-ae24-57fa13b361e1") @NotBlank @PathVariable("reminderId") String reminderId) {
+		@Parameter(name = "reminderId", description = "Reminder ID", example = "R-81471222-5798-11e9-ae24-57fa13b361e1") @NotBlank @PathVariable("reminderId") final String reminderId) {
 
 		reminderService.deleteReminderByReminderId(reminderId);
-		return ResponseEntity.noContent().build();
+		return noContent().build();
 	}
 
-	@GetMapping(path = "/{reminderId}", produces = {APPLICATION_JSON_VALUE, APPLICATION_PROBLEM_JSON_VALUE})
+	@GetMapping(path = "/{reminderId}", produces = { APPLICATION_JSON_VALUE, APPLICATION_PROBLEM_JSON_VALUE })
 	@Operation(summary = "Returns a reminder by reminder-id")
 	@ApiResponse(responseCode = "200", description = "Successful operation", content = @Content(mediaType = APPLICATION_JSON_VALUE, schema = @Schema(implementation = Reminder.class)))
 	@ApiResponse(responseCode = "400", description = "Bad request", content = @Content(mediaType = APPLICATION_PROBLEM_JSON_VALUE, schema = @Schema(oneOf = { Problem.class, ConstraintViolationProblem.class })))
 	@ApiResponse(responseCode = "404", description = "Not Found", content = @Content(mediaType = APPLICATION_PROBLEM_JSON_VALUE, schema = @Schema(implementation = Problem.class)))
 	@ApiResponse(responseCode = "500", description = "Internal Server error", content = @Content(mediaType = APPLICATION_PROBLEM_JSON_VALUE, schema = @Schema(implementation = Problem.class)))
 	public ResponseEntity<Reminder> getReminderByReminderId(
-		@Parameter(name = "reminderId", description = "Reminder ID", example = "R-81471222-5798-11e9-ae24-57fa13b361e1") @NotBlank @PathVariable("reminderId") String reminderId) {
+		@Parameter(name = "reminderId", description = "Reminder ID", example = "R-81471222-5798-11e9-ae24-57fa13b361e1") @NotBlank @PathVariable("reminderId") final String reminderId) {
 
-		return ResponseEntity.ok(reminderService.findReminderByReminderId(reminderId));
+		return ok(reminderService.findReminderByReminderId(reminderId));
 	}
 }

@@ -229,36 +229,39 @@ public class Reminder {
 	@Override
 	public int hashCode() {
 		return Objects.hash(action, caseId, caseLink, caseType, created, createdBy, externalCaseId, modified,
-				modifiedBy, note, partyId, reminderDate, reminderId);
+			modifiedBy, note, partyId, reminderDate, reminderId);
 	}
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
+		if (this == obj) {
 			return true;
-		if (obj == null)
+		}
+		if (obj == null) {
 			return false;
-		if (getClass() != obj.getClass())
+		}
+		if (getClass() != obj.getClass()) {
 			return false;
-		Reminder other = (Reminder) obj;
+		}
+		final Reminder other = (Reminder) obj;
 		return Objects.equals(action, other.action) && Objects.equals(caseId, other.caseId)
-				&& Objects.equals(caseLink, other.caseLink) && Objects.equals(caseType, other.caseType)
-				&& Objects.equals(created, other.created) && Objects.equals(createdBy, other.createdBy)
-				&& Objects.equals(externalCaseId, other.externalCaseId) && Objects.equals(modified, other.modified)
-				&& Objects.equals(modifiedBy, other.modifiedBy) && Objects.equals(note, other.note)
-				&& Objects.equals(partyId, other.partyId) && Objects.equals(reminderDate, other.reminderDate)
-				&& Objects.equals(reminderId, other.reminderId);
+			&& Objects.equals(caseLink, other.caseLink) && Objects.equals(caseType, other.caseType)
+			&& Objects.equals(created, other.created) && Objects.equals(createdBy, other.createdBy)
+			&& Objects.equals(externalCaseId, other.externalCaseId) && Objects.equals(modified, other.modified)
+			&& Objects.equals(modifiedBy, other.modifiedBy) && Objects.equals(note, other.note)
+			&& Objects.equals(partyId, other.partyId) && Objects.equals(reminderDate, other.reminderDate)
+			&& Objects.equals(reminderId, other.reminderId);
 	}
 
 	@Override
 	public String toString() {
-		StringBuilder builder = new StringBuilder();
+		final StringBuilder builder = new StringBuilder();
 		builder.append("Reminder [reminderId=").append(reminderId).append(", partyId=").append(partyId)
-				.append(", action=").append(action).append(", note=").append(note).append(", caseId=").append(caseId)
-				.append(", caseType=").append(caseType).append(", caseLink=").append(caseLink)
-				.append(", externalCaseId=").append(externalCaseId).append(", reminderDate=").append(reminderDate)
-				.append(", createdBy=").append(createdBy).append(", modifiedBy=").append(modifiedBy)
-				.append(", created=").append(created).append(", modified=").append(modified).append("]");
+			.append(", action=").append(action).append(", note=").append(note).append(", caseId=").append(caseId)
+			.append(", caseType=").append(caseType).append(", caseLink=").append(caseLink)
+			.append(", externalCaseId=").append(externalCaseId).append(", reminderDate=").append(reminderDate)
+			.append(", createdBy=").append(createdBy).append(", modifiedBy=").append(modifiedBy)
+			.append(", created=").append(created).append(", modified=").append(modified).append("]");
 		return builder.toString();
 	}
 }

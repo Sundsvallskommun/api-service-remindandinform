@@ -1,28 +1,31 @@
 package se.sundsvall.remindandinform.integration.db.model;
 
+import static java.time.temporal.ChronoUnit.MILLIS;
+
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.time.ZoneId;
-import java.time.temporal.ChronoUnit;
 import java.util.Objects;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Index;
-import javax.persistence.Lob;
-import javax.persistence.PrePersist;
-import javax.persistence.PreUpdate;
-import javax.persistence.Table;
+import org.hibernate.Length;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Index;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.PreUpdate;
+import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "reminder", indexes = {
-	@Index(name = "reminder_id_index", columnList = "reminder_id"),
-	@Index(name = "party_id_index", columnList = "party_id"),
-})
+@Table(name = "reminder",
+	indexes = {
+		@Index(name = "reminder_id_index", columnList = "reminder_id"),
+		@Index(name = "party_id_index", columnList = "party_id"),
+	})
 public class ReminderEntity implements Serializable {
 
 	private static final long serialVersionUID = -771490219800899398L;
@@ -41,8 +44,7 @@ public class ReminderEntity implements Serializable {
 	@Column(name = "action", nullable = false, length = 8192)
 	private String action;
 
-	@Lob
-	@Column(name = "note")
+	@Column(name = "note", length = Length.LONG32)
 	private String note;
 
 	@Column(name = "case_id")
@@ -77,19 +79,19 @@ public class ReminderEntity implements Serializable {
 
 	@PrePersist
 	protected void onCreate() {
-		created = OffsetDateTime.now(ZoneId.systemDefault()).truncatedTo(ChronoUnit.MILLIS);
+		created = OffsetDateTime.now(ZoneId.systemDefault()).truncatedTo(MILLIS);
 	}
 
 	@PreUpdate
 	protected void onUpdate() {
-		modified = OffsetDateTime.now(ZoneId.systemDefault()).truncatedTo(ChronoUnit.MILLIS);
+		modified = OffsetDateTime.now(ZoneId.systemDefault()).truncatedTo(MILLIS);
 	}
 
 	public long getId() {
 		return id;
 	}
 
-	public void setId(long id) {
+	public void setId(final long id) {
 		this.id = id;
 	}
 
@@ -97,7 +99,7 @@ public class ReminderEntity implements Serializable {
 		return reminderId;
 	}
 
-	public void setReminderId(String reminderId) {
+	public void setReminderId(final String reminderId) {
 		this.reminderId = reminderId;
 	}
 
@@ -105,7 +107,7 @@ public class ReminderEntity implements Serializable {
 		return partyId;
 	}
 
-	public void setPartyId(String partyId) {
+	public void setPartyId(final String partyId) {
 		this.partyId = partyId;
 	}
 
@@ -113,7 +115,7 @@ public class ReminderEntity implements Serializable {
 		return action;
 	}
 
-	public void setAction(String action) {
+	public void setAction(final String action) {
 		this.action = action;
 	}
 
@@ -121,7 +123,7 @@ public class ReminderEntity implements Serializable {
 		return note;
 	}
 
-	public void setNote(String note) {
+	public void setNote(final String note) {
 		this.note = note;
 	}
 
@@ -129,7 +131,7 @@ public class ReminderEntity implements Serializable {
 		return caseId;
 	}
 
-	public void setCaseId(String caseId) {
+	public void setCaseId(final String caseId) {
 		this.caseId = caseId;
 	}
 
@@ -137,7 +139,7 @@ public class ReminderEntity implements Serializable {
 		return caseLink;
 	}
 
-	public void setCaseLink(String caseLink) {
+	public void setCaseLink(final String caseLink) {
 		this.caseLink = caseLink;
 	}
 
@@ -145,7 +147,7 @@ public class ReminderEntity implements Serializable {
 		return externalCaseId;
 	}
 
-	public void setExternalCaseId(String externalCaseId) {
+	public void setExternalCaseId(final String externalCaseId) {
 		this.externalCaseId = externalCaseId;
 	}
 
@@ -153,7 +155,7 @@ public class ReminderEntity implements Serializable {
 		return caseType;
 	}
 
-	public void setCaseType(String caseType) {
+	public void setCaseType(final String caseType) {
 		this.caseType = caseType;
 	}
 
@@ -161,7 +163,7 @@ public class ReminderEntity implements Serializable {
 		return reminderDate;
 	}
 
-	public void setReminderDate(LocalDate reminderDate) {
+	public void setReminderDate(final LocalDate reminderDate) {
 		this.reminderDate = reminderDate;
 	}
 
@@ -169,7 +171,7 @@ public class ReminderEntity implements Serializable {
 		return sent;
 	}
 
-	public void setSent(boolean sent) {
+	public void setSent(final boolean sent) {
 		this.sent = sent;
 	}
 
@@ -177,7 +179,7 @@ public class ReminderEntity implements Serializable {
 		return created;
 	}
 
-	public void setCreated(OffsetDateTime created) {
+	public void setCreated(final OffsetDateTime created) {
 		this.created = created;
 	}
 
@@ -185,7 +187,7 @@ public class ReminderEntity implements Serializable {
 		return createdBy;
 	}
 
-	public void setCreatedBy(String createdBy) {
+	public void setCreatedBy(final String createdBy) {
 		this.createdBy = createdBy;
 	}
 
@@ -193,7 +195,7 @@ public class ReminderEntity implements Serializable {
 		return modified;
 	}
 
-	public void setModified(OffsetDateTime modified) {
+	public void setModified(final OffsetDateTime modified) {
 		this.modified = modified;
 	}
 
@@ -201,45 +203,34 @@ public class ReminderEntity implements Serializable {
 		return modifiedBy;
 	}
 
-	public void setModifiedBy(String modifiedBy) {
+	public void setModifiedBy(final String modifiedBy) {
 		this.modifiedBy = modifiedBy;
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(action, caseId, caseLink, caseType, created, createdBy, externalCaseId, id, modified,
-				modifiedBy, note, partyId, reminderDate, reminderId, sent);
+		return Objects.hash(action, caseId, caseLink, caseType, created, createdBy, externalCaseId, id, modified, modifiedBy, note, partyId, reminderDate, reminderId, sent);
 	}
 
 	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
+	public boolean equals(final Object obj) {
+		if (this == obj) {
 			return true;
-		if (obj == null)
+		}
+		if (!(obj instanceof final ReminderEntity other)) {
 			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		ReminderEntity other = (ReminderEntity) obj;
-		return Objects.equals(action, other.action) && Objects.equals(caseId, other.caseId)
-				&& Objects.equals(caseLink, other.caseLink) && Objects.equals(caseType, other.caseType)
-				&& Objects.equals(created, other.created) && Objects.equals(createdBy, other.createdBy)
-				&& Objects.equals(externalCaseId, other.externalCaseId) && id == other.id
-				&& Objects.equals(modified, other.modified) && Objects.equals(modifiedBy, other.modifiedBy)
-				&& Objects.equals(note, other.note) && Objects.equals(partyId, other.partyId)
-				&& Objects.equals(reminderDate, other.reminderDate) && Objects.equals(reminderId, other.reminderId)
-				&& sent == other.sent;
+		}
+		return Objects.equals(action, other.action) && Objects.equals(caseId, other.caseId) && Objects.equals(caseLink, other.caseLink) && Objects.equals(caseType, other.caseType) && Objects.equals(created, other.created) && Objects.equals(createdBy,
+			other.createdBy) && Objects.equals(externalCaseId, other.externalCaseId) && (id == other.id) && Objects.equals(modified, other.modified) && Objects.equals(modifiedBy, other.modifiedBy) && Objects.equals(note, other.note) && Objects.equals(
+				partyId, other.partyId) && Objects.equals(reminderDate, other.reminderDate) && Objects.equals(reminderId, other.reminderId) && (sent == other.sent);
 	}
 
 	@Override
 	public String toString() {
-		StringBuilder builder = new StringBuilder();
-		builder.append("ReminderEntity [id=").append(id).append(", reminderId=").append(reminderId).append(", partyId=")
-				.append(partyId).append(", action=").append(action).append(", note=").append(note).append(", caseId=")
-				.append(caseId).append(", caseType=").append(caseType).append(", caseLink=").append(caseLink)
-				.append(", externalCaseId=").append(externalCaseId).append(", reminderDate=").append(reminderDate)
-				.append(", sent=").append(sent).append(", created=").append(created).append(", createdBy=")
-				.append(createdBy).append(", modified=").append(modified).append(", modifiedBy=").append(modifiedBy)
-				.append("]");
+		final StringBuilder builder = new StringBuilder();
+		builder.append("ReminderEntity [id=").append(id).append(", reminderId=").append(reminderId).append(", partyId=").append(partyId).append(", action=").append(action).append(", note=").append(note).append(", caseId=").append(caseId).append(
+			", caseType=").append(caseType).append(", caseLink=").append(caseLink).append(", externalCaseId=").append(externalCaseId).append(", reminderDate=").append(reminderDate).append(", sent=").append(sent).append(", created=").append(created).append(
+				", createdBy=").append(createdBy).append(", modified=").append(modified).append(", modifiedBy=").append(modifiedBy).append("]");
 		return builder.toString();
 	}
 }

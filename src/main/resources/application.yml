@@ -24,7 +24,7 @@ spring:
         open-in-view: false
         database-platform: org.hibernate.dialect.MariaDB106Dialect
         properties:
-            javax:
+            jakarta:
                 persistence:
                     schema-generation:
                         database:
