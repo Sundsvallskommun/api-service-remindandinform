@@ -1,10 +1,13 @@
 package se.sundsvall.remindandinform.api;
 
 import static org.apache.commons.lang3.StringUtils.repeat;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.groups.Tuple.tuple;
 import static org.mockito.Mockito.verifyNoInteractions;
-import static org.springframework.http.HttpStatus.BAD_REQUEST;
+import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.http.MediaType.APPLICATION_PROBLEM_JSON_VALUE;
+import static org.zalando.problem.Status.BAD_REQUEST;
 
 import java.time.LocalDate;
 import java.util.UUID;
@@ -17,7 +20,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.reactive.server.WebTestClient;
-import org.zalando.problem.Status;
+import org.zalando.problem.Problem;
+import org.zalando.problem.violations.ConstraintViolationProblem;
+import org.zalando.problem.violations.Violation;
 
 import se.sundsvall.remindandinform.Application;
 import se.sundsvall.remindandinform.api.model.ReminderRequest;
@@ -26,7 +31,7 @@ import se.sundsvall.remindandinform.api.model.UpdateReminderRequest;
 import se.sundsvall.remindandinform.service.ReminderService;
 import se.sundsvall.remindandinform.service.logic.SendRemindersLogic;
 
-@SpringBootTest(classes = Application.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest(classes = Application.class, webEnvironment = RANDOM_PORT)
 @ActiveProfiles("junit")
 class RemindAndInformResourceFailuresTest {
 
@@ -46,16 +51,21 @@ class RemindAndInformResourceFailuresTest {
 	@Test
 	void createMissingBody() {
 
-		webTestClient.post().uri("/reminders/")
-				.contentType(APPLICATION_JSON)
-				.exchange()
-				.expectStatus().isBadRequest()
-				.expectHeader().contentType(APPLICATION_PROBLEM_JSON_VALUE)
-				.expectBody()
-				.jsonPath("$.title").isEqualTo(BAD_REQUEST.getReasonPhrase())
-				.jsonPath("$.status").isEqualTo(BAD_REQUEST.value())
-				.jsonPath("$.detail").isEqualTo(
-						"Required request body is missing: public org.springframework.http.ResponseEntity<java.lang.Void> se.sundsvall.remindandinform.api.RemindAndInformResource.createReminder(org.springframework.web.util.UriComponentsBuilder,se.sundsvall.remindandinform.api.model.ReminderRequest)");
+		// Act
+		final var response = webTestClient.post().uri("/reminders")
+			.contentType(APPLICATION_JSON)
+			.exchange()
+			.expectStatus().isBadRequest()
+			.expectHeader().contentType(APPLICATION_PROBLEM_JSON_VALUE)
+			.expectBody(Problem.class)
+			.returnResult()
+			.getResponseBody();
+
+		// Assert
+		assertThat(response.getTitle()).isEqualTo(BAD_REQUEST.getReasonPhrase());
+		assertThat(response.getStatus()).isEqualTo(BAD_REQUEST);
+		assertThat(response.getDetail()).isEqualTo(
+			"Required request body is missing: public org.springframework.http.ResponseEntity<java.lang.Void> se.sundsvall.remindandinform.api.RemindAndInformResource.createReminder(org.springframework.web.util.UriComponentsBuilder,se.sundsvall.remindandinform.api.model.ReminderRequest)");
 
 		verifyNoInteractions(reminderServiceMock, sendRemindersLogicMock);
 	}
@@ -63,23 +73,27 @@ class RemindAndInformResourceFailuresTest {
 	@Test
 	void createReminderEmptyBody() {
 
-		webTestClient.post().uri("/reminders/")
-				.contentType(APPLICATION_JSON)
-				.bodyValue(ReminderRequest.create())
-				.exchange()
-				.expectStatus().isBadRequest()
-				.expectHeader().contentType(APPLICATION_PROBLEM_JSON_VALUE)
-				.expectBody()
-				.jsonPath("$.title").isEqualTo("Constraint Violation")
-				.jsonPath("$.status").isEqualTo(BAD_REQUEST.value())
-				.jsonPath("$.violations[0].field").isEqualTo("action")
-				.jsonPath("$.violations[0].message").isEqualTo("must not be null")
-				.jsonPath("$.violations[1].field").isEqualTo("createdBy")
-				.jsonPath("$.violations[1].message").isEqualTo("must not be blank")
-				.jsonPath("$.violations[2].field").isEqualTo("partyId")
-				.jsonPath("$.violations[2].message").isEqualTo("not a valid UUID")
-				.jsonPath("$.violations[3].field").isEqualTo("reminderDate")
-				.jsonPath("$.violations[3].message").isEqualTo("must not be null");
+		// Act
+		final var response = webTestClient.post().uri("/reminders")
+			.contentType(APPLICATION_JSON)
+			.bodyValue(ReminderRequest.create())
+			.exchange()
+			.expectStatus().isBadRequest()
+			.expectHeader().contentType(APPLICATION_PROBLEM_JSON_VALUE)
+			.expectBody(ConstraintViolationProblem.class)
+			.returnResult()
+			.getResponseBody();
+
+		// Assert
+		assertThat(response.getTitle()).isEqualTo("Constraint Violation");
+		assertThat(response.getStatus()).isEqualTo(BAD_REQUEST);
+		assertThat(response.getViolations())
+			.extracting(Violation::getField, Violation::getMessage)
+			.containsExactly(
+				tuple("action", "must not be null"),
+				tuple("createdBy", "must not be blank"),
+				tuple("partyId", "not a valid UUID"),
+				tuple("reminderDate", "must not be null"));
 
 		verifyNoInteractions(reminderServiceMock, sendRemindersLogicMock);
 	}
@@ -87,6 +101,7 @@ class RemindAndInformResourceFailuresTest {
 	@Test
 	void createReminderMissingPartyId() {
 
+		// Arrange
 		final var body = ReminderRequest.create()
 			.withAction("action")
 			.withCaseId("caseId")
@@ -94,17 +109,23 @@ class RemindAndInformResourceFailuresTest {
 			.withCreatedBy("createdBy")
 			.withReminderDate(LocalDate.now()); // Body with missing partyId.
 
-		webTestClient.post().uri("/reminders/")
-				.contentType(APPLICATION_JSON)
-				.bodyValue(body)
-				.exchange()
-				.expectStatus().isBadRequest()
-				.expectHeader().contentType(APPLICATION_PROBLEM_JSON_VALUE)
-				.expectBody()
-				.jsonPath("$.title").isEqualTo("Constraint Violation")
-				.jsonPath("$.status").isEqualTo(BAD_REQUEST.value())
-				.jsonPath("$.violations[0].field").isEqualTo("partyId")
-				.jsonPath("$.violations[0].message").isEqualTo("not a valid UUID");
+		// Act
+		final var response = webTestClient.post().uri("/reminders")
+			.contentType(APPLICATION_JSON)
+			.bodyValue(body)
+			.exchange()
+			.expectStatus().isBadRequest()
+			.expectHeader().contentType(APPLICATION_PROBLEM_JSON_VALUE)
+			.expectBody(ConstraintViolationProblem.class)
+			.returnResult()
+			.getResponseBody();
+
+		// Assert
+		assertThat(response.getTitle()).isEqualTo("Constraint Violation");
+		assertThat(response.getStatus()).isEqualTo(BAD_REQUEST);
+		assertThat(response.getViolations())
+			.extracting(Violation::getField, Violation::getMessage)
+			.containsExactly(tuple("partyId", "not a valid UUID"));
 
 		verifyNoInteractions(reminderServiceMock, sendRemindersLogicMock);
 	}
@@ -112,6 +133,7 @@ class RemindAndInformResourceFailuresTest {
 	@Test
 	void createReminderContainsInvalidPartyId() {
 
+		// Arrange
 		final var body = ReminderRequest.create()
 			.withPartyId("invalid-person-id")
 			.withAction("action")
@@ -120,17 +142,23 @@ class RemindAndInformResourceFailuresTest {
 			.withCreatedBy("createdBy")
 			.withReminderDate(LocalDate.now()); // Body with not valid partyId.
 
-		webTestClient.post().uri("/reminders/")
-				.contentType(APPLICATION_JSON)
-				.bodyValue(body)
-				.exchange()
-				.expectStatus().isBadRequest()
-				.expectHeader().contentType(APPLICATION_PROBLEM_JSON_VALUE)
-				.expectBody()
-				.jsonPath("$.title").isEqualTo("Constraint Violation")
-				.jsonPath("$.status").isEqualTo(BAD_REQUEST.value())
-				.jsonPath("$.violations[0].field").isEqualTo("partyId")
-				.jsonPath("$.violations[0].message").isEqualTo("not a valid UUID");
+		// Act
+		final var response = webTestClient.post().uri("/reminders")
+			.contentType(APPLICATION_JSON)
+			.bodyValue(body)
+			.exchange()
+			.expectStatus().isBadRequest()
+			.expectHeader().contentType(APPLICATION_PROBLEM_JSON_VALUE)
+			.expectBody(ConstraintViolationProblem.class)
+			.returnResult()
+			.getResponseBody();
+
+		// Assert
+		assertThat(response.getTitle()).isEqualTo("Constraint Violation");
+		assertThat(response.getStatus()).isEqualTo(BAD_REQUEST);
+		assertThat(response.getViolations())
+			.extracting(Violation::getField, Violation::getMessage)
+			.containsExactly(tuple("partyId", "not a valid UUID"));
 
 		verifyNoInteractions(reminderServiceMock, sendRemindersLogicMock);
 	}
@@ -138,6 +166,7 @@ class RemindAndInformResourceFailuresTest {
 	@Test
 	void createReminderContainsNoteThatExceedsMaxLength() {
 
+		// Arrange
 		final var body = ReminderRequest.create()
 			.withPartyId(UUID.randomUUID().toString())
 			.withAction("action")
@@ -147,17 +176,23 @@ class RemindAndInformResourceFailuresTest {
 			.withCreatedBy("createdBy")
 			.withReminderDate(LocalDate.now());
 
-		webTestClient.post().uri("/reminders/")
-				.contentType(APPLICATION_JSON)
-				.bodyValue(body)
-				.exchange()
-				.expectStatus().isBadRequest()
-				.expectHeader().contentType(APPLICATION_PROBLEM_JSON_VALUE)
-				.expectBody()
-				.jsonPath("$.title").isEqualTo("Constraint Violation")
-				.jsonPath("$.status").isEqualTo(BAD_REQUEST.value())
-				.jsonPath("$.violations[0].field").isEqualTo("note")
-				.jsonPath("$.violations[0].message").isEqualTo("size must be between 0 and 2048");
+		// Act
+		final var response = webTestClient.post().uri("/reminders")
+			.contentType(APPLICATION_JSON)
+			.bodyValue(body)
+			.exchange()
+			.expectStatus().isBadRequest()
+			.expectHeader().contentType(APPLICATION_PROBLEM_JSON_VALUE)
+			.expectBody(ConstraintViolationProblem.class)
+			.returnResult()
+			.getResponseBody();
+
+		// Assert
+		assertThat(response.getTitle()).isEqualTo("Constraint Violation");
+		assertThat(response.getStatus()).isEqualTo(BAD_REQUEST);
+		assertThat(response.getViolations())
+			.extracting(Violation::getField, Violation::getMessage)
+			.containsExactly(tuple("note", "size must be between 0 and 2048"));
 
 		verifyNoInteractions(reminderServiceMock, sendRemindersLogicMock);
 	}
@@ -165,23 +200,29 @@ class RemindAndInformResourceFailuresTest {
 	@Test
 	void createReminderContainsLocalDateOfWrongFormat() throws JSONException {
 
-		var body = new JSONObject();
+		// Arrange
+		final var body = new JSONObject();
 		body.put("partyId", "81471222-5798-11e9-ae24-57fa13b361e");
 		body.put("action", "action");
 		body.put("caseId", "caseId");
 		body.put("caseLink", "caseLink");
 		body.put("reminderDate", "2021-13-01");
 
-		webTestClient.post().uri("/reminders/")
-				.contentType(APPLICATION_JSON)
-				.bodyValue(body.toString())
-				.exchange()
-				.expectStatus().isBadRequest()
-				.expectHeader().contentType(APPLICATION_PROBLEM_JSON_VALUE)
-				.expectBody()
-				.jsonPath("$.title").isEqualTo("Wrong format of date")
-				.jsonPath("$.status").isEqualTo(BAD_REQUEST.value())
-				.jsonPath("$.detail").isEqualTo("Text '2021-13-01' could not be parsed: Invalid value for MonthOfYear (valid values 1 - 12): 13");
+		// Act
+		final var response = webTestClient.post().uri("/reminders")
+			.contentType(APPLICATION_JSON)
+			.bodyValue(body.toString())
+			.exchange()
+			.expectStatus().isBadRequest()
+			.expectHeader().contentType(APPLICATION_PROBLEM_JSON_VALUE)
+			.expectBody(Problem.class)
+			.returnResult()
+			.getResponseBody();
+
+		// Assert
+		assertThat(response.getTitle()).isEqualTo("Wrong format of date");
+		assertThat(response.getStatus()).isEqualTo(BAD_REQUEST);
+		assertThat(response.getDetail()).isEqualTo("Text '2021-13-01' could not be parsed: Invalid value for MonthOfYear (valid values 1 - 12): 13");
 
 		verifyNoInteractions(reminderServiceMock, sendRemindersLogicMock);
 	}
@@ -192,15 +233,21 @@ class RemindAndInformResourceFailuresTest {
 		// Parameter values
 		final var reminderId = "reminderId";
 
-		webTestClient.patch().uri("/reminders/{reminderId}", reminderId)
-				.contentType(APPLICATION_JSON)
-				.exchange()
-				.expectStatus().isBadRequest()
-				.expectHeader().contentType(APPLICATION_PROBLEM_JSON_VALUE)
-				.expectBody()
-				.jsonPath("$.title").isEqualTo(Status.BAD_REQUEST.getReasonPhrase())
-				.jsonPath("$.status").isEqualTo(BAD_REQUEST.value())
-				.jsonPath("$.detail").isEqualTo("Required request body is missing: public org.springframework.http.ResponseEntity<se.sundsvall.remindandinform.api.model.Reminder> se.sundsvall.remindandinform.api.RemindAndInformResource.updateReminder(java.lang.String,se.sundsvall.remindandinform.api.model.UpdateReminderRequest)");
+		// Act
+		final var response = webTestClient.patch().uri("/reminders/{reminderId}", reminderId)
+			.contentType(APPLICATION_JSON)
+			.exchange()
+			.expectStatus().isBadRequest()
+			.expectHeader().contentType(APPLICATION_PROBLEM_JSON_VALUE)
+			.expectBody(Problem.class)
+			.returnResult()
+			.getResponseBody();
+
+		// Assert
+		assertThat(response.getTitle()).isEqualTo(BAD_REQUEST.getReasonPhrase());
+		assertThat(response.getStatus()).isEqualTo(BAD_REQUEST);
+		assertThat(response.getDetail()).isEqualTo(
+			"Required request body is missing: public org.springframework.http.ResponseEntity<se.sundsvall.remindandinform.api.model.Reminder> se.sundsvall.remindandinform.api.RemindAndInformResource.updateReminder(java.lang.String,se.sundsvall.remindandinform.api.model.UpdateReminderRequest)");
 
 		verifyNoInteractions(reminderServiceMock, sendRemindersLogicMock);
 	}
@@ -208,7 +255,7 @@ class RemindAndInformResourceFailuresTest {
 	@Test
 	void updateReminderBadReminderId() {
 
-		// Parameter values
+		// Arrange
 		final var reminderId = " ";
 		final var body = UpdateReminderRequest.create()
 			.withPartyId("81471222-5798-11e9-ae24-57fa13b361e")
@@ -218,17 +265,23 @@ class RemindAndInformResourceFailuresTest {
 			.withModifiedBy("modifiedBy")
 			.withReminderDate(LocalDate.now()); // Body with not valid partyId
 
-		webTestClient.patch().uri("/reminders/{reminderId}", reminderId)
-				.contentType(APPLICATION_JSON)
-				.bodyValue(body)
-				.exchange()
-				.expectStatus().isBadRequest()
-				.expectHeader().contentType(APPLICATION_PROBLEM_JSON_VALUE)
-				.expectBody()
-				.jsonPath("$.title").isEqualTo("Constraint Violation")
-				.jsonPath("$.status").isEqualTo(BAD_REQUEST.value())
-				.jsonPath("$.violations[0].field").isEqualTo("updateReminder.reminderId")
-				.jsonPath("$.violations[0].message").isEqualTo("must not be blank");
+		// Act
+		final var response = webTestClient.patch().uri("/reminders/{reminderId}", reminderId)
+			.contentType(APPLICATION_JSON)
+			.bodyValue(body)
+			.exchange()
+			.expectStatus().isBadRequest()
+			.expectHeader().contentType(APPLICATION_PROBLEM_JSON_VALUE)
+			.expectBody(ConstraintViolationProblem.class)
+			.returnResult()
+			.getResponseBody();
+
+		// Assert
+		assertThat(response.getTitle()).isEqualTo("Constraint Violation");
+		assertThat(response.getStatus()).isEqualTo(BAD_REQUEST);
+		assertThat(response.getViolations())
+			.extracting(Violation::getField, Violation::getMessage)
+			.containsExactly(tuple("updateReminder.reminderId", "must not be blank"));
 
 		verifyNoInteractions(reminderServiceMock, sendRemindersLogicMock);
 	}
@@ -236,22 +289,27 @@ class RemindAndInformResourceFailuresTest {
 	@Test
 	void updateReminderContainsLocalDateOfWrongFormat() throws JSONException {
 
-		// Parameter values
+		// Arrange
 		final var reminderId = "reminderId";
 
-		JSONObject body = new JSONObject();
+		final JSONObject body = new JSONObject();
 		body.put("reminderDate", "2021-13-01");
 
-		webTestClient.patch().uri("/reminders/{reminderId}", reminderId)
-				.contentType(APPLICATION_JSON)
-				.bodyValue(body.toString())
-				.exchange()
-				.expectStatus().isBadRequest()
-				.expectHeader().contentType(APPLICATION_PROBLEM_JSON_VALUE)
-				.expectBody()
-				.jsonPath("$.title").isEqualTo("Wrong format of date")
-				.jsonPath("$.status").isEqualTo(BAD_REQUEST.value())
-				.jsonPath("$.detail").isEqualTo("Text '2021-13-01' could not be parsed: Invalid value for MonthOfYear (valid values 1 - 12): 13");
+		// Act
+		final var response = webTestClient.patch().uri("/reminders/{reminderId}", reminderId)
+			.contentType(APPLICATION_JSON)
+			.bodyValue(body.toString())
+			.exchange()
+			.expectStatus().isBadRequest()
+			.expectHeader().contentType(APPLICATION_PROBLEM_JSON_VALUE)
+			.expectBody(Problem.class)
+			.returnResult()
+			.getResponseBody();
+
+		// Assert
+		assertThat(response.getTitle()).isEqualTo("Wrong format of date");
+		assertThat(response.getStatus()).isEqualTo(BAD_REQUEST);
+		assertThat(response.getDetail()).isEqualTo("Text '2021-13-01' could not be parsed: Invalid value for MonthOfYear (valid values 1 - 12): 13");
 
 		verifyNoInteractions(reminderServiceMock, sendRemindersLogicMock);
 	}
@@ -259,7 +317,7 @@ class RemindAndInformResourceFailuresTest {
 	@Test
 	void updateReminderContainsInvalidPartyId() {
 
-		// Parameter values.
+		// Arrange
 		final var reminderId = "reminderId";
 		final var partyId = "invalidPartyId";
 		final var caseId = "caseId";
@@ -276,17 +334,23 @@ class RemindAndInformResourceFailuresTest {
 			.withAction(action)
 			.withReminderDate(reminderDate);
 
-		webTestClient.patch().uri("/reminders/{reminderId}", reminderId)
-				.contentType(APPLICATION_JSON)
-				.bodyValue(body)
-				.exchange()
-				.expectStatus().isBadRequest()
-				.expectHeader().contentType(APPLICATION_PROBLEM_JSON_VALUE)
-				.expectBody()
-				.jsonPath("$.title").isEqualTo("Constraint Violation")
-				.jsonPath("$.status").isEqualTo(BAD_REQUEST.value())
-				.jsonPath("$.violations[0].field").isEqualTo("partyId")
-				.jsonPath("$.violations[0].message").isEqualTo("not a valid UUID");
+		// Act
+		final var response = webTestClient.patch().uri("/reminders/{reminderId}", reminderId)
+			.contentType(APPLICATION_JSON)
+			.bodyValue(body)
+			.exchange()
+			.expectStatus().isBadRequest()
+			.expectHeader().contentType(APPLICATION_PROBLEM_JSON_VALUE)
+			.expectBody(ConstraintViolationProblem.class)
+			.returnResult()
+			.getResponseBody();
+
+		// Assert
+		assertThat(response.getTitle()).isEqualTo("Constraint Violation");
+		assertThat(response.getStatus()).isEqualTo(BAD_REQUEST);
+		assertThat(response.getViolations())
+			.extracting(Violation::getField, Violation::getMessage)
+			.containsExactly(tuple("partyId", "not a valid UUID"));
 
 		verifyNoInteractions(reminderServiceMock, sendRemindersLogicMock);
 	}
@@ -294,18 +358,24 @@ class RemindAndInformResourceFailuresTest {
 	@Test
 	void deleteReminderBadReminderId() {
 
-		// Parameter values
+		// Arrange
 		final var reminderId = " ";
 
-		webTestClient.delete().uri("/reminders/{reminderId}", reminderId)
-				.exchange()
-				.expectStatus().isBadRequest()
-				.expectHeader().contentType(APPLICATION_PROBLEM_JSON_VALUE)
-				.expectBody()
-				.jsonPath("$.title").isEqualTo("Constraint Violation")
-				.jsonPath("$.status").isEqualTo(BAD_REQUEST.value())
-				.jsonPath("$.violations[0].field").isEqualTo("deleteReminder.reminderId")
-				.jsonPath("$.violations[0].message").isEqualTo("must not be blank");
+		// Act
+		final var response = webTestClient.delete().uri("/reminders/{reminderId}", reminderId)
+			.exchange()
+			.expectStatus().isBadRequest()
+			.expectHeader().contentType(APPLICATION_PROBLEM_JSON_VALUE)
+			.expectBody(ConstraintViolationProblem.class)
+			.returnResult()
+			.getResponseBody();
+
+		// Assert
+		assertThat(response.getTitle()).isEqualTo("Constraint Violation");
+		assertThat(response.getStatus()).isEqualTo(BAD_REQUEST);
+		assertThat(response.getViolations())
+			.extracting(Violation::getField, Violation::getMessage)
+			.containsExactly(tuple("deleteReminder.reminderId", "must not be blank"));
 
 		verifyNoInteractions(reminderServiceMock, sendRemindersLogicMock);
 	}
@@ -313,19 +383,25 @@ class RemindAndInformResourceFailuresTest {
 	@Test
 	void sendRemindersWrongFormatOfDate() throws JSONException {
 
+		// Arrange
 		final var body = new JSONObject();
 		body.put("reminderDate", "2021-13-01");
 
-		webTestClient.post().uri("/reminders/send/")
-				.contentType(APPLICATION_JSON)
-				.bodyValue(body.toString())
-				.exchange()
-				.expectStatus().isBadRequest()
-				.expectHeader().contentType(APPLICATION_PROBLEM_JSON_VALUE)
-				.expectBody()
-				.jsonPath("$.title").isEqualTo("Wrong format of date")
-				.jsonPath("$.status").isEqualTo(BAD_REQUEST.value())
-				.jsonPath("$.detail").isEqualTo("Text '2021-13-01' could not be parsed: Invalid value for MonthOfYear (valid values 1 - 12): 13");
+		// Act
+		final var response = webTestClient.post().uri("/reminders/send")
+			.contentType(APPLICATION_JSON)
+			.bodyValue(body.toString())
+			.exchange()
+			.expectStatus().isBadRequest()
+			.expectHeader().contentType(APPLICATION_PROBLEM_JSON_VALUE)
+			.expectBody(Problem.class)
+			.returnResult()
+			.getResponseBody();
+
+		// Assert
+		assertThat(response.getTitle()).isEqualTo("Wrong format of date");
+		assertThat(response.getStatus()).isEqualTo(BAD_REQUEST);
+		assertThat(response.getDetail()).isEqualTo("Text '2021-13-01' could not be parsed: Invalid value for MonthOfYear (valid values 1 - 12): 13");
 
 		verifyNoInteractions(reminderServiceMock, sendRemindersLogicMock);
 	}
@@ -333,15 +409,21 @@ class RemindAndInformResourceFailuresTest {
 	@Test
 	void sendRemindersMissingBody() {
 
-		webTestClient.post().uri("/reminders/send/")
-				.contentType(APPLICATION_JSON)
-				.exchange()
-				.expectStatus().isBadRequest()
-				.expectHeader().contentType(APPLICATION_PROBLEM_JSON_VALUE)
-				.expectBody()
-				.jsonPath("$.title").isEqualTo(Status.BAD_REQUEST.getReasonPhrase())
-				.jsonPath("$.status").isEqualTo(BAD_REQUEST.value())
-				.jsonPath("$.detail").isEqualTo("Required request body is missing: public org.springframework.http.ResponseEntity<java.lang.Void> se.sundsvall.remindandinform.api.RemindAndInformResource.sendReminders(se.sundsvall.remindandinform.api.model.SendRemindersRequest)");
+		// Act
+		final var response = webTestClient.post().uri("/reminders/send")
+			.contentType(APPLICATION_JSON)
+			.exchange()
+			.expectStatus().isBadRequest()
+			.expectHeader().contentType(APPLICATION_PROBLEM_JSON_VALUE)
+			.expectBody(Problem.class)
+			.returnResult()
+			.getResponseBody();
+
+		// Assert
+		assertThat(response.getTitle()).isEqualTo(BAD_REQUEST.getReasonPhrase());
+		assertThat(response.getStatus()).isEqualTo(BAD_REQUEST);
+		assertThat(response.getDetail()).isEqualTo(
+			"Required request body is missing: public org.springframework.http.ResponseEntity<java.lang.Void> se.sundsvall.remindandinform.api.RemindAndInformResource.sendReminders(se.sundsvall.remindandinform.api.model.SendRemindersRequest)");
 
 		verifyNoInteractions(reminderServiceMock, sendRemindersLogicMock);
 	}
@@ -349,17 +431,23 @@ class RemindAndInformResourceFailuresTest {
 	@Test
 	void sendRemindersMissingReminderDate() {
 
-		webTestClient.post().uri("/reminders/send/")
-				.contentType(APPLICATION_JSON)
-				.bodyValue(SendRemindersRequest.create())
-				.exchange()
-				.expectStatus().isBadRequest()
-				.expectHeader().contentType(APPLICATION_PROBLEM_JSON_VALUE)
-				.expectBody()
-				.jsonPath("$.title").isEqualTo("Constraint Violation")
-				.jsonPath("$.status").isEqualTo(BAD_REQUEST.value())
-				.jsonPath("$.violations[0].field").isEqualTo("reminderDate")
-				.jsonPath("$.violations[0].message").isEqualTo("must not be null");
+		// Act
+		final var response = webTestClient.post().uri("/reminders/send")
+			.contentType(APPLICATION_JSON)
+			.bodyValue(SendRemindersRequest.create())
+			.exchange()
+			.expectStatus().isBadRequest()
+			.expectHeader().contentType(APPLICATION_PROBLEM_JSON_VALUE)
+			.expectBody(ConstraintViolationProblem.class)
+			.returnResult()
+			.getResponseBody();
+
+		// Assert
+		assertThat(response.getTitle()).isEqualTo("Constraint Violation");
+		assertThat(response.getStatus()).isEqualTo(BAD_REQUEST);
+		assertThat(response.getViolations())
+			.extracting(Violation::getField, Violation::getMessage)
+			.containsExactly(tuple("reminderDate", "must not be null"));
 
 		verifyNoInteractions(reminderServiceMock, sendRemindersLogicMock);
 	}
@@ -367,17 +455,24 @@ class RemindAndInformResourceFailuresTest {
 	@Test
 	void getReminderMissingReminderId() {
 
+		// Arrange
 		final var reminderId = " ";
 
-		webTestClient.get().uri("/reminders/{reminderId}/", reminderId)
-				.exchange()
-				.expectStatus().isBadRequest()
-				.expectHeader().contentType(APPLICATION_PROBLEM_JSON_VALUE)
-				.expectBody()
-				.jsonPath("$.title").isEqualTo("Constraint Violation")
-				.jsonPath("$.status").isEqualTo(BAD_REQUEST.value())
-				.jsonPath("$.violations[0].field").isEqualTo("getReminderByReminderId.reminderId")
-				.jsonPath("$.violations[0].message").isEqualTo("must not be blank");
+		// Act
+		final var response = webTestClient.get().uri("/reminders/{reminderId}", reminderId)
+			.exchange()
+			.expectStatus().isBadRequest()
+			.expectHeader().contentType(APPLICATION_PROBLEM_JSON_VALUE)
+			.expectBody(ConstraintViolationProblem.class)
+			.returnResult()
+			.getResponseBody();
+
+		// Assert
+		assertThat(response.getTitle()).isEqualTo("Constraint Violation");
+		assertThat(response.getStatus()).isEqualTo(BAD_REQUEST);
+		assertThat(response.getViolations())
+			.extracting(Violation::getField, Violation::getMessage)
+			.containsExactly(tuple("getReminderByReminderId.reminderId", "must not be blank"));
 
 		verifyNoInteractions(reminderServiceMock, sendRemindersLogicMock);
 	}
@@ -385,17 +480,24 @@ class RemindAndInformResourceFailuresTest {
 	@Test
 	void getRemindersInvalidPartyId() {
 
+		// Arrange
 		final var partyId = "not-valid-party-id";
 
-		webTestClient.get().uri("/reminders/parties/{partyId}/", partyId)
-				.exchange()
-				.expectStatus().isBadRequest()
-				.expectHeader().contentType(APPLICATION_PROBLEM_JSON_VALUE)
-				.expectBody()
-				.jsonPath("$.title").isEqualTo("Constraint Violation")
-				.jsonPath("$.status").isEqualTo(BAD_REQUEST.value())
-				.jsonPath("$.violations[0].field").isEqualTo("getRemindersByPartyId.partyId")
-				.jsonPath("$.violations[0].message").isEqualTo("not a valid UUID");
+		// Act
+		final var response = webTestClient.get().uri("/reminders/parties/{partyId}", partyId)
+			.exchange()
+			.expectStatus().isBadRequest()
+			.expectHeader().contentType(APPLICATION_PROBLEM_JSON_VALUE)
+			.expectBody(ConstraintViolationProblem.class)
+			.returnResult()
+			.getResponseBody();
+
+		// Assert
+		assertThat(response.getTitle()).isEqualTo("Constraint Violation");
+		assertThat(response.getStatus()).isEqualTo(BAD_REQUEST);
+		assertThat(response.getViolations())
+			.extracting(Violation::getField, Violation::getMessage)
+			.containsExactly(tuple("getRemindersByPartyId.partyId", "not a valid UUID"));
 
 		verifyNoInteractions(reminderServiceMock, sendRemindersLogicMock);
 	}

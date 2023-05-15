@@ -5,12 +5,12 @@ import static io.swagger.v3.oas.annotations.media.Schema.RequiredMode.REQUIRED;
 import java.time.LocalDate;
 import java.util.Objects;
 
-import javax.validation.constraints.NotNull;
-
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotNull;
 
 @Schema(description = "Request model for sending reminders of a specified date")
 public class SendRemindersRequest {
+
 	@Schema(description = "Date for reminding", example = "2021-11-01", requiredMode = REQUIRED)
 	@NotNull
 	private LocalDate reminderDate;
@@ -23,11 +23,11 @@ public class SendRemindersRequest {
 		return reminderDate;
 	}
 
-	public void setReminderDate(final LocalDate reminderDate) {
+	public void setReminderDate(LocalDate reminderDate) {
 		this.reminderDate = reminderDate;
 	}
 
-	public SendRemindersRequest withReminderDate(final LocalDate reminderDate) {
+	public SendRemindersRequest withReminderDate(LocalDate reminderDate) {
 		this.reminderDate = reminderDate;
 		return this;
 	}
@@ -38,11 +38,11 @@ public class SendRemindersRequest {
 	}
 
 	@Override
-	public boolean equals(final Object o) {
+	public boolean equals(Object o) {
 		if (this == o) {
 			return true;
 		}
-		if (o == null || getClass() != o.getClass()) {
+		if ((o == null) || (getClass() != o.getClass())) {
 			return false;
 		}
 		final var sendRemindersRequest = (SendRemindersRequest) o;

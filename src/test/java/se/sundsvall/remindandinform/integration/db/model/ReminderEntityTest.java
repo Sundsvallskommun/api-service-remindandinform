@@ -15,15 +15,15 @@ import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.util.Random;
 
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import com.google.code.beanmatchers.BeanMatchers;
 
 class ReminderEntityTest {
 
-	@BeforeEach
-	void setup() {
+	@BeforeAll
+	static void setup() {
 		BeanMatchers.registerValueGenerator(() -> OffsetDateTime.now().plusDays(new Random().nextInt()), OffsetDateTime.class);
 		BeanMatchers.registerValueGenerator(() -> LocalDate.now().plusDays(new Random().nextInt()), LocalDate.class);
 	}
@@ -37,12 +37,12 @@ class ReminderEntityTest {
 			hasValidBeanEquals(),
 			hasValidBeanToString()));
 	}
-	
+
 	@Test
 	void testOnCreate() {
-		ReminderEntity entity = new ReminderEntity();
+		final ReminderEntity entity = new ReminderEntity();
 		entity.onCreate();
-		
+
 		assertThat(entity.getCreated()).isCloseTo(OffsetDateTime.now(), within(1, SECONDS));
 		assertThat(entity).hasAllNullFieldsOrPropertiesExcept("id", "sent", "created")
 			.hasFieldOrPropertyWithValue("id", 0L)
@@ -51,9 +51,9 @@ class ReminderEntityTest {
 
 	@Test
 	void testOnUpdate() {
-		ReminderEntity entity = new ReminderEntity();
+		final ReminderEntity entity = new ReminderEntity();
 		entity.onUpdate();
-		
+
 		assertThat(entity.getModified()).isCloseTo(OffsetDateTime.now(), within(1, SECONDS));
 		assertThat(entity)
 			.hasAllNullFieldsOrPropertiesExcept("id", "sent", "modified")

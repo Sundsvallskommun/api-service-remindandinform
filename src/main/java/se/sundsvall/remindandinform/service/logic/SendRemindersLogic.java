@@ -7,13 +7,12 @@ import java.time.ZoneId;
 import java.util.List;
 import java.util.Objects;
 
-import javax.transaction.Transactional;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import generated.se.sundsvall.messaging.Message;
 import generated.se.sundsvall.messaging.MessageRequest;
@@ -54,18 +53,18 @@ public class SendRemindersLogic {
 			LOGGER.debug("Messages to send to api-messaging-service: '{}'", messageRequest);
 			apiMessagingClient.sendMessage(new MessageRequest().messages(messages));
 			reminderRepository.saveAll(reminderRepository.findByReminderDateLessThanEqualAndSentFalse(reminderDate).stream()
-					.map(reminder -> {
-						reminder.setSent(true);
-						return reminder;
-					})
-					.toList());
+				.map(reminder -> {
+					reminder.setSent(true);
+					return reminder;
+				})
+				.toList());
 			LOGGER.info("{} reminders sent for reminderDate: '{}'", messages.size(), reminderDate);
 		}
 	}
 
 	private List<Reminder> findRemindersToSendByReminderDate(LocalDate reminderDate) {
-		var reminders = ReminderMapper.toReminders(reminderRepository.findByReminderDateLessThanEqualAndSentFalse(reminderDate));
-		if(reminders.isEmpty()) {
+		final var reminders = ReminderMapper.toReminders(reminderRepository.findByReminderDateLessThanEqualAndSentFalse(reminderDate));
+		if (reminders.isEmpty()) {
 			LOGGER.info("No reminders found for reminderDate: '{}'", reminderDate);
 		}
 
@@ -74,8 +73,8 @@ public class SendRemindersLogic {
 
 	private List<Message> createMessages(List<Reminder> reminders) {
 		return reminders.stream()
-				.filter(Objects::nonNull)
-				.map(reminder -> toMessage(reminder, reminderMessageProperties))
-				.toList();
+			.filter(Objects::nonNull)
+			.map(reminder -> toMessage(reminder, reminderMessageProperties))
+			.toList();
 	}
 }

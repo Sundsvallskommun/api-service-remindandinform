@@ -1,22 +1,24 @@
 package se.sundsvall.remindandinform.integration.db;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace.NONE;
+
+import java.time.LocalDate;
+import java.util.List;
+
 import org.assertj.core.api.recursive.comparison.RecursiveComparisonConfiguration;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.ActiveProfiles;
+
 import se.sundsvall.remindandinform.integration.db.model.ReminderEntity;
 
-import javax.transaction.Transactional;
-import java.time.LocalDate;
-import java.util.List;
-
-import static org.assertj.core.api.Assertions.assertThat;
-
-@SpringBootTest
+@DataJpaTest
+@AutoConfigureTestDatabase(replace = NONE)
 @ActiveProfiles("junit")
-@Transactional
 class ReminderRepositoryTest {
 
 	private static final String REMINDER_ID_1 = "reminderId1";
@@ -177,7 +179,7 @@ class ReminderRepositoryTest {
 	@Test
 	void getRemindersByReminderDate() {
 
-		var reminders = reminderRepository.findByReminderDateLessThanEqualAndSentFalse(LocalDate.now());
+		final var reminders = reminderRepository.findByReminderDateLessThanEqualAndSentFalse(LocalDate.now());
 
 		assertThat(reminders).isNotEmpty().hasSize(2);
 		assertThat(reminders)

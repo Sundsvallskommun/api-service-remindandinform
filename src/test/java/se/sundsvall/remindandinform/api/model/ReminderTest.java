@@ -13,15 +13,15 @@ import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.util.Random;
 
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import com.google.code.beanmatchers.BeanMatchers;
 
 class ReminderTest {
 
-	@BeforeEach
-	void setup() {
+	@BeforeAll
+	static void setup() {
 		BeanMatchers.registerValueGenerator(() -> LocalDate.now().plusDays(new Random().nextInt()), LocalDate.class);
 		BeanMatchers.registerValueGenerator(() -> OffsetDateTime.now().plusDays(new Random().nextInt()), OffsetDateTime.class);
 	}
@@ -51,7 +51,7 @@ class ReminderTest {
 		final var partyId = "partyId";
 		final var reminderDate = LocalDate.now();
 		final var reminderId = "reminderId";
-		
+
 		final var reminder = Reminder.create()
 			.withAction(action)
 			.withCaseId(caseId)
