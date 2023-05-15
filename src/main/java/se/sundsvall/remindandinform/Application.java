@@ -1,8 +1,10 @@
 package se.sundsvall.remindandinform;
 
-import org.springframework.boot.SpringApplication;
+import static org.springframework.boot.SpringApplication.run;
+
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.scheduling.annotation.EnableScheduling;
+
 import se.sundsvall.dept44.ServiceApplication;
 
 @ServiceApplication
@@ -10,6 +12,6 @@ import se.sundsvall.dept44.ServiceApplication;
 @EnableScheduling
 public class Application {
 	public static void main(String... args) {
-		SpringApplication.run(Application.class, args);
+		run(Application.class, args);
 	}
 }

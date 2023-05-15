@@ -12,14 +12,15 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import java.time.LocalDate;
 import java.util.Random;
 
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import com.google.code.beanmatchers.BeanMatchers;
 
 class UpdateReminderRequestTest {
-	@BeforeEach
-	void setup() {
+
+	@BeforeAll
+	static void setup() {
 		BeanMatchers.registerValueGenerator(() -> LocalDate.now().plusDays(new Random().nextInt()), LocalDate.class);
 	}
 

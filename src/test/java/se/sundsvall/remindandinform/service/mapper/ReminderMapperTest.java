@@ -7,13 +7,12 @@ import static org.mockito.Mockito.when;
 import java.time.LocalDate;
 import java.util.List;
 
-import javax.xml.bind.DatatypeConverter;
-
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import jakarta.xml.bind.DatatypeConverter;
 import se.sundsvall.remindandinform.api.model.Reminder;
 import se.sundsvall.remindandinform.api.model.ReminderRequest;
 import se.sundsvall.remindandinform.api.model.UpdateReminderRequest;
@@ -170,7 +169,7 @@ class ReminderMapperTest {
 
 		final var message = ReminderMapper.toMessage(reminder, reminderMessagePropertiesMock);
 
-		assertThat(message.getParty().getPartyId().toString()).isEqualTo(reminder.getPartyId());
+		assertThat(message.getParty().getPartyId()).hasToString(reminder.getPartyId());
 		assertThat(message.getMessage()).isEqualTo("message");
 		// htmlMessage is Base64Encoded
 		assertThat(new String(DatatypeConverter.parseBase64Binary((message.getHtmlMessage())))).isEqualTo("emailMessage");
