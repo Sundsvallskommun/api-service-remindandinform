@@ -1,8 +1,12 @@
 package se.sundsvall.remindandinform.integration.db.model;
 
+import static org.hibernate.annotations.TimeZoneStorageType.NORMALIZE;
+
 import java.io.Serializable;
 import java.time.OffsetDateTime;
 import java.util.Objects;
+
+import org.hibernate.annotations.TimeZoneStorage;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -23,6 +27,7 @@ public class SchemaHistoryEntity implements Serializable {
 	private String comment;
 
 	@Column(name = "applied", nullable = false)
+	@TimeZoneStorage(NORMALIZE)
 	private OffsetDateTime applied;
 
 	public String getSchemaVersion() {
@@ -59,7 +64,7 @@ public class SchemaHistoryEntity implements Serializable {
 		if (this == obj) {
 			return true;
 		}
-		if (!(obj instanceof SchemaHistoryEntity other)) {
+		if (!(obj instanceof final SchemaHistoryEntity other)) {
 			return false;
 		}
 		return Objects.equals(applied, other.applied) && Objects.equals(comment, other.comment) && Objects.equals(schemaVersion, other.schemaVersion);
