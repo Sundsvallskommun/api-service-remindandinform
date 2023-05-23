@@ -1,6 +1,7 @@
 package se.sundsvall.remindandinform.integration.db.model;
 
 import static java.time.temporal.ChronoUnit.MILLIS;
+import static org.hibernate.annotations.TimeZoneStorageType.NORMALIZE;
 
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -9,6 +10,7 @@ import java.time.ZoneId;
 import java.util.Objects;
 
 import org.hibernate.Length;
+import org.hibernate.annotations.TimeZoneStorage;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -66,12 +68,14 @@ public class ReminderEntity implements Serializable {
 	private boolean sent;
 
 	@Column(name = "created")
+	@TimeZoneStorage(NORMALIZE)
 	private OffsetDateTime created;
 
 	@Column(name = "created_by")
 	private String createdBy;
 
 	@Column(name = "modified")
+	@TimeZoneStorage(NORMALIZE)
 	private OffsetDateTime modified;
 
 	@Column(name = "modified_by")
