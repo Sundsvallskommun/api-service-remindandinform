@@ -17,7 +17,6 @@
 	<properties>
 		<!-- CI/CD properties -->
 		<docker.image.name>ms-remindandinform</docker.image.name>
-		<published.container.port.sandbox>9080</published.container.port.sandbox>
 		<published.container.port.test>9081</published.container.port.test>
 		<published.container.port.production>9081</published.container.port.production>
 		<!-- Service properties -->
