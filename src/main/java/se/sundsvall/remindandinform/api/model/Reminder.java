@@ -5,11 +5,9 @@ import java.time.OffsetDateTime;
 import java.util.Objects;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonInclude;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 
-@JsonInclude(JsonInclude.Include.NON_NULL)
 @Schema(description = "Reminder model")
 public class Reminder {
 

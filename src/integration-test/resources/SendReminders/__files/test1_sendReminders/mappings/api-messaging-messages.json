@@ -16,6 +16,7 @@
 							"party": {
 								"partyId": "fbfbd90c-4c47-11ec-81d3-0242ac130003"
 							},
+							"filters": {},
 							"sender": {
 								"sms": {
 									"name": "TestSmsNameÅÄÖåäö"
@@ -33,6 +34,7 @@
 							"party": {
 								"partyId": "fbfbd90c-4c47-11ec-81d3-0242ac130001"
 							},
+							"filters": {},
 							"sender": {
 								"sms": {
 									"name": "TestSmsNameÅÄÖåäö"
@@ -50,6 +52,7 @@
 							"party": {
 								"partyId": "fbfbd90c-4c47-11ec-81d3-0242ac130002"
 							},
+							"filters": {},
 							"sender": {
 								"sms": {
 									"name": "TestSmsNameÅÄÖåäö"
