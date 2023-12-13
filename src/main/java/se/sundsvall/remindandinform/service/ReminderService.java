@@ -10,7 +10,6 @@ import static se.sundsvall.remindandinform.service.mapper.ReminderMapper.toRemin
 import java.util.List;
 import java.util.UUID;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.zalando.problem.Problem;
@@ -21,12 +20,15 @@ import se.sundsvall.remindandinform.api.model.UpdateReminderRequest;
 import se.sundsvall.remindandinform.integration.db.ReminderRepository;
 
 @Service
+@Transactional
 public class ReminderService {
 
-	@Autowired
-	private ReminderRepository reminderRepository;
+	private final ReminderRepository reminderRepository;
 
-	@Transactional
+	public ReminderService(ReminderRepository reminderRepository) {
+		this.reminderRepository = reminderRepository;
+	}
+
 	public Reminder createReminder(ReminderRequest reminderRequest) {
 
 		final String reminderId = "R-" + UUID.randomUUID();
@@ -34,7 +36,6 @@ public class ReminderService {
 		return toReminder(reminderRepository.save(toReminderEntity(reminderRequest, reminderId)));
 	}
 
-	@Transactional
 	public Reminder updateReminder(UpdateReminderRequest updateReminderRequest, String reminderId) {
 
 		final var existingReminderEntity = reminderRepository.findByReminderId(reminderId).orElseThrow(() -> Problem.valueOf(NOT_FOUND, format("No reminder with reminderId:'%s' was found!", reminderId)));
@@ -47,7 +48,6 @@ public class ReminderService {
 		return findReminderByReminderId(reminderId);
 	}
 
-	@Transactional
 	public void deleteReminderByReminderId(String reminderId) {
 
 		if (reminderRepository.findByReminderId(reminderId).isEmpty()) {
