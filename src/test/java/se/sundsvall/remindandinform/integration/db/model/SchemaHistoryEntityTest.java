@@ -5,6 +5,8 @@ import static com.google.code.beanmatchers.BeanMatchers.hasValidBeanEqualsExclud
 import static com.google.code.beanmatchers.BeanMatchers.hasValidBeanHashCodeExcluding;
 import static com.google.code.beanmatchers.BeanMatchers.hasValidBeanToStringExcluding;
 import static com.google.code.beanmatchers.BeanMatchers.hasValidGettersAndSetters;
+import static com.google.code.beanmatchers.BeanMatchers.registerValueGenerator;
+import static java.time.OffsetDateTime.now;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.AllOf.allOf;
 
@@ -14,13 +16,11 @@ import java.util.Random;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import com.google.code.beanmatchers.BeanMatchers;
-
 class SchemaHistoryEntityTest {
 
 	@BeforeAll
 	static void setup() {
-		BeanMatchers.registerValueGenerator(() -> OffsetDateTime.now().plusDays(new Random().nextInt()), OffsetDateTime.class);
+		registerValueGenerator(() -> now().plusDays(new Random().nextInt()), OffsetDateTime.class);
 	}
 
 	@Test
