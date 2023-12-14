@@ -1,15 +1,15 @@
 package se.sundsvall.remindandinform.service.logic;
 
+import static java.time.LocalDate.now;
+import static java.time.ZoneId.systemDefault;
 import static se.sundsvall.remindandinform.service.mapper.ReminderMapper.toMessage;
 
 import java.time.LocalDate;
-import java.time.ZoneId;
 import java.util.List;
 import java.util.Objects;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,26 +23,26 @@ import se.sundsvall.remindandinform.service.mapper.ReminderMapper;
 import se.sundsvall.remindandinform.service.mapper.configuration.ReminderMessageProperties;
 
 @Service
+@Transactional
 public class SendRemindersLogic {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(SendRemindersLogic.class);
 
-	@Autowired
-	private ReminderRepository reminderRepository;
+	private final ReminderRepository reminderRepository;
+	private final ApiMessagingClient apiMessagingClient;
+	private final ReminderMessageProperties reminderMessageProperties;
 
-	@Autowired
-	private ApiMessagingClient apiMessagingClient;
-
-	@Autowired
-	private ReminderMessageProperties reminderMessageProperties;
-
-	@Scheduled(cron = "${sendReminders.cron.expr}")
-	@Transactional
-	public void sendReminders() {
-		sendReminders(LocalDate.now(ZoneId.systemDefault()));
+	public SendRemindersLogic(ReminderRepository reminderRepository, ApiMessagingClient apiMessagingClient, ReminderMessageProperties reminderMessageProperties) {
+		this.reminderRepository = reminderRepository;
+		this.apiMessagingClient = apiMessagingClient;
+		this.reminderMessageProperties = reminderMessageProperties;
 	}
 
-	@Transactional
+	@Scheduled(cron = "${sendReminders.cron.expr}")
+	public void sendReminders() {
+		sendReminders(now(systemDefault()));
+	}
+
 	public void sendReminders(LocalDate reminderDate) {
 		final var reminders = findRemindersToSendByReminderDate(reminderDate);
 
