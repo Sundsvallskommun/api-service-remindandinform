@@ -20,7 +20,6 @@
 		<published.container.port.test>9081</published.container.port.test>
 		<published.container.port.production>9081</published.container.port.production>
 		<!-- Service properties -->
-		<openapi-generator-maven-plugin>7.1.0</openapi-generator-maven-plugin>
 		<generated-sources-path>${project.build.directory}/generated-sources</generated-sources-path>
 		<generated-sources-java-path>src/main/java</generated-sources-java-path>
 	</properties>
@@ -64,7 +63,6 @@
 			<plugin>
 				<groupId>org.openapitools</groupId>
 				<artifactId>openapi-generator-maven-plugin</artifactId>
-				<version>${openapi-generator-maven-plugin}</version>
 				<executions>
 					<execution>
 						<id>messaging-api</id>
@@ -74,20 +72,39 @@
 						<configuration>
 							<inputSpec>${project.basedir}/src/main/resources/integrations/messaging.yaml</inputSpec>
 							<output>${generated-sources-path}</output>
-							<generatorName>jaxrs-spec</generatorName>
+							<generatorName>spring</generatorName>
 							<generateApis>false</generateApis>
 							<generateSupportingFiles>false</generateSupportingFiles>
 							<configOptions>
 								<useSpringBoot3>true</useSpringBoot3>
 								<useBeanValidation>false</useBeanValidation>
 								<useSwaggerAnnotations>false</useSwaggerAnnotations>
-								<sourceFolder>${generated-sources-java-path}</sourceFolder>
+								<sourceFolder>models</sourceFolder>
 								<dateLibrary>java8</dateLibrary>
 								<modelPackage>generated.se.sundsvall.messaging</modelPackage>
 								<openApiNullable>false</openApiNullable>
 								<generatePom>false</generatePom>
 								<interfaceOnly>true</interfaceOnly>
 							</configOptions>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>build-helper-maven-plugin</artifactId>
+				<version>${build-helper-maven-plugin.version}</version>
+				<executions>
+					<execution>
+						<id>add-generated-source</id>
+						<phase>generate-sources</phase>
+						<goals>
+							<goal>add-source</goal>
+						</goals>
+						<configuration>
+							<sources>
+								<source>${generated-sources-path}/models</source> <!-- API model classes -->
+							</sources>
 						</configuration>
 					</execution>
 				</executions>

@@ -25,7 +25,7 @@ import generated.se.sundsvall.messaging.DeliveryResult;
 import generated.se.sundsvall.messaging.MessageResult;
 import se.sundsvall.remindandinform.integration.db.ReminderRepository;
 import se.sundsvall.remindandinform.integration.db.model.ReminderEntity;
-import se.sundsvall.remindandinform.integration.messaging.ApiMessagingClient;
+import se.sundsvall.remindandinform.integration.messaging.MessagingClient;
 import se.sundsvall.remindandinform.service.mapper.configuration.ReminderMessageProperties;
 
 @ExtendWith(MockitoExtension.class)
@@ -52,7 +52,7 @@ class SendRemindersLogicTest {
 	private ReminderMessageProperties reminderMessagePropertiesMock;
 
 	@Mock
-	private ApiMessagingClient apiMessagingClientMock;
+	private MessagingClient messagingClientMock;
 
 	@InjectMocks
 	private SendRemindersLogic sendRemindersLogic;
@@ -80,12 +80,12 @@ class SendRemindersLogicTest {
 
 		when(reminderRepositoryMock.findByReminderDateLessThanEqualAndSentFalse(LocalDate.now())).thenReturn(List.of(reminderEntity1, reminderEntity2));
 
-		when(apiMessagingClientMock.sendMessage(any())).thenReturn(new MessageResult().deliveries(List.of(new DeliveryResult().status(SENT).messageType(MESSAGE))));
+		when(messagingClientMock.sendMessage(any())).thenReturn(new MessageResult().deliveries(List.of(new DeliveryResult().status(SENT).messageType(MESSAGE))));
 
 		sendRemindersLogic.sendReminders();
 
 		verify(reminderRepositoryMock, times(2)).findByReminderDateLessThanEqualAndSentFalse(LocalDate.now());
-		verify(apiMessagingClientMock).sendMessage(any());
+		verify(messagingClientMock).sendMessage(any());
 	}
 
 	@Test
@@ -96,7 +96,7 @@ class SendRemindersLogicTest {
 		sendRemindersLogic.sendReminders();
 
 		verify(reminderRepositoryMock).findByReminderDateLessThanEqualAndSentFalse(LocalDate.now());
-		verify(apiMessagingClientMock, never()).sendMessage(any());
+		verify(messagingClientMock, never()).sendMessage(any());
 	}
 
 	@Test
@@ -106,12 +106,12 @@ class SendRemindersLogicTest {
 
 		when(reminderRepositoryMock.findByReminderDateLessThanEqualAndSentFalse(LocalDate.now())).thenReturn(List.of(reminderEntity1, reminderEntity2));
 
-		when(apiMessagingClientMock.sendMessage(any())).thenReturn(new MessageResult().messageId(randomUUID()).deliveries(List.of(new DeliveryResult().status(SENT).messageType(MESSAGE))));
+		when(messagingClientMock.sendMessage(any())).thenReturn(new MessageResult().messageId(randomUUID()).deliveries(List.of(new DeliveryResult().status(SENT).messageType(MESSAGE))));
 
 		sendRemindersLogic.sendReminders();
 
 		verify(reminderRepositoryMock, times(2)).findByReminderDateLessThanEqualAndSentFalse(LocalDate.now());
-		verify(apiMessagingClientMock).sendMessage(any());
+		verify(messagingClientMock).sendMessage(any());
 	}
 
 	public void setUpProperties() {

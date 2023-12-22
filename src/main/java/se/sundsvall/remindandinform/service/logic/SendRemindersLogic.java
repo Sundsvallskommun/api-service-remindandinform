@@ -18,7 +18,7 @@ import generated.se.sundsvall.messaging.Message;
 import generated.se.sundsvall.messaging.MessageRequest;
 import se.sundsvall.remindandinform.api.model.Reminder;
 import se.sundsvall.remindandinform.integration.db.ReminderRepository;
-import se.sundsvall.remindandinform.integration.messaging.ApiMessagingClient;
+import se.sundsvall.remindandinform.integration.messaging.MessagingClient;
 import se.sundsvall.remindandinform.service.mapper.ReminderMapper;
 import se.sundsvall.remindandinform.service.mapper.configuration.ReminderMessageProperties;
 
@@ -29,12 +29,12 @@ public class SendRemindersLogic {
 	private static final Logger LOGGER = LoggerFactory.getLogger(SendRemindersLogic.class);
 
 	private final ReminderRepository reminderRepository;
-	private final ApiMessagingClient apiMessagingClient;
+	private final MessagingClient messagingClient;
 	private final ReminderMessageProperties reminderMessageProperties;
 
-	public SendRemindersLogic(ReminderRepository reminderRepository, ApiMessagingClient apiMessagingClient, ReminderMessageProperties reminderMessageProperties) {
+	public SendRemindersLogic(ReminderRepository reminderRepository, MessagingClient messagingClient, ReminderMessageProperties reminderMessageProperties) {
 		this.reminderRepository = reminderRepository;
-		this.apiMessagingClient = apiMessagingClient;
+		this.messagingClient = messagingClient;
 		this.reminderMessageProperties = reminderMessageProperties;
 	}
 
@@ -51,7 +51,7 @@ public class SendRemindersLogic {
 		if (!messages.isEmpty()) {
 			final var messageRequest = new MessageRequest().messages(messages);
 			LOGGER.debug("Messages to send to api-messaging-service: '{}'", messageRequest);
-			apiMessagingClient.sendMessage(new MessageRequest().messages(messages));
+			messagingClient.sendMessage(new MessageRequest().messages(messages));
 			reminderRepository.saveAll(reminderRepository.findByReminderDateLessThanEqualAndSentFalse(reminderDate).stream()
 				.map(reminder -> {
 					reminder.setSent(true);
