@@ -12,7 +12,7 @@ import generated.se.sundsvall.messaging.MessageResult;
 import se.sundsvall.remindandinform.integration.messaging.configuration.MessagingConfiguration;
 
 @FeignClient(name = CLIENT_ID, url = "${integration.messaging.url}", configuration = MessagingConfiguration.class)
-public interface ApiMessagingClient {
+public interface MessagingClient {
 
 	/**
 	 * Send messages as email or SMS to list of recipients.

@@ -22,7 +22,7 @@ import se.sundsvall.remindandinform.api.model.UpdateReminderRequest;
 import se.sundsvall.remindandinform.integration.db.model.ReminderEntity;
 import se.sundsvall.remindandinform.service.mapper.configuration.ReminderMessageProperties;
 
-public class ReminderMapper {
+public final class ReminderMapper {
 
 	private ReminderMapper() {}
 
