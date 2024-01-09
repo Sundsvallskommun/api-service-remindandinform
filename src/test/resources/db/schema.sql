@@ -31,5 +31,5 @@
     create index party_id_index 
        on reminder (party_id);
 
-    alter table reminder 
+    alter table if exists reminder 
        add constraint UK_sef5hopmuh38iabf4vhl9bajj unique (reminder_id);
