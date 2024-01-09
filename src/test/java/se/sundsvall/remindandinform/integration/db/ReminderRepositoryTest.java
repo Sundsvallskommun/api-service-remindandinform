@@ -126,8 +126,9 @@ class ReminderRepositoryTest {
 	@Test
 	void findByPartyId() {
 		final var reminders = reminderRepository.findByPartyId(PARTY_ID_1);
-		assertThat(reminders).isNotEmpty().hasSize(1);
 		assertThat(reminders)
+			.isNotEmpty()
+			.hasSize(1)
 			.usingRecursiveFieldByFieldElementComparator(RecursiveComparisonConfiguration.builder().withIgnoredFieldsMatchingRegexes(".+hibernate.+").build())
 			.containsExactlyInAnyOrder(entity1);
 	}
@@ -164,8 +165,9 @@ class ReminderRepositoryTest {
 
 		var reminders = reminderRepository.findByPartyId(PARTY_ID_4);
 
-		assertThat(reminders).isNotEmpty().hasSize(1);
 		assertThat(reminders)
+			.isNotEmpty()
+			.hasSize(1)
 			.usingRecursiveFieldByFieldElementComparator(RecursiveComparisonConfiguration.builder().withIgnoredFieldsMatchingRegexes(".+hibernate.+").build())
 			.containsExactlyInAnyOrder(entity4);
 
@@ -181,8 +183,9 @@ class ReminderRepositoryTest {
 
 		final var reminders = reminderRepository.findByReminderDateLessThanEqualAndSentFalse(LocalDate.now());
 
-		assertThat(reminders).isNotEmpty().hasSize(2);
 		assertThat(reminders)
+			.isNotEmpty()
+			.hasSize(2)
 			.usingRecursiveFieldByFieldElementComparator(RecursiveComparisonConfiguration.builder().withIgnoredFieldsMatchingRegexes(".+hibernate.+").build())
 			.containsExactlyInAnyOrder(entity1, entity2);
 	}
