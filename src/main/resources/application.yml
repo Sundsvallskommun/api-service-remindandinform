@@ -15,6 +15,7 @@ reminder:
 sendReminders:
     cron:
         expr: 0 0 8 * * ?
+    shedlock-lock-at-most-for: PT2M
 spring:
     application:
         name: api-remindandinform
@@ -29,6 +30,9 @@ spring:
                     schema-generation:
                         database:
                             action: none
+    flyway:
+        enabled: false
+        baseline-on-migrate: true
 # Circuit breaker settings
 resilience4j.circuitbreaker:
         instances:
