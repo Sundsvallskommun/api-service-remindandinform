@@ -29,8 +29,8 @@ spring:
                         scripts:
                             action: create
                             create-target: target/database/generated-schema.sql
-            flyway:
-                enabled: true
+    flyway:
+        enabled: true
     security:
         oauth2:
             client:
