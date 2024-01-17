@@ -30,6 +30,8 @@ spring:
                     schema-generation:
                         database:
                             action: none
+    flyway:
+        enabled: false
 # Circuit breaker settings
 resilience4j.circuitbreaker:
         instances:
