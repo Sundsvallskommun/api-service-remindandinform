@@ -15,6 +15,7 @@ reminder:
 sendReminders:
     cron:
         expr: 0 0 8 * * ?
+    shedlock-lock-at-most-for: PT2M
 spring:
     application:
         name: api-remindandinform

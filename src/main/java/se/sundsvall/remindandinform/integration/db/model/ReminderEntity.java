@@ -9,6 +9,7 @@ import java.time.OffsetDateTime;
 import java.time.ZoneId;
 import java.util.Objects;
 
+import jakarta.persistence.UniqueConstraint;
 import org.hibernate.Length;
 import org.hibernate.annotations.TimeZoneStorage;
 
@@ -27,6 +28,9 @@ import jakarta.persistence.Table;
 	indexes = {
 		@Index(name = "reminder_id_index", columnList = "reminder_id"),
 		@Index(name = "party_id_index", columnList = "party_id"),
+	},
+	uniqueConstraints = {
+		@UniqueConstraint(name = "uq_reminder_id", columnNames = { "reminder_id" })
 	})
 public class ReminderEntity implements Serializable {
 

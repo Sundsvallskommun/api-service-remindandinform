@@ -18,11 +18,13 @@
         primary key (id)
     ) engine=InnoDB;
 
-    create index reminder_id_index 
+    create index reminder_id_index
        on reminder (reminder_id);
 
-    create index party_id_index 
+    create index party_id_index
        on reminder (party_id);
 
-    alter table if exists reminder 
+    alter table if exists reminder
        add constraint uq_reminder_id unique (reminder_id);
+
+    drop table if exists schema_history;

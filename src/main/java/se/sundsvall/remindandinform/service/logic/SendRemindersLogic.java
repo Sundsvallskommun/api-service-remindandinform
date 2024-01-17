@@ -8,6 +8,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
 
+import net.javacrumbs.shedlock.spring.annotation.SchedulerLock;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -39,6 +40,7 @@ public class SendRemindersLogic {
 	}
 
 	@Scheduled(cron = "${sendReminders.cron.expr}")
+	@SchedulerLock(name = "sendReminders", lockAtMostFor = "${sendReminders.shedlock-lock-at-most-for}")
 	public void sendReminders() {
 		sendReminders(now(systemDefault()));
 	}
