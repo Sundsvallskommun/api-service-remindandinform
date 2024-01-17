@@ -32,6 +32,7 @@ spring:
                             action: none
     flyway:
         enabled: false
+        baseline-on-migrate: true
 # Circuit breaker settings
 resilience4j.circuitbreaker:
         instances:
