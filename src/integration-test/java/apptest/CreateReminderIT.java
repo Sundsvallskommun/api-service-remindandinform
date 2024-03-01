@@ -32,7 +32,7 @@ class CreateReminderIT extends AbstractAppTest {
 			.withHttpMethod(POST)
 			.withRequest("request.json")
 			.withExpectedResponseStatus(CREATED)
-			.withExpectedResponseHeader(LOCATION, List.of("^http://(.*)/R-(.*)$"))
+			.withExpectedResponseHeader(LOCATION, List.of("^/reminders/(.*)$"))
 			.sendRequestAndVerifyResponse();
 
 		assertThat(reminderRepository.findByPartyId(partyId).stream().findFirst()).isPresent();

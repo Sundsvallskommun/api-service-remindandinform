@@ -190,7 +190,6 @@ class RemindAndInformResourceTest {
 		final var partyId = "81471222-5798-11e9-ae24-57fa13b361e";
 		final var reminderId = "reminderId";
 
-		final var expectedLocationURL = "http://localhost:".concat(String.valueOf(port)).concat("/").concat(reminderId);
 		final var body = ReminderRequest.create()
 			.withPartyId(partyId)
 			.withAction("action")
@@ -208,7 +207,7 @@ class RemindAndInformResourceTest {
 			.exchange()
 			.expectStatus().isCreated()
 			.expectHeader().contentType(ALL_VALUE)
-			.expectHeader().value(LOCATION, is(expectedLocationURL));
+			.expectHeader().location("/reminders/" + reminderId);
 
 		// Assert
 		assertThat(response).isNotNull();
