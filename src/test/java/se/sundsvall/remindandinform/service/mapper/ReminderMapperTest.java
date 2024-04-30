@@ -170,6 +170,7 @@ class ReminderMapperTest {
 		final var message = ReminderMapper.toMessage(reminder, reminderMessagePropertiesMock);
 
 		assertThat(message.getParty().getPartyId()).hasToString(reminder.getPartyId());
+		assertThat(message.getParty().getExternalReferences()).isNotNull().isEmpty();
 		assertThat(message.getMessage()).isEqualTo("message");
 		// htmlMessage is Base64Encoded
 		assertThat(new String(DatatypeConverter.parseBase64Binary((message.getHtmlMessage())))).isEqualTo("emailMessage");

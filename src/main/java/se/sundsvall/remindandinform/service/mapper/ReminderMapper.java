@@ -1,6 +1,7 @@
 package se.sundsvall.remindandinform.service.mapper;
 
 import static java.lang.String.format;
+import static java.util.Collections.emptyList;
 import static java.util.Optional.ofNullable;
 
 import java.nio.charset.StandardCharsets;
@@ -126,7 +127,8 @@ public final class ReminderMapper {
 
 	private static MessageParty toParty(final String partyId) {
 		return new MessageParty()
-			.partyId(UUID.fromString(partyId));
+			.partyId(UUID.fromString(partyId))
+			.externalReferences(emptyList());
 	}
 
 	private static String decodeSpecialChars(final String stringToConvert) {
