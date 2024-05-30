@@ -16,9 +16,6 @@
 	<description>Service for handling and sending reminders</description>
 	<properties>
 		<!-- CI/CD properties -->
-		<docker.image.name>ms-remindandinform</docker.image.name>
-		<published.container.port.test>9081</published.container.port.test>
-		<published.container.port.production>9081</published.container.port.production>
 		<!-- Service properties -->
 		<generated-sources-path>${project.build.directory}/generated-sources</generated-sources-path>
 		<generated-sources-java-path>src/main/java</generated-sources-java-path>
