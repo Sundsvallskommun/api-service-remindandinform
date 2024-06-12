@@ -31,6 +31,10 @@ import se.sundsvall.remindandinform.integration.db.model.ReminderEntity;
 @ExtendWith(MockitoExtension.class)
 class ReminderServiceTest {
 
+	private static final String PARTY_ID = "partyId";
+
+	private static final String REMINDER_ID = "reminderId";
+
 	@Mock
 	private ReminderRepository reminderRepositoryMock;
 
@@ -44,7 +48,7 @@ class ReminderServiceTest {
 	void findByPartyIdSuccess() {
 
 		// Parameters
-		final var partyId = "partyId";
+		final var partyId = PARTY_ID;
 		final var reminderId1 = "reminderId1";
 		final var reminderId2 = "reminderId2";
 
@@ -72,40 +76,33 @@ class ReminderServiceTest {
 	@Test
 	void findByPartyIdNotFound() {
 
-		// Parameters
-		final var partyId = "partyId";
+		when(reminderRepositoryMock.findByPartyId(PARTY_ID)).thenReturn(Collections.emptyList());
 
-		when(reminderRepositoryMock.findByPartyId(partyId)).thenReturn(Collections.emptyList());
-
-		final var problem = assertThrows(DefaultProblem.class, () -> reminderService.findRemindersByPartyId(partyId));
+		final var problem = assertThrows(DefaultProblem.class, () -> reminderService.findRemindersByPartyId(PARTY_ID));
 
 		assertThat(problem.getTitle()).isEqualTo(Status.NOT_FOUND.getReasonPhrase());
 		assertThat(problem.getDetail()).isEqualTo("No reminders found for partyId:'partyId'");
 		assertThat(problem.getStatus()).isEqualTo(Status.NOT_FOUND);
 
-		verify(reminderRepositoryMock).findByPartyId(partyId);
+		verify(reminderRepositoryMock).findByPartyId(PARTY_ID);
 	}
 
 	@Test
 	void deleteByReminderIdSuccess() {
 
-		// Parameters
-		final var reminderId = "reminderId";
 
-		when(reminderRepositoryMock.findByReminderId(reminderId)).thenReturn(Optional.of(new ReminderEntity()));
+		when(reminderRepositoryMock.findByReminderId(REMINDER_ID)).thenReturn(Optional.of(new ReminderEntity()));
 
-		doNothing().when(reminderRepositoryMock).deleteByReminderId(reminderId);
+		doNothing().when(reminderRepositoryMock).deleteByReminderId(REMINDER_ID);
 
-		reminderService.deleteReminderByReminderId(reminderId);
+		reminderService.deleteReminderByReminderId(REMINDER_ID);
 
-		verify(reminderRepositoryMock).deleteByReminderId(reminderId);
+		verify(reminderRepositoryMock).deleteByReminderId(REMINDER_ID);
 	}
 
 	@Test
 	void updateReminderSuccess() {
 		// Parameters
-		final var reminderId = "reminderId";
-		final var partyId = "partyId";
 		final var caseId = "caseId";
 		final var caseLink = "caseLink";
 		final var action = "action";
@@ -130,8 +127,8 @@ class ReminderServiceTest {
 		// Create existing ReminderEntity
 		final var reminderEntity = new ReminderEntity();
 		reminderEntity.setReminderDate(reminderDate);
-		reminderEntity.setReminderId(reminderId);
-		reminderEntity.setPartyId(partyId);
+		reminderEntity.setReminderId(REMINDER_ID);
+		reminderEntity.setPartyId(PARTY_ID);
 		reminderEntity.setCaseId(caseId);
 		reminderEntity.setCaseLink(caseLink);
 		reminderEntity.setAction(action);
@@ -140,26 +137,26 @@ class ReminderServiceTest {
 		// Create updated ReminderEntity
 		final var updatedReminderEntity = new ReminderEntity();
 		reminderEntity.setReminderDate(updatedReminderDate);
-		reminderEntity.setReminderId(reminderId);
+		reminderEntity.setReminderId(REMINDER_ID);
 		reminderEntity.setPartyId(updatedPartyId);
 		reminderEntity.setCaseId(updatedCaseId);
 		reminderEntity.setCaseLink(updatedCaseLink);
 		reminderEntity.setAction(updatedAction);
 		reminderEntity.setNote(updatedNote);
 
-		when(reminderRepositoryMock.findByReminderId(reminderId)).thenReturn(Optional.of(reminderEntity));
+		when(reminderRepositoryMock.findByReminderId(REMINDER_ID)).thenReturn(Optional.of(reminderEntity));
 		when(reminderRepositoryMock.save(any(ReminderEntity.class))).thenReturn(updatedReminderEntity);
 
-		final var reminder = reminderService.updateReminder(updateReminderRequest, reminderId);
+		final var reminder = reminderService.updateReminder(updateReminderRequest, REMINDER_ID);
 
 		assertThat(reminder).isNotNull();
 
 		verify(reminderRepositoryMock).save(reminderEntityArgumentCaptor.capture());
-		verify(reminderRepositoryMock, times(2)).findByReminderId(reminderId);
+		verify(reminderRepositoryMock, times(2)).findByReminderId(REMINDER_ID);
 
 		final var reminderEntityCaptorValue = reminderEntityArgumentCaptor.getValue();
 		assertThat(reminderEntityCaptorValue).isNotNull();
-		assertThat(reminderEntityCaptorValue.getReminderId()).isEqualTo(reminderId);
+		assertThat(reminderEntityCaptorValue.getReminderId()).isEqualTo(REMINDER_ID);
 		assertThat(reminderEntityCaptorValue.getPartyId()).isEqualTo(updatedPartyId);
 		assertThat(reminderEntityCaptorValue.getCaseId()).isEqualTo(updatedCaseId);
 		assertThat(reminderEntityCaptorValue.getCaseLink()).isEqualTo(updatedCaseLink);
@@ -171,24 +168,21 @@ class ReminderServiceTest {
 	@Test
 	void deleteByReminderIdNotFound() {
 
-		// Parameters
-		final var reminderId = "reminderId";
 
-		when(reminderRepositoryMock.findByReminderId(reminderId)).thenReturn(Optional.empty());
+		when(reminderRepositoryMock.findByReminderId(REMINDER_ID)).thenReturn(Optional.empty());
 
-		final var problem = assertThrows(DefaultProblem.class, () -> reminderService.deleteReminderByReminderId(reminderId));
+		final var problem = assertThrows(DefaultProblem.class, () -> reminderService.deleteReminderByReminderId(REMINDER_ID));
 
 		assertThat(problem.getTitle()).isEqualTo(Status.NOT_FOUND.getReasonPhrase());
 		assertThat(problem.getDetail()).isEqualTo("No reminder found for reminderId:'reminderId'");
 		assertThat(problem.getStatus()).isEqualTo(Status.NOT_FOUND);
 
-		verify(reminderRepositoryMock, times(0)).deleteByReminderId(reminderId);
+		verify(reminderRepositoryMock, times(0)).deleteByReminderId(REMINDER_ID);
 	}
 
 	@Test
 	void createReminder() {
 
-		final var partyId = "partyId";
 		final var action = "action";
 		final var note = "note";
 		final var caseId = "caseId";
@@ -197,7 +191,7 @@ class ReminderServiceTest {
 
 		// Parameters
 		final var reminderRequest = ReminderRequest.create()
-			.withPartyId(partyId)
+			.withPartyId(PARTY_ID)
 			.withAction(action)
 			.withNote(note)
 			.withCaseId(caseId)
@@ -214,7 +208,7 @@ class ReminderServiceTest {
 		final var reminderEntityCaptorValue = reminderEntityArgumentCaptor.getValue();
 		assertThat(reminderEntityCaptorValue).isNotNull();
 		assertThat(reminderEntityCaptorValue.getReminderId()).startsWith("R-");
-		assertThat(reminderEntityCaptorValue.getPartyId()).isEqualTo(partyId);
+		assertThat(reminderEntityCaptorValue.getPartyId()).isEqualTo(PARTY_ID);
 		assertThat(reminderEntityCaptorValue.getCaseId()).isEqualTo(caseId);
 		assertThat(reminderEntityCaptorValue.getCaseLink()).isEqualTo(caseLink);
 		assertThat(reminderEntityCaptorValue.getAction()).isEqualTo(action);
