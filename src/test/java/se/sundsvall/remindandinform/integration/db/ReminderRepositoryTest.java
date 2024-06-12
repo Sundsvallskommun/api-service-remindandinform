@@ -57,10 +57,10 @@ class ReminderRepositoryTest {
 	private static final String PARTY_ID_2 = "partyId2";
 	private static final String PARTY_ID_3 = "partyId3";
 	private static final String PARTY_ID_4 = "partyId4";
+	private static final String HIBERNATE_REGEX = ".+hibernate.+";
 
 	private ReminderEntity entity1;
 	private ReminderEntity entity2;
-	private ReminderEntity entity3;
 	private ReminderEntity entity4;
 
 	@Autowired
@@ -68,7 +68,7 @@ class ReminderRepositoryTest {
 
 	@BeforeEach
 	void setup() {
-		reminderRepository.findAll().forEach(reminder -> reminderRepository.delete(reminder));
+		reminderRepository.deleteAll(reminderRepository.findAll());
 
 		entity1 = new ReminderEntity();
 		entity1.setReminderId(REMINDER_ID_1);
@@ -95,7 +95,7 @@ class ReminderRepositoryTest {
 		entity2.setSent(false);
 
 		// Entity with null in companyId
-		entity3 = new ReminderEntity();
+		final ReminderEntity entity3 = new ReminderEntity();
 		entity3.setReminderId(REMINDER_ID_3);
 		entity3.setPartyId(PARTY_ID_3);
 		entity3.setCaseId(CASE_ID_3);
@@ -129,7 +129,7 @@ class ReminderRepositoryTest {
 		assertThat(reminders)
 			.isNotEmpty()
 			.hasSize(1)
-			.usingRecursiveFieldByFieldElementComparator(RecursiveComparisonConfiguration.builder().withIgnoredFieldsMatchingRegexes(".+hibernate.+").build())
+			.usingRecursiveFieldByFieldElementComparator(RecursiveComparisonConfiguration.builder().withIgnoredFieldsMatchingRegexes(HIBERNATE_REGEX).build())
 			.containsExactlyInAnyOrder(entity1);
 	}
 
@@ -155,7 +155,7 @@ class ReminderRepositoryTest {
 
 		final var fetchedEntity = reminderRepository.save(reminderEntity);
 		assertThat(fetchedEntity)
-			.usingRecursiveComparison(RecursiveComparisonConfiguration.builder().withIgnoredFieldsMatchingRegexes(".+hibernate.+").build())
+			.usingRecursiveComparison(RecursiveComparisonConfiguration.builder().withIgnoredFieldsMatchingRegexes(HIBERNATE_REGEX).build())
 			.isEqualTo(reminderEntity);
 		assertThat(fetchedEntity.getId()).isPositive();
 	}
@@ -168,7 +168,7 @@ class ReminderRepositoryTest {
 		assertThat(reminders)
 			.isNotEmpty()
 			.hasSize(1)
-			.usingRecursiveFieldByFieldElementComparator(RecursiveComparisonConfiguration.builder().withIgnoredFieldsMatchingRegexes(".+hibernate.+").build())
+			.usingRecursiveFieldByFieldElementComparator(RecursiveComparisonConfiguration.builder().withIgnoredFieldsMatchingRegexes(HIBERNATE_REGEX).build())
 			.containsExactlyInAnyOrder(entity4);
 
 		reminderRepository.deleteByReminderId(REMINDER_ID_4);
@@ -186,7 +186,7 @@ class ReminderRepositoryTest {
 		assertThat(reminders)
 			.isNotEmpty()
 			.hasSize(2)
-			.usingRecursiveFieldByFieldElementComparator(RecursiveComparisonConfiguration.builder().withIgnoredFieldsMatchingRegexes(".+hibernate.+").build())
+			.usingRecursiveFieldByFieldElementComparator(RecursiveComparisonConfiguration.builder().withIgnoredFieldsMatchingRegexes(HIBERNATE_REGEX).build())
 			.containsExactlyInAnyOrder(entity1, entity2);
 	}
 }

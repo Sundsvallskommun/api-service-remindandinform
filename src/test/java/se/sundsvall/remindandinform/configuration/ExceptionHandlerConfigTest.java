@@ -1,14 +1,14 @@
 package se.sundsvall.remindandinform.configuration;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
+
+import java.time.format.DateTimeParseException;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.zalando.problem.Status;
-
-import java.time.format.DateTimeParseException;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.springframework.http.HttpStatus.BAD_REQUEST;
 
 @SpringBootTest(classes = ExceptionHandlerConfig.class)
 class ExceptionHandlerConfigTest {

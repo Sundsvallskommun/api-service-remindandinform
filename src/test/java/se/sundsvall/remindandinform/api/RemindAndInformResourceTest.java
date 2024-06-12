@@ -1,14 +1,12 @@
 package se.sundsvall.remindandinform.api;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
-import static org.springframework.http.HttpHeaders.LOCATION;
 import static org.springframework.http.MediaType.ALL_VALUE;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
@@ -22,7 +20,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
@@ -38,6 +35,20 @@ import se.sundsvall.remindandinform.service.logic.SendRemindersLogic;
 @ActiveProfiles("junit")
 class RemindAndInformResourceTest {
 
+	private static final String REMINDER_ID = "reminderId";
+
+	private static final String CASE_ID = "caseId";
+
+	private static final String CASE_LINK = "caseLink";
+
+	private static final String ACTION = "action";
+
+	private static final String CREATED_BY = "createdBy";
+
+	private static final String PARTY_ID = "81471222-5798-11e9-ae24-57fa13b361e";
+
+	private static final String MODIFIED_BY = "modifiedBy";
+
 	@MockBean
 	private ReminderService reminderServiceMock;
 
@@ -47,26 +58,19 @@ class RemindAndInformResourceTest {
 	@Autowired
 	private WebTestClient webTestClient;
 
-	@LocalServerPort
-	private int port;
-
 	@Test
 	void getRemindersByPartyId() {
 
 		// Arrange
 		final var partyId = UUID.randomUUID().toString();
-		final var reminderId = "reminderId";
-		final var caseId = "caseId";
-		final var caseLink = "caseLink";
-		final var action = "action";
 		final var reminderDate = LocalDate.now();
 
 		final var reminder = Reminder.create()
 			.withPartyId(partyId)
-			.withReminderId(reminderId)
-			.withAction(action)
-			.withCaseId(caseId)
-			.withCaseLink(caseLink)
+			.withReminderId(REMINDER_ID)
+			.withAction(ACTION)
+			.withCaseId(CASE_ID)
+			.withCaseLink(CASE_LINK)
 			.withReminderDate(reminderDate);
 
 		when(reminderServiceMock.findRemindersByPartyId(partyId)).thenReturn(List.of(reminder));
@@ -88,24 +92,20 @@ class RemindAndInformResourceTest {
 
 		// Arrange
 		final var partyId = UUID.randomUUID().toString();
-		final var reminderId = "reminderId";
-		final var caseId = "caseId";
-		final var caseLink = "caseLink";
-		final var action = "action";
 		final var reminderDate = LocalDate.now();
 
 		final var reminder = Reminder.create()
 			.withPartyId(partyId)
-			.withReminderId(reminderId)
-			.withAction(action)
-			.withCaseId(caseId)
-			.withCaseLink(caseLink)
+			.withReminderId(REMINDER_ID)
+			.withAction(ACTION)
+			.withCaseId(CASE_ID)
+			.withCaseLink(CASE_LINK)
 			.withReminderDate(reminderDate);
 
-		when(reminderServiceMock.findReminderByReminderId(reminderId)).thenReturn(reminder);
+		when(reminderServiceMock.findReminderByReminderId(REMINDER_ID)).thenReturn(reminder);
 
 		// Act
-		final var response = webTestClient.get().uri("/reminders/{reminderId}", reminderId)
+		final var response = webTestClient.get().uri("/reminders/{reminderId}", REMINDER_ID)
 			.exchange()
 			.expectStatus().isOk()
 			.expectHeader().contentType(APPLICATION_JSON_VALUE)
@@ -114,7 +114,7 @@ class RemindAndInformResourceTest {
 
 		// Assert
 		assertThat(response).isNotNull();
-		verify(reminderServiceMock).findReminderByReminderId(reminderId);
+		verify(reminderServiceMock).findReminderByReminderId(REMINDER_ID);
 	}
 
 	@Test
@@ -141,19 +141,20 @@ class RemindAndInformResourceTest {
 	void updateReminder() {
 
 		// Arrange
-		final var reminderId = "reminderId";
 		final var body = UpdateReminderRequest.create()
-			.withPartyId("81471222-5798-11e9-ae24-57fa13b361e")
-			.withAction("action")
-			.withCaseId("caseId")
-			.withCaseLink("caseLink")
-			.withModifiedBy("modifiedBy")
+			.withPartyId(PARTY_ID)
+			.withAction(ACTION)
+			.withCaseId(CASE_ID)
+			.withCaseLink(CASE_LINK)
+			.withModifiedBy(MODIFIED_BY)
 			.withReminderDate(LocalDate.now());
 
-		when(reminderServiceMock.updateReminder(argThat(reminderRequest -> "81471222-5798-11e9-ae24-57fa13b361e".equals(reminderRequest.getPartyId())), argThat(id -> reminderId.equals(id)))).thenReturn(Reminder.create());
+		when(reminderServiceMock.updateReminder(argThat(reminderRequest ->
+			PARTY_ID.equals(reminderRequest.getPartyId())), argThat(REMINDER_ID::equals)))
+			.thenReturn(Reminder.create());
 
 		// Act
-		final var response = webTestClient.patch().uri("/reminders/{reminderId}", reminderId)
+		final var response = webTestClient.patch().uri("/reminders/{reminderId}", REMINDER_ID)
 			.contentType(APPLICATION_JSON)
 			.bodyValue(body)
 			.exchange()
@@ -164,14 +165,14 @@ class RemindAndInformResourceTest {
 
 		// Assert
 		assertThat(response).isNotNull();
-		verify(reminderServiceMock).updateReminder(argThat(reminderRequest -> "81471222-5798-11e9-ae24-57fa13b361e".equals(reminderRequest.getPartyId())), anyString());
+		verify(reminderServiceMock).updateReminder(argThat(reminderRequest -> PARTY_ID.equals(reminderRequest.getPartyId())), anyString());
 	}
 
 	@Test
 	void deleteReminder() {
 
 		// Arrange
-		final var reminderId = "reminderId";
+		final var reminderId = REMINDER_ID;
 		doNothing().when(reminderServiceMock).deleteReminderByReminderId(reminderId);
 
 		// Act
@@ -187,18 +188,15 @@ class RemindAndInformResourceTest {
 	void createReminder() {
 
 		// Arrange
-		final var partyId = "81471222-5798-11e9-ae24-57fa13b361e";
-		final var reminderId = "reminderId";
-
 		final var body = ReminderRequest.create()
-			.withPartyId(partyId)
-			.withAction("action")
-			.withCaseId("caseId")
-			.withCaseLink("caseLink")
-			.withCreatedBy("createdBy")
+			.withPartyId(PARTY_ID)
+			.withAction(ACTION)
+			.withCaseId(CASE_ID)
+			.withCaseLink(CASE_LINK)
+			.withCreatedBy(CREATED_BY)
 			.withReminderDate(LocalDate.now(ZoneId.systemDefault()));
 
-		when(reminderServiceMock.createReminder(argThat(reminderRequest -> partyId.equals(reminderRequest.getPartyId())))).thenReturn(Reminder.create().withReminderId(reminderId));
+		when(reminderServiceMock.createReminder(argThat(reminderRequest -> PARTY_ID.equals(reminderRequest.getPartyId())))).thenReturn(Reminder.create().withReminderId(REMINDER_ID));
 
 		// Act
 		final var response = webTestClient.post().uri("/reminders")
@@ -207,10 +205,10 @@ class RemindAndInformResourceTest {
 			.exchange()
 			.expectStatus().isCreated()
 			.expectHeader().contentType(ALL_VALUE)
-			.expectHeader().location("/reminders/" + reminderId);
+			.expectHeader().location("/reminders/" + REMINDER_ID);
 
 		// Assert
 		assertThat(response).isNotNull();
-		verify(reminderServiceMock).createReminder(argThat(reminderRequest -> "81471222-5798-11e9-ae24-57fa13b361e".equals(reminderRequest.getPartyId())));
+		verify(reminderServiceMock).createReminder(argThat(reminderRequest -> PARTY_ID.equals(reminderRequest.getPartyId())));
 	}
 }
