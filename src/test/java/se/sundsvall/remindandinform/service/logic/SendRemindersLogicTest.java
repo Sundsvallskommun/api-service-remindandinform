@@ -4,6 +4,7 @@ import static generated.se.sundsvall.messaging.MessageStatus.SENT;
 import static generated.se.sundsvall.messaging.MessageType.MESSAGE;
 import static java.util.UUID.randomUUID;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -21,28 +22,41 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import generated.se.sundsvall.messaging.DeliveryResult;
-import generated.se.sundsvall.messaging.MessageResult;
 import se.sundsvall.remindandinform.integration.db.ReminderRepository;
 import se.sundsvall.remindandinform.integration.db.model.ReminderEntity;
 import se.sundsvall.remindandinform.integration.messaging.MessagingClient;
 import se.sundsvall.remindandinform.service.mapper.configuration.ReminderMessageProperties;
 
+import generated.se.sundsvall.messaging.DeliveryResult;
+import generated.se.sundsvall.messaging.MessageResult;
+
 @ExtendWith(MockitoExtension.class)
 class SendRemindersLogicTest {
 
 	private static final UUID partyId1 = UUID.randomUUID();
+
 	private static final UUID partyId2 = UUID.randomUUID();
+
 	private static final String reminderId1 = "reminderId1";
+
 	private static final String reminderId2 = "reminderId2";
+
 	private static final String action1 = "action1";
+
 	private static final String action2 = "action2";
+
 	private static final String caseId1 = "caseId1";
+
 	private static final String caseId2 = "caseId2";
+
 	private static final String caseLink1 = "caseLink1";
+
 	private static final String caseLink2 = "caseLink2";
 
+	private static final String MUNICIPALITY_ID = "municipalityId";
+
 	private static final ReminderEntity reminderEntity1 = new ReminderEntity();
+
 	private static final ReminderEntity reminderEntity2 = new ReminderEntity();
 
 	@Mock
@@ -78,25 +92,27 @@ class SendRemindersLogicTest {
 
 		setUpProperties();
 
-		when(reminderRepositoryMock.findByReminderDateLessThanEqualAndSentFalse(LocalDate.now())).thenReturn(List.of(reminderEntity1, reminderEntity2));
+		when(reminderRepositoryMock.findByReminderDateLessThanEqualAndSentFalseAndMunicipalityId(LocalDate.now(), MUNICIPALITY_ID)).thenReturn(List.of(reminderEntity1, reminderEntity2));
+		when(reminderMessagePropertiesMock.getMunicipalityIds()).thenReturn(List.of(MUNICIPALITY_ID));
 
-		when(messagingClientMock.sendMessage(any())).thenReturn(new MessageResult().deliveries(List.of(new DeliveryResult().status(SENT).messageType(MESSAGE))));
+		when(messagingClientMock.sendMessage(eq(MUNICIPALITY_ID), any())).thenReturn(new MessageResult().deliveries(List.of(new DeliveryResult().status(SENT).messageType(MESSAGE))));
 
 		sendRemindersLogic.sendReminders();
 
-		verify(reminderRepositoryMock, times(2)).findByReminderDateLessThanEqualAndSentFalse(LocalDate.now());
-		verify(messagingClientMock).sendMessage(any());
+		verify(reminderRepositoryMock, times(2)).findByReminderDateLessThanEqualAndSentFalseAndMunicipalityId(LocalDate.now(), MUNICIPALITY_ID);
+		verify(messagingClientMock).sendMessage(eq(MUNICIPALITY_ID), any());
 	}
 
 	@Test
 	void sendRemindersNotFound() {
 
-		when(reminderRepositoryMock.findByReminderDateLessThanEqualAndSentFalse(LocalDate.now())).thenReturn(Collections.emptyList());
+		when(reminderRepositoryMock.findByReminderDateLessThanEqualAndSentFalseAndMunicipalityId(LocalDate.now(), MUNICIPALITY_ID)).thenReturn(Collections.emptyList());
+		when(reminderMessagePropertiesMock.getMunicipalityIds()).thenReturn(List.of(MUNICIPALITY_ID));
 
 		sendRemindersLogic.sendReminders();
 
-		verify(reminderRepositoryMock).findByReminderDateLessThanEqualAndSentFalse(LocalDate.now());
-		verify(messagingClientMock, never()).sendMessage(any());
+		verify(reminderRepositoryMock).findByReminderDateLessThanEqualAndSentFalseAndMunicipalityId(LocalDate.now(), MUNICIPALITY_ID);
+		verify(messagingClientMock, never()).sendMessage(eq(MUNICIPALITY_ID), any());
 	}
 
 	@Test
@@ -104,14 +120,16 @@ class SendRemindersLogicTest {
 
 		setUpProperties();
 
-		when(reminderRepositoryMock.findByReminderDateLessThanEqualAndSentFalse(LocalDate.now())).thenReturn(List.of(reminderEntity1, reminderEntity2));
+		when(reminderRepositoryMock.findByReminderDateLessThanEqualAndSentFalseAndMunicipalityId(LocalDate.now(), MUNICIPALITY_ID)).thenReturn(List.of(reminderEntity1, reminderEntity2));
 
-		when(messagingClientMock.sendMessage(any())).thenReturn(new MessageResult().messageId(randomUUID()).deliveries(List.of(new DeliveryResult().status(SENT).messageType(MESSAGE))));
+		when(reminderMessagePropertiesMock.getMunicipalityIds()).thenReturn(List.of(MUNICIPALITY_ID));
+
+		when(messagingClientMock.sendMessage(eq(MUNICIPALITY_ID), any())).thenReturn(new MessageResult().messageId(randomUUID()).deliveries(List.of(new DeliveryResult().status(SENT).messageType(MESSAGE))));
 
 		sendRemindersLogic.sendReminders();
 
-		verify(reminderRepositoryMock, times(2)).findByReminderDateLessThanEqualAndSentFalse(LocalDate.now());
-		verify(messagingClientMock).sendMessage(any());
+		verify(reminderRepositoryMock, times(2)).findByReminderDateLessThanEqualAndSentFalseAndMunicipalityId(LocalDate.now(), MUNICIPALITY_ID);
+		verify(messagingClientMock).sendMessage(eq(MUNICIPALITY_ID), any());
 	}
 
 	public void setUpProperties() {
@@ -122,4 +140,5 @@ class SendRemindersLogicTest {
 		when(reminderMessagePropertiesMock.getSenderEmailAddress()).thenReturn("email-address");
 		when(reminderMessagePropertiesMock.getSenderSmsName()).thenReturn("sms-name");
 	}
+
 }

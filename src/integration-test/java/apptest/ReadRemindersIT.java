@@ -25,9 +25,10 @@ class ReadRemindersIT extends AbstractAppTest {
 	@Test
 	void test1_getRemindersByPartyId() { // NOSONAR
 		final String partyId = "fbfbd90c-4c47-11ec-81d3-0242ac130001";
+		final String municipalityId = "2281";
 
 		setupCall()
-			.withServicePath("/reminders/parties/" + partyId)
+			.withServicePath("/" + municipalityId + "/reminders/parties/" + partyId)
 			.withHttpMethod(GET)
 			.withExpectedResponseStatus(OK)
 			.withExpectedResponse("response.json")
@@ -37,9 +38,10 @@ class ReadRemindersIT extends AbstractAppTest {
 	@Test
 	void test2_getRemindersByReminderId() { // NOSONAR
 		final String reminderId = "R-fbfbd90c-4c47-11ec-81d3-0242ac130002";
+		final String municipalityId = "2281";
 
 		setupCall()
-			.withServicePath("/reminders/" + reminderId)
+			.withServicePath("/" + municipalityId + "/reminders/" + reminderId)
 			.withHttpMethod(GET)
 			.withExpectedResponseStatus(OK)
 			.withExpectedResponse("response.json")

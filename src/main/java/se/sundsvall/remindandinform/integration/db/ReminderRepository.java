@@ -6,17 +6,19 @@ import java.util.Optional;
 
 import org.springframework.data.repository.CrudRepository;
 
-import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import se.sundsvall.remindandinform.integration.db.model.ReminderEntity;
+
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 
 @CircuitBreaker(name = "reminderRepository")
 public interface ReminderRepository extends CrudRepository<ReminderEntity, Long> {
 
-	List<ReminderEntity> findByPartyId(String partyId);
+	List<ReminderEntity> findByPartyIdAndMunicipalityId(String partyId, String municipalityId);
 
-	Optional<ReminderEntity> findByReminderId(String reminderId);
+	Optional<ReminderEntity> findByReminderIdAndMunicipalityId(String reminderId, String municipalityId);
 
-	List<ReminderEntity> findByReminderDateLessThanEqualAndSentFalse(LocalDate reminderDate);
+	List<ReminderEntity> findByReminderDateLessThanEqualAndSentFalseAndMunicipalityId(LocalDate reminderDate, String municipalityId);
 
 	void deleteByReminderId(String reminderId);
+
 }

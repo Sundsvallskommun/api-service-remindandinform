@@ -28,21 +28,24 @@ import se.sundsvall.remindandinform.integration.db.ReminderRepository;
 @WireMockAppTestSuite(files = "classpath:/SendReminders/", classes = Application.class)
 class SendRemindersIT extends AbstractAppTest {
 
+	private final String municipalityId = "2281";
+
 	@Autowired
 	private ReminderRepository reminderRepository;
 
 	@Test
 	void test1_sendReminders() {
 
-		assertThat(reminderRepository.findByReminderDateLessThanEqualAndSentFalse(LocalDate.parse("2021-11-25")).stream().toList()).hasSize(3);
+		assertThat(reminderRepository.findByReminderDateLessThanEqualAndSentFalseAndMunicipalityId(LocalDate.parse("2021-11-25"), municipalityId).stream().toList()).hasSize(3);
 
 		setupCall()
-			.withServicePath("/reminders/send")
+			.withServicePath("/" + municipalityId + "/reminders/send")
 			.withHttpMethod(POST)
 			.withRequest("request.json")
 			.withExpectedResponseStatus(NO_CONTENT)
 			.sendRequestAndVerifyResponse();
 
-		assertThat(reminderRepository.findByReminderDateLessThanEqualAndSentFalse(LocalDate.parse("2021-11-25")).stream().toList()).isEmpty();
+		assertThat(reminderRepository.findByReminderDateLessThanEqualAndSentFalseAndMunicipalityId(LocalDate.parse("2021-11-25"), municipalityId).stream().toList()).isEmpty();
 	}
+
 }

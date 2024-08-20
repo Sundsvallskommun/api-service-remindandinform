@@ -70,6 +70,10 @@ class RemindAndInformResourceFailuresTest {
 
 	private static final String REMINDER_ID = "reminderId";
 
+	private static final String MUNICIPALITY_ID = "2281";
+
+	private static final String PATH = "/" + MUNICIPALITY_ID + "/reminders";
+
 	@MockBean
 	private ReminderService reminderServiceMock;
 
@@ -81,7 +85,7 @@ class RemindAndInformResourceFailuresTest {
 
 	@Test
 	void createMissingBody() {
-		webTestClient.post().uri("/reminders")
+		webTestClient.post().uri(PATH)
 			.contentType(APPLICATION_JSON)
 			.exchange()
 			.expectStatus().isBadRequest()
@@ -89,14 +93,14 @@ class RemindAndInformResourceFailuresTest {
 			.expectBody()
 			.jsonPath(TITLE).isEqualTo("Bad Request")
 			.jsonPath(STATUS).isEqualTo(HttpStatus.BAD_REQUEST.value())
-			.jsonPath(DETAIL).isEqualTo("Required request body is missing: public org.springframework.http.ResponseEntity<java.lang.Void> se.sundsvall.remindandinform.api.RemindAndInformResource.createReminder(se.sundsvall.remindandinform.api.model.ReminderRequest)");
+			.jsonPath(DETAIL).isEqualTo("Required request body is missing: public org.springframework.http.ResponseEntity<java.lang.Void> se.sundsvall.remindandinform.api.RemindAndInformResource.createReminder(java.lang.String,se.sundsvall.remindandinform.api.model.ReminderRequest)");
 
 		verifyNoInteractions(reminderServiceMock, sendRemindersLogicMock);
 	}
 
 	@Test
 	void createReminderEmptyBody() {
-		 webTestClient.post().uri("/reminders")
+		webTestClient.post().uri(PATH)
 			.contentType(APPLICATION_JSON)
 			.bodyValue(ReminderRequest.create())
 			.exchange()
@@ -107,7 +111,7 @@ class RemindAndInformResourceFailuresTest {
 			.jsonPath(STATUS).isEqualTo(HttpStatus.BAD_REQUEST.value())
 			.jsonPath("$.violations[0].field").isEqualTo(ACTION)
 			.jsonPath("$.violations[0].message").isEqualTo(MUST_NOT_BE_NULL)
-		    .jsonPath("$.violations[1].field").isEqualTo(CREATED_BY)
+			.jsonPath("$.violations[1].field").isEqualTo(CREATED_BY)
 			.jsonPath("$.violations[1].message").isEqualTo(MUST_NOT_BE_BLANK)
 			.jsonPath("$.violations[2].field").isEqualTo(PARTY_ID)
 			.jsonPath("$.violations[2].message").isEqualTo(NOT_A_VALID_UUID)
@@ -126,7 +130,7 @@ class RemindAndInformResourceFailuresTest {
 			.withCreatedBy(CREATED_BY)
 			.withReminderDate(LocalDate.now()); // Body with missing partyId.
 
-		webTestClient.post().uri("/reminders")
+		webTestClient.post().uri(PATH)
 			.contentType(APPLICATION_JSON)
 			.bodyValue(body)
 			.exchange()
@@ -151,7 +155,7 @@ class RemindAndInformResourceFailuresTest {
 			.withCreatedBy(CREATED_BY)
 			.withReminderDate(LocalDate.now());
 
-		webTestClient.post().uri("/reminders")
+		webTestClient.post().uri(PATH)
 			.contentType(APPLICATION_JSON)
 			.bodyValue(body)
 			.exchange()
@@ -177,7 +181,7 @@ class RemindAndInformResourceFailuresTest {
 			.withCreatedBy(CREATED_BY)
 			.withReminderDate(LocalDate.now());
 
-		webTestClient.post().uri("/reminders")
+		webTestClient.post().uri(PATH)
 			.contentType(APPLICATION_JSON)
 			.bodyValue(body)
 			.exchange()
@@ -201,7 +205,7 @@ class RemindAndInformResourceFailuresTest {
 		body.put(CASE_LINK, CASE_LINK);
 		body.put(REMINDER_DATE, REMINDER_DATE_DATE);
 
-		webTestClient.post().uri("/reminders")
+		webTestClient.post().uri(PATH)
 			.contentType(APPLICATION_JSON)
 			.bodyValue(body.toString())
 			.exchange()
@@ -217,7 +221,7 @@ class RemindAndInformResourceFailuresTest {
 
 	@Test
 	void updateReminderMissingBody() {
-		webTestClient.patch().uri("/reminders/{reminderId}", REMINDER_ID)
+		webTestClient.patch().uri(PATH + "/{reminderId}", REMINDER_ID)
 			.contentType(APPLICATION_JSON)
 			.exchange()
 			.expectStatus().isBadRequest()
@@ -225,7 +229,7 @@ class RemindAndInformResourceFailuresTest {
 			.expectBody()
 			.jsonPath(TITLE).isEqualTo("Bad Request")
 			.jsonPath(STATUS).isEqualTo(HttpStatus.BAD_REQUEST.value())
-			.jsonPath(DETAIL).isEqualTo("Required request body is missing: public org.springframework.http.ResponseEntity<se.sundsvall.remindandinform.api.model.Reminder> se.sundsvall.remindandinform.api.RemindAndInformResource.updateReminder(java.lang.String,se.sundsvall.remindandinform.api.model.UpdateReminderRequest)");
+			.jsonPath(DETAIL).isEqualTo("Required request body is missing: public org.springframework.http.ResponseEntity<se.sundsvall.remindandinform.api.model.Reminder> se.sundsvall.remindandinform.api.RemindAndInformResource.updateReminder(java.lang.String,java.lang.String,se.sundsvall.remindandinform.api.model.UpdateReminderRequest)");
 
 		verifyNoInteractions(reminderServiceMock, sendRemindersLogicMock);
 	}
@@ -240,7 +244,7 @@ class RemindAndInformResourceFailuresTest {
 			.withModifiedBy(MODIFIED_BY)
 			.withReminderDate(LocalDate.now());
 
-		webTestClient.patch().uri("/reminders/{reminderId}", " ")
+		webTestClient.patch().uri(PATH + "/{reminderId}", " ")
 			.contentType(APPLICATION_JSON)
 			.bodyValue(body)
 			.exchange()
@@ -260,7 +264,7 @@ class RemindAndInformResourceFailuresTest {
 		final JSONObject body = new JSONObject();
 		body.put(REMINDER_DATE, REMINDER_DATE_DATE);
 
-		webTestClient.patch().uri("/reminders/{reminderId}", REMINDER_ID)
+		webTestClient.patch().uri(PATH + "/{reminderId}", REMINDER_ID)
 			.contentType(APPLICATION_JSON)
 			.bodyValue(body.toString())
 			.exchange()
@@ -284,7 +288,7 @@ class RemindAndInformResourceFailuresTest {
 			.withAction(ACTION)
 			.withReminderDate(LocalDate.now());
 
-		webTestClient.patch().uri("/reminders/{reminderId}", REMINDER_ID)
+		webTestClient.patch().uri(PATH + "/{reminderId}", REMINDER_ID)
 			.contentType(APPLICATION_JSON)
 			.bodyValue(body)
 			.exchange()
@@ -301,7 +305,7 @@ class RemindAndInformResourceFailuresTest {
 
 	@Test
 	void deleteReminderBadReminderId() {
-		webTestClient.delete().uri("/reminders/{reminderId}", " ")
+		webTestClient.delete().uri(PATH + "/{reminderId}", " ")
 			.exchange()
 			.expectStatus().isBadRequest()
 			.expectHeader().contentType(APPLICATION_PROBLEM_JSON_VALUE)
@@ -319,7 +323,7 @@ class RemindAndInformResourceFailuresTest {
 		final var body = new JSONObject();
 		body.put(REMINDER_DATE, REMINDER_DATE_DATE);
 
-	    webTestClient.post().uri("/reminders/send")
+		webTestClient.post().uri(PATH + "/send")
 			.contentType(APPLICATION_JSON)
 			.bodyValue(body.toString())
 			.exchange()
@@ -335,7 +339,7 @@ class RemindAndInformResourceFailuresTest {
 
 	@Test
 	void sendRemindersMissingBody() {
-		webTestClient.post().uri("/reminders/send")
+		webTestClient.post().uri(PATH + "/send")
 			.contentType(APPLICATION_JSON)
 			.exchange()
 			.expectStatus().isBadRequest()
@@ -343,14 +347,14 @@ class RemindAndInformResourceFailuresTest {
 			.expectBody()
 			.jsonPath(TITLE).isEqualTo(HttpStatus.BAD_REQUEST.getReasonPhrase())
 			.jsonPath(STATUS).isEqualTo(HttpStatus.BAD_REQUEST.value())
-			.jsonPath(DETAIL).isEqualTo("Required request body is missing: public org.springframework.http.ResponseEntity<java.lang.Void> se.sundsvall.remindandinform.api.RemindAndInformResource.sendReminders(se.sundsvall.remindandinform.api.model.SendRemindersRequest)");
+			.jsonPath(DETAIL).isEqualTo("Required request body is missing: public org.springframework.http.ResponseEntity<java.lang.Void> se.sundsvall.remindandinform.api.RemindAndInformResource.sendReminders(java.lang.String,se.sundsvall.remindandinform.api.model.SendRemindersRequest)");
 
 		verifyNoInteractions(reminderServiceMock, sendRemindersLogicMock);
 	}
 
 	@Test
 	void sendRemindersMissingReminderDate() {
-		webTestClient.post().uri("/reminders/send")
+		webTestClient.post().uri(PATH + "/send")
 			.contentType(APPLICATION_JSON)
 			.bodyValue(SendRemindersRequest.create())
 			.exchange()
@@ -367,7 +371,7 @@ class RemindAndInformResourceFailuresTest {
 
 	@Test
 	void getReminderMissingReminderId() {
-		webTestClient.get().uri("/reminders/{reminderId}", " ")
+		webTestClient.get().uri(PATH + "/{reminderId}", " ")
 			.exchange()
 			.expectStatus().isBadRequest()
 			.expectHeader().contentType(APPLICATION_PROBLEM_JSON_VALUE)
@@ -382,7 +386,7 @@ class RemindAndInformResourceFailuresTest {
 
 	@Test
 	void getRemindersInvalidPartyId() {
-		 webTestClient.get().uri("/reminders/parties/{partyId}", INVALID)
+		webTestClient.get().uri(PATH + "/parties/{partyId}", INVALID)
 			.exchange()
 			.expectStatus().isBadRequest()
 			.expectHeader().contentType(APPLICATION_PROBLEM_JSON_VALUE)
@@ -394,4 +398,5 @@ class RemindAndInformResourceFailuresTest {
 
 		verifyNoInteractions(reminderServiceMock, sendRemindersLogicMock);
 	}
+
 }

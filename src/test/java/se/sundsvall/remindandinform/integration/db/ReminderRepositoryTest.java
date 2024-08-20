@@ -22,45 +22,85 @@ import se.sundsvall.remindandinform.integration.db.model.ReminderEntity;
 class ReminderRepositoryTest {
 
 	private static final String REMINDER_ID_1 = "reminderId1";
+
 	private static final String REMINDER_ID_2 = "reminderId2";
+
 	private static final String REMINDER_ID_3 = "reminderId3";
+
 	private static final String REMINDER_ID_4 = "reminderId4";
+
 	private static final String CASE_ID_1 = "caseId1";
+
 	private static final String CASE_ID_2 = "caseId2";
+
 	private static final String CASE_ID_3 = "caseId3";
+
 	private static final String CASE_ID_4 = "caseId4";
+
 	private static final String CASE_TYPE_1 = "caseType1";
+
 	private static final String CASE_TYPE_2 = "caseType2";
+
 	private static final String CASE_TYPE_3 = "caseType3";
+
 	private static final String CASE_TYPE_4 = "caseType4";
+
 	private static final String CASE_LINK_1 = "caseLink1";
+
 	private static final String CASE_LINK_2 = "caseLink2";
+
 	private static final String CASE_LINK_3 = "caseLink3";
+
 	private static final String CASE_LINK_4 = "caseLink4";
+
 	private static final String EXTERNAL_CASE_ID_1 = "externalCaseId1";
+
 	private static final String EXTERNAL_CASE_ID_2 = "externalCaseId2";
+
 	private static final String EXTERNAL_CASE_ID_3 = "externalCaseId3";
+
 	private static final String EXTERNAL_CASE_ID_4 = "externalCaseId4";
+
 	private static final String ACTION_1 = "action1";
+
 	private static final String ACTION_2 = "action2";
+
 	private static final String ACTION_3 = "action3";
+
 	private static final String ACTION_4 = "action4";
+
 	private static final String NOTE_1 = "note1";
+
 	private static final String NOTE_2 = "note2";
+
 	private static final String NOTE_3 = "note3";
+
 	private static final String NOTE_4 = "note4";
+
 	private static final LocalDate REMINDER_DATE_1 = LocalDate.now();
+
 	private static final LocalDate REMINDER_DATE_2 = LocalDate.now().minusDays(2);
+
 	private static final LocalDate REMINDER_DATE_3 = LocalDate.now().minusDays(2);
+
 	private static final LocalDate REMINDER_DATE_4 = LocalDate.now().plusDays(2);
+
 	private static final String PARTY_ID_1 = "partyId1";
+
 	private static final String PARTY_ID_2 = "partyId2";
+
 	private static final String PARTY_ID_3 = "partyId3";
+
 	private static final String PARTY_ID_4 = "partyId4";
+
 	private static final String HIBERNATE_REGEX = ".+hibernate.+";
 
+	private static final String MUNICIPALITY_ID = "municipalityId";
+
 	private ReminderEntity entity1;
+
 	private ReminderEntity entity2;
+
 	private ReminderEntity entity4;
 
 	@Autowired
@@ -81,6 +121,7 @@ class ReminderRepositoryTest {
 		entity1.setNote(NOTE_1);
 		entity1.setReminderDate(REMINDER_DATE_1);
 		entity1.setSent(false);
+		entity1.setMunicipalityId(MUNICIPALITY_ID);
 
 		entity2 = new ReminderEntity();
 		entity2.setReminderId(REMINDER_ID_2);
@@ -93,6 +134,7 @@ class ReminderRepositoryTest {
 		entity2.setNote(NOTE_2);
 		entity2.setReminderDate(REMINDER_DATE_2);
 		entity2.setSent(false);
+		entity2.setMunicipalityId(MUNICIPALITY_ID);
 
 		// Entity with null in companyId
 		final ReminderEntity entity3 = new ReminderEntity();
@@ -106,6 +148,7 @@ class ReminderRepositoryTest {
 		entity3.setNote(NOTE_3);
 		entity3.setReminderDate(REMINDER_DATE_3);
 		entity3.setSent(true);
+		entity3.setMunicipalityId(MUNICIPALITY_ID);
 
 		// Entity to remove
 		entity4 = new ReminderEntity();
@@ -119,13 +162,14 @@ class ReminderRepositoryTest {
 		entity4.setNote(NOTE_4);
 		entity4.setReminderDate(REMINDER_DATE_4);
 		entity4.setSent(false);
+		entity4.setMunicipalityId(MUNICIPALITY_ID);
 
 		reminderRepository.saveAll(List.of(entity1, entity2, entity3, entity4));
 	}
 
 	@Test
-	void findByPartyId() {
-		final var reminders = reminderRepository.findByPartyId(PARTY_ID_1);
+	void findByPartyIdAndMunicipalityId() {
+		final var reminders = reminderRepository.findByPartyIdAndMunicipalityId(PARTY_ID_1, MUNICIPALITY_ID);
 		assertThat(reminders)
 			.isNotEmpty()
 			.hasSize(1)
@@ -134,8 +178,8 @@ class ReminderRepositoryTest {
 	}
 
 	@Test
-	void findByReminderId() {
-		final var reminder = reminderRepository.findByReminderId((REMINDER_ID_1));
+	void findByReminderIdAndMunicipalityId() {
+		final var reminder = reminderRepository.findByReminderIdAndMunicipalityId(REMINDER_ID_1, MUNICIPALITY_ID);
 		assertThat(reminder).isPresent().contains(entity1);
 	}
 
@@ -163,7 +207,7 @@ class ReminderRepositoryTest {
 	@Test
 	void deleteByReminderId() {
 
-		var reminders = reminderRepository.findByPartyId(PARTY_ID_4);
+		var reminders = reminderRepository.findByPartyIdAndMunicipalityId(PARTY_ID_4, MUNICIPALITY_ID);
 
 		assertThat(reminders)
 			.isNotEmpty()
@@ -173,7 +217,7 @@ class ReminderRepositoryTest {
 
 		reminderRepository.deleteByReminderId(REMINDER_ID_4);
 
-		reminders = reminderRepository.findByPartyId(PARTY_ID_4);
+		reminders = reminderRepository.findByPartyIdAndMunicipalityId(PARTY_ID_4, MUNICIPALITY_ID);
 
 		assertThat(reminders).isEmpty();
 	}
@@ -181,7 +225,7 @@ class ReminderRepositoryTest {
 	@Test
 	void getRemindersByReminderDate() {
 
-		final var reminders = reminderRepository.findByReminderDateLessThanEqualAndSentFalse(LocalDate.now());
+		final var reminders = reminderRepository.findByReminderDateLessThanEqualAndSentFalseAndMunicipalityId(LocalDate.now(), MUNICIPALITY_ID);
 
 		assertThat(reminders)
 			.isNotEmpty()
@@ -189,4 +233,5 @@ class ReminderRepositoryTest {
 			.usingRecursiveFieldByFieldElementComparator(RecursiveComparisonConfiguration.builder().withIgnoredFieldsMatchingRegexes(HIBERNATE_REGEX).build())
 			.containsExactlyInAnyOrder(entity1, entity2);
 	}
+
 }

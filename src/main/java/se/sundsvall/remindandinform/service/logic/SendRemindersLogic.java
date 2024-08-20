@@ -31,10 +31,12 @@ public class SendRemindersLogic {
 	private static final Logger LOGGER = LoggerFactory.getLogger(SendRemindersLogic.class);
 
 	private final ReminderRepository reminderRepository;
+
 	private final MessagingClient messagingClient;
+
 	private final ReminderMessageProperties reminderMessageProperties;
 
-	public SendRemindersLogic(ReminderRepository reminderRepository, MessagingClient messagingClient, ReminderMessageProperties reminderMessageProperties) {
+	public SendRemindersLogic(final ReminderRepository reminderRepository, final MessagingClient messagingClient, final ReminderMessageProperties reminderMessageProperties) {
 		this.reminderRepository = reminderRepository;
 		this.messagingClient = messagingClient;
 		this.reminderMessageProperties = reminderMessageProperties;
@@ -43,19 +45,20 @@ public class SendRemindersLogic {
 	@Scheduled(cron = "${sendReminders.cron.expr}")
 	@SchedulerLock(name = "sendReminders", lockAtMostFor = "${sendReminders.shedlock-lock-at-most-for}")
 	public void sendReminders() {
-		sendReminders(now(systemDefault()));
+
+		reminderMessageProperties.getMunicipalityIds().forEach(municipalityId -> sendReminders(now(systemDefault()), municipalityId));
 	}
 
-	public void sendReminders(LocalDate reminderDate) {
-		final var reminders = findRemindersToSendByReminderDate(reminderDate);
+	public void sendReminders(final LocalDate reminderDate, final String municipalityId) {
+		final var reminders = findRemindersToSendByReminderDate(reminderDate, municipalityId);
 
 		final var messages = createMessages(reminders);
 
 		if (!messages.isEmpty()) {
 			final var messageRequest = new MessageRequest().messages(messages);
 			LOGGER.debug("Messages to send to api-messaging-service: '{}'", messageRequest);
-			messagingClient.sendMessage(new MessageRequest().messages(messages));
-			reminderRepository.saveAll(reminderRepository.findByReminderDateLessThanEqualAndSentFalse(reminderDate).stream()
+			messagingClient.sendMessage(municipalityId, new MessageRequest().messages(messages));
+			reminderRepository.saveAll(reminderRepository.findByReminderDateLessThanEqualAndSentFalseAndMunicipalityId(reminderDate, municipalityId).stream()
 				.map(reminder -> {
 					reminder.setSent(true);
 					return reminder;
@@ -64,8 +67,8 @@ public class SendRemindersLogic {
 		}
 	}
 
-	private List<Reminder> findRemindersToSendByReminderDate(LocalDate reminderDate) {
-		final var reminders = ReminderMapper.toReminders(reminderRepository.findByReminderDateLessThanEqualAndSentFalse(reminderDate));
+	private List<Reminder> findRemindersToSendByReminderDate(final LocalDate reminderDate, final String municipalityId) {
+		final var reminders = ReminderMapper.toReminders(reminderRepository.findByReminderDateLessThanEqualAndSentFalseAndMunicipalityId(reminderDate, municipalityId));
 		if (reminders.isEmpty()) {
 			LOGGER.info("No reminders found for reminderDate");
 		}
@@ -73,10 +76,11 @@ public class SendRemindersLogic {
 		return reminders;
 	}
 
-	private List<Message> createMessages(List<Reminder> reminders) {
+	private List<Message> createMessages(final List<Reminder> reminders) {
 		return reminders.stream()
 			.filter(Objects::nonNull)
 			.map(reminder -> toMessage(reminder, reminderMessageProperties))
 			.toList();
 	}
+
 }

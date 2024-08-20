@@ -3,6 +3,7 @@ package se.sundsvall.remindandinform.api;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.argThat;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -35,6 +36,8 @@ import se.sundsvall.remindandinform.service.logic.SendRemindersLogic;
 @ActiveProfiles("junit")
 class RemindAndInformResourceTest {
 
+	private static final String MUNICIPALITY_ID = "2281";
+
 	private static final String REMINDER_ID = "reminderId";
 
 	private static final String CASE_ID = "caseId";
@@ -48,6 +51,8 @@ class RemindAndInformResourceTest {
 	private static final String PARTY_ID = "81471222-5798-11e9-ae24-57fa13b361e";
 
 	private static final String MODIFIED_BY = "modifiedBy";
+
+	private static final String PATH = "/" + MUNICIPALITY_ID + "/reminders";
 
 	@MockBean
 	private ReminderService reminderServiceMock;
@@ -73,10 +78,10 @@ class RemindAndInformResourceTest {
 			.withCaseLink(CASE_LINK)
 			.withReminderDate(reminderDate);
 
-		when(reminderServiceMock.findRemindersByPartyId(partyId)).thenReturn(List.of(reminder));
+		when(reminderServiceMock.findRemindersByPartyIdAndMunicipalityId(partyId, MUNICIPALITY_ID)).thenReturn(List.of(reminder));
 
 		// Act
-		final var response = webTestClient.get().uri("/reminders/parties/{partyId}", partyId)
+		final var response = webTestClient.get().uri(PATH + "/parties/{partyId}", partyId)
 			.exchange()
 			.expectStatus().isOk()
 			.expectHeader().contentType(APPLICATION_JSON_VALUE)
@@ -84,7 +89,7 @@ class RemindAndInformResourceTest {
 
 		// Assert
 		assertThat(response).isNotNull();
-		verify(reminderServiceMock).findRemindersByPartyId(partyId);
+		verify(reminderServiceMock).findRemindersByPartyIdAndMunicipalityId(partyId, MUNICIPALITY_ID);
 	}
 
 	@Test
@@ -102,10 +107,10 @@ class RemindAndInformResourceTest {
 			.withCaseLink(CASE_LINK)
 			.withReminderDate(reminderDate);
 
-		when(reminderServiceMock.findReminderByReminderId(REMINDER_ID)).thenReturn(reminder);
+		when(reminderServiceMock.findReminderByReminderIdAndMunicipalityId(REMINDER_ID, MUNICIPALITY_ID)).thenReturn(reminder);
 
 		// Act
-		final var response = webTestClient.get().uri("/reminders/{reminderId}", REMINDER_ID)
+		final var response = webTestClient.get().uri(PATH + "/{reminderId}", REMINDER_ID)
 			.exchange()
 			.expectStatus().isOk()
 			.expectHeader().contentType(APPLICATION_JSON_VALUE)
@@ -114,7 +119,7 @@ class RemindAndInformResourceTest {
 
 		// Assert
 		assertThat(response).isNotNull();
-		verify(reminderServiceMock).findReminderByReminderId(REMINDER_ID);
+		verify(reminderServiceMock).findReminderByReminderIdAndMunicipalityId(REMINDER_ID, MUNICIPALITY_ID);
 	}
 
 	@Test
@@ -123,10 +128,10 @@ class RemindAndInformResourceTest {
 		// Arrange
 		final var sendRemindersRequest = SendRemindersRequest.create().withReminderDate(LocalDate.now());
 
-		doNothing().when(sendRemindersLogicMock).sendReminders(sendRemindersRequest.getReminderDate());
+		doNothing().when(sendRemindersLogicMock).sendReminders(sendRemindersRequest.getReminderDate(), MUNICIPALITY_ID);
 
 		// Act
-		final var response = webTestClient.post().uri("/reminders/send")
+		final var response = webTestClient.post().uri(PATH + "/send")
 			.contentType(APPLICATION_JSON)
 			.bodyValue(sendRemindersRequest)
 			.exchange()
@@ -134,7 +139,7 @@ class RemindAndInformResourceTest {
 
 		// Assert
 		assertThat(response).isNotNull();
-		verify(sendRemindersLogicMock).sendReminders(LocalDate.now());
+		verify(sendRemindersLogicMock).sendReminders(LocalDate.now(), MUNICIPALITY_ID);
 	}
 
 	@Test
@@ -150,11 +155,11 @@ class RemindAndInformResourceTest {
 			.withReminderDate(LocalDate.now());
 
 		when(reminderServiceMock.updateReminder(argThat(reminderRequest ->
-			PARTY_ID.equals(reminderRequest.getPartyId())), argThat(REMINDER_ID::equals)))
+			PARTY_ID.equals(reminderRequest.getPartyId())), argThat(REMINDER_ID::equals), eq(MUNICIPALITY_ID)))
 			.thenReturn(Reminder.create());
 
 		// Act
-		final var response = webTestClient.patch().uri("/reminders/{reminderId}", REMINDER_ID)
+		final var response = webTestClient.patch().uri(PATH + "/{reminderId}", REMINDER_ID)
 			.contentType(APPLICATION_JSON)
 			.bodyValue(body)
 			.exchange()
@@ -165,7 +170,7 @@ class RemindAndInformResourceTest {
 
 		// Assert
 		assertThat(response).isNotNull();
-		verify(reminderServiceMock).updateReminder(argThat(reminderRequest -> PARTY_ID.equals(reminderRequest.getPartyId())), anyString());
+		verify(reminderServiceMock).updateReminder(argThat(reminderRequest -> PARTY_ID.equals(reminderRequest.getPartyId())), anyString(), eq(MUNICIPALITY_ID));
 	}
 
 	@Test
@@ -173,15 +178,15 @@ class RemindAndInformResourceTest {
 
 		// Arrange
 		final var reminderId = REMINDER_ID;
-		doNothing().when(reminderServiceMock).deleteReminderByReminderId(reminderId);
+		doNothing().when(reminderServiceMock).deleteReminderByReminderIdAndMunicipalityId(reminderId, MUNICIPALITY_ID);
 
 		// Act
-		webTestClient.delete().uri("/reminders/{reminderId}", reminderId)
+		webTestClient.delete().uri(PATH + "/{reminderId}", reminderId)
 			.exchange()
 			.expectStatus().isNoContent();
 
 		// Assert
-		verify(reminderServiceMock).deleteReminderByReminderId(reminderId);
+		verify(reminderServiceMock).deleteReminderByReminderIdAndMunicipalityId(reminderId, MUNICIPALITY_ID);
 	}
 
 	@Test
@@ -196,19 +201,20 @@ class RemindAndInformResourceTest {
 			.withCreatedBy(CREATED_BY)
 			.withReminderDate(LocalDate.now(ZoneId.systemDefault()));
 
-		when(reminderServiceMock.createReminder(argThat(reminderRequest -> PARTY_ID.equals(reminderRequest.getPartyId())))).thenReturn(Reminder.create().withReminderId(REMINDER_ID));
+		when(reminderServiceMock.createReminder(argThat(reminderRequest -> PARTY_ID.equals(reminderRequest.getPartyId())), eq(MUNICIPALITY_ID))).thenReturn(Reminder.create().withReminderId(REMINDER_ID));
 
 		// Act
-		final var response = webTestClient.post().uri("/reminders")
+		final var response = webTestClient.post().uri(PATH)
 			.contentType(APPLICATION_JSON)
 			.bodyValue(body)
 			.exchange()
 			.expectStatus().isCreated()
 			.expectHeader().contentType(ALL_VALUE)
-			.expectHeader().location("/reminders/" + REMINDER_ID);
+			.expectHeader().location(PATH + "/" + REMINDER_ID);
 
 		// Assert
 		assertThat(response).isNotNull();
-		verify(reminderServiceMock).createReminder(argThat(reminderRequest -> PARTY_ID.equals(reminderRequest.getPartyId())));
+		verify(reminderServiceMock).createReminder(argThat(reminderRequest -> PARTY_ID.equals(reminderRequest.getPartyId())), eq(MUNICIPALITY_ID));
 	}
+
 }

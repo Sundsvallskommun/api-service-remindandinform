@@ -25,48 +25,49 @@ public class ReminderService {
 
 	private final ReminderRepository reminderRepository;
 
-	public ReminderService(ReminderRepository reminderRepository) {
+	public ReminderService(final ReminderRepository reminderRepository) {
 		this.reminderRepository = reminderRepository;
 	}
 
-	public Reminder createReminder(ReminderRequest reminderRequest) {
+	public Reminder createReminder(final ReminderRequest reminderRequest, final String municipalityId) {
 
 		final String reminderId = "R-" + UUID.randomUUID();
 
-		return toReminder(reminderRepository.save(toReminderEntity(reminderRequest, reminderId)));
+		return toReminder(reminderRepository.save(toReminderEntity(reminderRequest, reminderId, municipalityId)));
 	}
 
-	public Reminder updateReminder(UpdateReminderRequest updateReminderRequest, String reminderId) {
+	public Reminder updateReminder(final UpdateReminderRequest updateReminderRequest, final String reminderId, final String municipalityId) {
 
-		final var existingReminderEntity = reminderRepository.findByReminderId(reminderId).orElseThrow(() -> Problem.valueOf(NOT_FOUND, format("No reminder with reminderId:'%s' was found!", reminderId)));
+		final var existingReminderEntity = reminderRepository.findByReminderIdAndMunicipalityId(reminderId, municipalityId).orElseThrow(() -> Problem.valueOf(NOT_FOUND, format("No reminder with reminderId:'%s' was found!", reminderId)));
 
 		// Find changes and create new entity to save
-		final var newReminderEntity = toMergedReminderEntity(existingReminderEntity, toReminderEntity(updateReminderRequest, reminderId));
+		final var newReminderEntity = toMergedReminderEntity(existingReminderEntity, toReminderEntity(updateReminderRequest, reminderId, municipalityId));
 		// Save entity
 		reminderRepository.save(newReminderEntity);
 		// Read and return updated entity
-		return findReminderByReminderId(reminderId);
+		return findReminderByReminderIdAndMunicipalityId(reminderId, municipalityId);
 	}
 
-	public void deleteReminderByReminderId(String reminderId) {
+	public void deleteReminderByReminderIdAndMunicipalityId(final String reminderId, final String municipalityId) {
 
-		if (reminderRepository.findByReminderId(reminderId).isEmpty()) {
+		if (reminderRepository.findByReminderIdAndMunicipalityId(reminderId, municipalityId).isEmpty()) {
 			throw Problem.valueOf(NOT_FOUND, format("No reminder found for reminderId:'%s'", reminderId));
 		}
 		reminderRepository.deleteByReminderId(reminderId);
 	}
 
-	public List<Reminder> findRemindersByPartyId(String partyId) {
-		final var reminders = toReminders(reminderRepository.findByPartyId(partyId));
+	public List<Reminder> findRemindersByPartyIdAndMunicipalityId(final String partyId, final String municipalityId) {
+		final var reminders = toReminders(reminderRepository.findByPartyIdAndMunicipalityId(partyId, municipalityId));
 
 		if (reminders.isEmpty()) {
-			throw Problem.valueOf(NOT_FOUND, format("No reminders found for partyId:'%s'", partyId));
+			throw Problem.valueOf(NOT_FOUND, format("No reminders found for partyId:'%s' and municipalityId: '%s'", partyId, municipalityId));
 		}
 
 		return reminders;
 	}
 
-	public Reminder findReminderByReminderId(String reminderId) {
-		return toReminder(reminderRepository.findByReminderId(reminderId).orElseThrow(() -> Problem.valueOf(NOT_FOUND, format("No reminders found for reminderId:'%s'", reminderId))));
+	public Reminder findReminderByReminderIdAndMunicipalityId(final String reminderId, final String municipalityId) {
+		return toReminder(reminderRepository.findByReminderIdAndMunicipalityId(reminderId, municipalityId).orElseThrow(() -> Problem.valueOf(NOT_FOUND, format("No reminders found for reminderId:'%s'", reminderId))));
 	}
+
 }

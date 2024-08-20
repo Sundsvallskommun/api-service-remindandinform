@@ -12,16 +12,17 @@ import java.util.UUID;
 
 import org.springframework.web.util.HtmlUtils;
 
-import generated.se.sundsvall.messaging.Email;
-import generated.se.sundsvall.messaging.Message;
-import generated.se.sundsvall.messaging.MessageParty;
-import generated.se.sundsvall.messaging.MessageSender;
-import generated.se.sundsvall.messaging.Sms;
 import se.sundsvall.remindandinform.api.model.Reminder;
 import se.sundsvall.remindandinform.api.model.ReminderRequest;
 import se.sundsvall.remindandinform.api.model.UpdateReminderRequest;
 import se.sundsvall.remindandinform.integration.db.model.ReminderEntity;
 import se.sundsvall.remindandinform.service.mapper.configuration.ReminderMessageProperties;
+
+import generated.se.sundsvall.messaging.Email;
+import generated.se.sundsvall.messaging.Message;
+import generated.se.sundsvall.messaging.MessageParty;
+import generated.se.sundsvall.messaging.MessageSender;
+import generated.se.sundsvall.messaging.Sms;
 
 public final class ReminderMapper {
 
@@ -44,7 +45,7 @@ public final class ReminderMapper {
 			.withReminderId(reminderEntity.getReminderId());
 	}
 
-	public static ReminderEntity toReminderEntity(final ReminderRequest reminderRequest, final String reminderId) {
+	public static ReminderEntity toReminderEntity(final ReminderRequest reminderRequest, final String reminderId, final String municipalityId) {
 		final var reminderEntity = new ReminderEntity();
 		reminderEntity.setReminderId(reminderId);
 		reminderEntity.setPartyId(reminderRequest.getPartyId());
@@ -56,11 +57,12 @@ public final class ReminderMapper {
 		reminderEntity.setNote(reminderRequest.getNote());
 		reminderEntity.setReminderDate(reminderRequest.getReminderDate());
 		reminderEntity.setCreatedBy(reminderRequest.getCreatedBy());
+		reminderEntity.setMunicipalityId(municipalityId);
 
 		return reminderEntity;
 	}
 
-	public static ReminderEntity toReminderEntity(final UpdateReminderRequest updateReminderRequest, final String reminderId) {
+	public static ReminderEntity toReminderEntity(final UpdateReminderRequest updateReminderRequest, final String reminderId, final String municipalityId) {
 		final var reminderEntity = new ReminderEntity();
 		reminderEntity.setReminderId(reminderId);
 		reminderEntity.setPartyId(updateReminderRequest.getPartyId());
@@ -72,6 +74,7 @@ public final class ReminderMapper {
 		reminderEntity.setNote(updateReminderRequest.getNote());
 		reminderEntity.setReminderDate(updateReminderRequest.getReminderDate());
 		reminderEntity.setModifiedBy(updateReminderRequest.getModifiedBy());
+		reminderEntity.setMunicipalityId(municipalityId);
 
 		return reminderEntity;
 	}
@@ -134,4 +137,5 @@ public final class ReminderMapper {
 	private static String decodeSpecialChars(final String stringToConvert) {
 		return stringToConvert.replace("%n", "<br>");
 	}
+
 }
