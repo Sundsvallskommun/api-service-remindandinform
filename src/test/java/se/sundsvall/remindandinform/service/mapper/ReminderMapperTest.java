@@ -7,12 +7,13 @@ import static org.mockito.Mockito.when;
 import java.time.LocalDate;
 import java.util.List;
 
+import jakarta.xml.bind.DatatypeConverter;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import jakarta.xml.bind.DatatypeConverter;
 import se.sundsvall.remindandinform.api.model.Reminder;
 import se.sundsvall.remindandinform.api.model.ReminderRequest;
 import se.sundsvall.remindandinform.api.model.UpdateReminderRequest;
@@ -64,6 +65,7 @@ class ReminderMapperTest {
 		final var externalCaseId = "externalCaseId";
 		final var reminderId = "reminderId";
 		final var reminderDate = LocalDate.now();
+		final var municipalityId = "municipalityId";
 
 		// Parameters
 		final var reminderRequest = ReminderRequest.create()
@@ -76,7 +78,7 @@ class ReminderMapperTest {
 			.withExternalCaseId(externalCaseId)
 			.withReminderDate(reminderDate);
 
-		final var reminderEntity = ReminderMapper.toReminderEntity(reminderRequest, reminderId);
+		final var reminderEntity = ReminderMapper.toReminderEntity(reminderRequest, reminderId, municipalityId);
 
 		assertThat(reminderEntity.getReminderId()).isEqualTo(reminderId);
 		assertThat(reminderEntity.getPartyId()).isEqualTo(partyId);
@@ -87,6 +89,7 @@ class ReminderMapperTest {
 		assertThat(reminderEntity.getAction()).isEqualTo(action);
 		assertThat(reminderEntity.getNote()).isEqualTo(note);
 		assertThat(reminderEntity.getReminderDate()).isEqualTo(LocalDate.now());
+		assertThat(reminderEntity.getMunicipalityId()).isEqualTo(municipalityId);
 	}
 
 	@Test
@@ -101,6 +104,8 @@ class ReminderMapperTest {
 		final var externalCaseId = "externalCaseId";
 		final var reminderId = "reminderId";
 		final var reminderDate = LocalDate.now();
+		final var municipalityId = "municipalityId";
+
 
 		// Parameters
 		final var updateReminderRequest = UpdateReminderRequest.create()
@@ -113,7 +118,7 @@ class ReminderMapperTest {
 			.withExternalCaseId(externalCaseId)
 			.withReminderDate(reminderDate);
 
-		final var reminderEntity = ReminderMapper.toReminderEntity(updateReminderRequest, reminderId);
+		final var reminderEntity = ReminderMapper.toReminderEntity(updateReminderRequest, reminderId, municipalityId);
 
 		assertThat(reminderEntity.getReminderId()).isEqualTo(reminderId);
 		assertThat(reminderEntity.getPartyId()).isEqualTo(partyId);
@@ -124,6 +129,7 @@ class ReminderMapperTest {
 		assertThat(reminderEntity.getAction()).isEqualTo(action);
 		assertThat(reminderEntity.getNote()).isEqualTo(note);
 		assertThat(reminderEntity.getReminderDate()).isEqualTo(LocalDate.now());
+		assertThat(reminderEntity.getMunicipalityId()).isEqualTo(municipalityId);
 	}
 
 	@Test
@@ -131,15 +137,15 @@ class ReminderMapperTest {
 
 		final var reminders = ReminderMapper.toReminders(createReminderEntities());
 
-		assertThat(reminders.get(0).getReminderId()).isEqualTo("reminderId1");
-		assertThat(reminders.get(0).getPartyId()).isEqualTo("partyId1");
-		assertThat(reminders.get(0).getCaseId()).isEqualTo("caseId1");
-		assertThat(reminders.get(0).getCaseType()).isEqualTo("caseType1");
-		assertThat(reminders.get(0).getCaseLink()).isEqualTo("caseLink1");
-		assertThat(reminders.get(0).getExternalCaseId()).isEqualTo("externalCaseId1");
-		assertThat(reminders.get(0).getAction()).isEqualTo("action1");
-		assertThat(reminders.get(0).getNote()).isEqualTo("note1");
-		assertThat(reminders.get(0).getReminderDate()).isEqualTo(LocalDate.now());
+		assertThat(reminders.getFirst().getReminderId()).isEqualTo("reminderId1");
+		assertThat(reminders.getFirst().getPartyId()).isEqualTo("partyId1");
+		assertThat(reminders.getFirst().getCaseId()).isEqualTo("caseId1");
+		assertThat(reminders.getFirst().getCaseType()).isEqualTo("caseType1");
+		assertThat(reminders.getFirst().getCaseLink()).isEqualTo("caseLink1");
+		assertThat(reminders.getFirst().getExternalCaseId()).isEqualTo("externalCaseId1");
+		assertThat(reminders.getFirst().getAction()).isEqualTo("action1");
+		assertThat(reminders.getFirst().getNote()).isEqualTo("note1");
+		assertThat(reminders.getFirst().getReminderDate()).isEqualTo(LocalDate.now());
 
 		assertThat(reminders.get(1).getReminderId()).isEqualTo("reminderId2");
 		assertThat(reminders.get(1).getPartyId()).isEqualTo("partyId2");
@@ -200,6 +206,8 @@ class ReminderMapperTest {
 		final var note2 = "note2";
 		final var reminderDate1 = LocalDate.now();
 		final var reminderDate2 = LocalDate.now().plusDays(1);
+		final var municipalityId1 = "municipalityId1";
+		final var municipalityId2 = "municipalityId2";
 
 		final var reminderEntity1 = new ReminderEntity();
 		reminderEntity1.setReminderId(reminderId1);
@@ -211,6 +219,7 @@ class ReminderMapperTest {
 		reminderEntity1.setAction(action1);
 		reminderEntity1.setNote(note1);
 		reminderEntity1.setReminderDate(reminderDate1);
+		reminderEntity1.setMunicipalityId(municipalityId1);
 
 		final var reminderEntity2 = new ReminderEntity();
 		reminderEntity2.setReminderId(reminderId2);
@@ -222,7 +231,9 @@ class ReminderMapperTest {
 		reminderEntity2.setAction(action2);
 		reminderEntity2.setNote(note2);
 		reminderEntity2.setReminderDate(reminderDate2);
+		reminderEntity2.setMunicipalityId(municipalityId2);
 
 		return List.of(reminderEntity1, reminderEntity2);
 	}
+
 }

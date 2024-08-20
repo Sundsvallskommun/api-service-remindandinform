@@ -12,6 +12,7 @@
         created_by varchar(255),
         external_case_id varchar(255),
         modified_by varchar(255),
+        municipality_id varchar(255),
         party_id varchar(255),
         reminder_id varchar(255),
         note longtext,
@@ -23,6 +24,9 @@
 
     create index party_id_index 
        on reminder (party_id);
+
+    create index municipality_id_index 
+       on reminder (municipality_id);
 
     alter table if exists reminder 
        add constraint uq_reminder_id unique (reminder_id);

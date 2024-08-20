@@ -31,15 +31,16 @@ class DeleteReminderIT extends AbstractAppTest {
 	@Test
 	void test1_deleteReminder() {
 		final String reminderId = "R-fbfbd90c-4c47-11ec-81d3-0242ac130006";
-
-		assertThat(reminderRepository.findByReminderId(reminderId).stream().findFirst()).isPresent();
+		final String municipalityId = "2281";
+		assertThat(reminderRepository.findByReminderIdAndMunicipalityId(reminderId, municipalityId).stream().findFirst()).isPresent();
 
 		setupCall()
-			.withServicePath("/reminders/" + reminderId)
+			.withServicePath("/" + municipalityId + "/reminders/" + reminderId)
 			.withHttpMethod(DELETE)
 			.withExpectedResponseStatus(NO_CONTENT)
 			.sendRequestAndVerifyResponse();
 
-		assertThat(reminderRepository.findByReminderId(reminderId).stream().findFirst()).isNotPresent();
+		assertThat(reminderRepository.findByReminderIdAndMunicipalityId(reminderId, municipalityId).stream().findFirst()).isNotPresent();
 	}
+
 }

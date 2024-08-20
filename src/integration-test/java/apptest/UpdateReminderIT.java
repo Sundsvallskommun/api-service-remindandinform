@@ -25,6 +25,8 @@ import se.sundsvall.remindandinform.integration.db.ReminderRepository;
 @WireMockAppTestSuite(files = "classpath:/UpdateReminder/", classes = Application.class)
 class UpdateReminderIT extends AbstractAppTest {
 
+	private final String municipalityId = "2281";
+
 	@Autowired
 	private ReminderRepository reminderRepository;
 
@@ -34,13 +36,14 @@ class UpdateReminderIT extends AbstractAppTest {
 		final String reminderId = "R-fbfbd90c-4c47-11ec-81d3-0242ac130004";
 
 		setupCall()
-			.withServicePath("/reminders/" + reminderId)
+			.withServicePath("/" + municipalityId + "/reminders/" + reminderId)
 			.withHttpMethod(PATCH)
 			.withRequest("request.json")
 			.withExpectedResponseStatus(OK)
 			.withExpectedResponse("response.json")
 			.sendRequestAndVerifyResponse();
 
-		assertThat(reminderRepository.findByReminderId(reminderId).stream().findFirst()).isPresent();
+		assertThat(reminderRepository.findByReminderIdAndMunicipalityId(reminderId, municipalityId).stream().findFirst()).isPresent();
 	}
+
 }

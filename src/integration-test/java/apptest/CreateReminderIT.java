@@ -24,17 +24,19 @@ class CreateReminderIT extends AbstractAppTest {
 	@Test
 	void test1_createReminder() {
 		final String partyId = "81471222-5798-11e9-ae24-57fa13b361e1";
+		final String municipalityId = "2281";
 
-		assertThat(reminderRepository.findByPartyId(partyId).stream().findFirst()).isNotPresent();
+		assertThat(reminderRepository.findByPartyIdAndMunicipalityId(partyId, municipalityId).stream().findFirst()).isNotPresent();
 
 		setupCall()
-			.withServicePath("/reminders")
+			.withServicePath("/" + municipalityId + "/reminders")
 			.withHttpMethod(POST)
 			.withRequest("request.json")
 			.withExpectedResponseStatus(CREATED)
-			.withExpectedResponseHeader(LOCATION, List.of("^/reminders/(.*)$"))
+			.withExpectedResponseHeader(LOCATION, List.of("^/" + municipalityId + "/reminders/(.*)$"))
 			.sendRequestAndVerifyResponse();
 
-		assertThat(reminderRepository.findByPartyId(partyId).stream().findFirst()).isPresent();
+		assertThat(reminderRepository.findByPartyIdAndMunicipalityId(partyId, municipalityId).stream().findFirst()).isPresent();
 	}
+
 }

@@ -1,84 +1,84 @@
 {
-	"name": "api-messaging",
-	"request": {
-		"urlPath": "/api-messaging/messages",
-		"method": "POST",
-		"queryParameters": {
-			"async": {
-				"equalTo": "true"
-			}
-		},
-		"bodyPatterns": [
-			{
-				"equalToJson": {
-					"messages": [
-						{
-							"party": {
-								"partyId": "fbfbd90c-4c47-11ec-81d3-0242ac130003",
-								"externalReferences": []
-							},
-							"filters": {},
-							"sender": {
-								"sms": {
-									"name": "TestSmsNameÅÄÖåäö"
-								},
-								"email": {
-									"name": "TestEmailNameÅÄÖåäö",
-									"address": "TestEmailAddressÅÄÖåäö"
-								}
-							},
-							"subject": "TestSubjectÅÄÖåäö",
-							"message": "TestSmsMessageÅÄÖåäö",
-							"htmlMessage": "VGVzdEVtYWlsTWVzc2FnZcOFw4TDlsOlw6TDtg=="
-						},
-						{
-							"party": {
-								"partyId": "fbfbd90c-4c47-11ec-81d3-0242ac130001",
-								"externalReferences": []
-							},
-							"filters": {},
-							"sender": {
-								"sms": {
-									"name": "TestSmsNameÅÄÖåäö"
-								},
-								"email": {
-									"name": "TestEmailNameÅÄÖåäö",
-									"address": "TestEmailAddressÅÄÖåäö"
-								}
-							},
-							"subject": "TestSubjectÅÄÖåäö",
-							"message": "TestSmsMessageÅÄÖåäö",
-							"htmlMessage": "VGVzdEVtYWlsTWVzc2FnZcOFw4TDlsOlw6TDtg=="
-						},
-						{
-							"party": {
-								"partyId": "fbfbd90c-4c47-11ec-81d3-0242ac130002",
-								"externalReferences": []
-							},
-							"filters": {},
-							"sender": {
-								"sms": {
-									"name": "TestSmsNameÅÄÖåäö"
-								},
-								"email": {
-									"name": "TestEmailNameÅÄÖåäö",
-									"address": "TestEmailAddressÅÄÖåäö"
-								}
-							},
-							"subject": "TestSubjectÅÄÖåäö",
-							"message": "TestSmsMessageÅÄÖåäö",
-							"htmlMessage": "VGVzdEVtYWlsTWVzc2FnZcOFw4TDlsOlw6TDtg=="
-						}
-					]
-				}
-			}
-		]
-	},
-	"response": {
-		"headers": {
-			"Content-Type": "application/json"
-		},
-		"status": 200,
-		"bodyFileName": "test1_sendReminders/mocking/api-messaging-messages-response.json"
-	}
+  "name": "api-messaging",
+  "request": {
+    "urlPath": "/api-messaging/2281/messages",
+    "method": "POST",
+    "queryParameters": {
+      "async": {
+        "equalTo": "true"
+      }
+    },
+    "bodyPatterns": [
+      {
+        "equalToJson": {
+          "messages": [
+            {
+              "party": {
+                "partyId": "fbfbd90c-4c47-11ec-81d3-0242ac130003",
+                "externalReferences": []
+              },
+              "filters": {},
+              "sender": {
+                "sms": {
+                  "name": "TestSmsNameÅÄÖåäö"
+                },
+                "email": {
+                  "name": "TestEmailNameÅÄÖåäö",
+                  "address": "TestEmailAddressÅÄÖåäö"
+                }
+              },
+              "subject": "TestSubjectÅÄÖåäö",
+              "message": "TestSmsMessageÅÄÖåäö",
+              "htmlMessage": "VGVzdEVtYWlsTWVzc2FnZcOFw4TDlsOlw6TDtg=="
+            },
+            {
+              "party": {
+                "partyId": "fbfbd90c-4c47-11ec-81d3-0242ac130001",
+                "externalReferences": []
+              },
+              "filters": {},
+              "sender": {
+                "sms": {
+                  "name": "TestSmsNameÅÄÖåäö"
+                },
+                "email": {
+                  "name": "TestEmailNameÅÄÖåäö",
+                  "address": "TestEmailAddressÅÄÖåäö"
+                }
+              },
+              "subject": "TestSubjectÅÄÖåäö",
+              "message": "TestSmsMessageÅÄÖåäö",
+              "htmlMessage": "VGVzdEVtYWlsTWVzc2FnZcOFw4TDlsOlw6TDtg=="
+            },
+            {
+              "party": {
+                "partyId": "fbfbd90c-4c47-11ec-81d3-0242ac130002",
+                "externalReferences": []
+              },
+              "filters": {},
+              "sender": {
+                "sms": {
+                  "name": "TestSmsNameÅÄÖåäö"
+                },
+                "email": {
+                  "name": "TestEmailNameÅÄÖåäö",
+                  "address": "TestEmailAddressÅÄÖåäö"
+                }
+              },
+              "subject": "TestSubjectÅÄÖåäö",
+              "message": "TestSmsMessageÅÄÖåäö",
+              "htmlMessage": "VGVzdEVtYWlsTWVzc2FnZcOFw4TDlsOlw6TDtg=="
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "response": {
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "status": 200,
+    "bodyFileName": "test1_sendReminders/mocking/api-messaging-messages-response.json"
+  }
 }
