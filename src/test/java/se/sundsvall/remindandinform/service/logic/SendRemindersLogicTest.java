@@ -33,31 +33,31 @@ import generated.se.sundsvall.messaging.MessageResult;
 @ExtendWith(MockitoExtension.class)
 class SendRemindersLogicTest {
 
-	private static final UUID partyId1 = UUID.randomUUID();
+	private static final UUID PARTY_ID_1 = UUID.randomUUID();
 
-	private static final UUID partyId2 = UUID.randomUUID();
+	private static final UUID PARTY_ID_2 = UUID.randomUUID();
 
-	private static final String reminderId1 = "reminderId1";
+	private static final String REMINDER_ID_1 = "reminderId1";
 
-	private static final String reminderId2 = "reminderId2";
+	private static final String REMINDER_ID_2 = "reminderId2";
 
-	private static final String action1 = "action1";
+	private static final String ACTION_1 = "action1";
 
-	private static final String action2 = "action2";
+	private static final String ACTION_2 = "action2";
 
-	private static final String caseId1 = "caseId1";
+	private static final String CASE_ID_1 = "caseId1";
 
-	private static final String caseId2 = "caseId2";
+	private static final String CASE_ID_2 = "caseId2";
 
-	private static final String caseLink1 = "caseLink1";
+	private static final String CASE_LINK_1 = "caseLink1";
 
-	private static final String caseLink2 = "caseLink2";
+	private static final String CASE_LINK_2 = "caseLink2";
 
 	private static final String MUNICIPALITY_ID = "municipalityId";
 
-	private static final ReminderEntity reminderEntity1 = new ReminderEntity();
+	private static final ReminderEntity REMINDER_ENTITY_1 = new ReminderEntity();
 
-	private static final ReminderEntity reminderEntity2 = new ReminderEntity();
+	private static final ReminderEntity REMINDER_ENTITY_2 = new ReminderEntity();
 
 	@Mock
 	private ReminderRepository reminderRepositoryMock;
@@ -74,17 +74,17 @@ class SendRemindersLogicTest {
 	@BeforeEach
 	void setup() {
 		// Parameters
-		reminderEntity1.setReminderId(reminderId1);
-		reminderEntity1.setPartyId(partyId1.toString());
-		reminderEntity1.setAction(action1);
-		reminderEntity1.setCaseId(caseId1);
-		reminderEntity1.setCaseLink(caseLink1);
+		REMINDER_ENTITY_1.setReminderId(REMINDER_ID_1);
+		REMINDER_ENTITY_1.setPartyId(PARTY_ID_1.toString());
+		REMINDER_ENTITY_1.setAction(ACTION_1);
+		REMINDER_ENTITY_1.setCaseId(CASE_ID_1);
+		REMINDER_ENTITY_1.setCaseLink(CASE_LINK_1);
 
-		reminderEntity2.setReminderId(reminderId2);
-		reminderEntity2.setPartyId(partyId2.toString());
-		reminderEntity2.setAction(action2);
-		reminderEntity2.setCaseId(caseId2);
-		reminderEntity2.setCaseLink(caseLink2);
+		REMINDER_ENTITY_2.setReminderId(REMINDER_ID_2);
+		REMINDER_ENTITY_2.setPartyId(PARTY_ID_2.toString());
+		REMINDER_ENTITY_2.setAction(ACTION_2);
+		REMINDER_ENTITY_2.setCaseId(CASE_ID_2);
+		REMINDER_ENTITY_2.setCaseLink(CASE_LINK_2);
 	}
 
 	@Test
@@ -92,7 +92,7 @@ class SendRemindersLogicTest {
 
 		setUpProperties();
 
-		when(reminderRepositoryMock.findByReminderDateLessThanEqualAndSentFalseAndMunicipalityId(LocalDate.now(), MUNICIPALITY_ID)).thenReturn(List.of(reminderEntity1, reminderEntity2));
+		when(reminderRepositoryMock.findByReminderDateLessThanEqualAndSentFalseAndMunicipalityId(LocalDate.now(), MUNICIPALITY_ID)).thenReturn(List.of(REMINDER_ENTITY_1, REMINDER_ENTITY_2));
 		when(reminderMessagePropertiesMock.getMunicipalityIds()).thenReturn(List.of(MUNICIPALITY_ID));
 
 		when(messagingClientMock.sendMessage(eq(MUNICIPALITY_ID), any())).thenReturn(new MessageResult().deliveries(List.of(new DeliveryResult().status(SENT).messageType(MESSAGE))));
@@ -120,7 +120,7 @@ class SendRemindersLogicTest {
 
 		setUpProperties();
 
-		when(reminderRepositoryMock.findByReminderDateLessThanEqualAndSentFalseAndMunicipalityId(LocalDate.now(), MUNICIPALITY_ID)).thenReturn(List.of(reminderEntity1, reminderEntity2));
+		when(reminderRepositoryMock.findByReminderDateLessThanEqualAndSentFalseAndMunicipalityId(LocalDate.now(), MUNICIPALITY_ID)).thenReturn(List.of(REMINDER_ENTITY_1, REMINDER_ENTITY_2));
 
 		when(reminderMessagePropertiesMock.getMunicipalityIds()).thenReturn(List.of(MUNICIPALITY_ID));
 
