@@ -92,7 +92,6 @@ class ReminderServiceTest {
 	@Test
 	void deleteByReminderIdSuccess() {
 
-
 		when(reminderRepositoryMock.findByReminderIdAndMunicipalityId(REMINDER_ID, MUNICIPALITY_ID)).thenReturn(Optional.of(new ReminderEntity()));
 
 		doNothing().when(reminderRepositoryMock).deleteByReminderId(REMINDER_ID);
@@ -169,7 +168,6 @@ class ReminderServiceTest {
 
 	@Test
 	void deleteByReminderIdNotFound() {
-
 
 		when(reminderRepositoryMock.findByReminderIdAndMunicipalityId(REMINDER_ID, MUNICIPALITY_ID)).thenReturn(Optional.empty());
 

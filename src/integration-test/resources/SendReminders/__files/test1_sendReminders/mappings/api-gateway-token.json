@@ -1,14 +1,12 @@
 {
-	"name": "api-messaging",
 	"request": {
-		"urlPath": "/api-messaging/token",
-		"method": "POST"
+		"method": "POST",
+		"urlPath": "/api-messaging/token"
 	},
 	"response": {
-		"headers": {
-			"Content-Type": "application/json"
-		},
-		"status": 200,
-		"bodyFileName": "test1_sendReminders/mocking/api-gateway-token-response.json"
-	}
+		"headers": {"Content-Type": "application/json"},
+		"bodyFileName": "test1_sendReminders/mocking/api-gateway-token-response.json",
+		"status": 200
+	},
+	"name": "api-messaging"
 }

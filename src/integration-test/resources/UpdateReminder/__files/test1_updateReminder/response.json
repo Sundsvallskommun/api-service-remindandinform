@@ -1,15 +1,15 @@
 {
-	"action": "Updated action",
-	"caseId": "Updated caseId",
+	"note": "Updated note",
+	"externalCaseId": "Updated externalCaseId",
+	"reminderId": "R-fbfbd90c-4c47-11ec-81d3-0242ac130004",
+	"created": "2022-01-01T12:14:32.234+01:00",
 	"caseLink": "Updated caseLink",
 	"caseType": "Updated caseType",
-	"created": "2022-01-01T12:14:32.234+01:00",
 	"createdBy": "User Identification",
-	"externalCaseId": "Updated externalCaseId",
-	"note": "Updated note",
+	"caseId": "Updated caseId",
+	"action": "Updated action",
 	"modified": "${json-unit.any-string}",
 	"modifiedBy": "Another User Identification",
 	"partyId": "fbfbd90c-4c47-11ec-81d3-0242ac130003",
-	"reminderDate": "2029-11-01",
-	"reminderId": "R-fbfbd90c-4c47-11ec-81d3-0242ac130004"
+	"reminderDate": "2029-11-01"
 }

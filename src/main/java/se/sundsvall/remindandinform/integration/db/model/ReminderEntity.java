@@ -31,7 +31,9 @@ import org.hibernate.annotations.TimeZoneStorage;
 		@Index(name = "municipality_id_index", columnList = "municipality_id"),
 	},
 	uniqueConstraints = {
-		@UniqueConstraint(name = "uq_reminder_id", columnNames = {"reminder_id"})
+		@UniqueConstraint(name = "uq_reminder_id", columnNames = {
+			"reminder_id"
+		})
 	})
 public class ReminderEntity implements Serializable {
 
@@ -229,10 +231,14 @@ public class ReminderEntity implements Serializable {
 
 	@Override
 	public boolean equals(final Object o) {
-		if (this == o) return true;
-		if (o == null || getClass() != o.getClass()) return false;
+		if (this == o)
+			return true;
+		if (o == null || getClass() != o.getClass())
+			return false;
 		final ReminderEntity that = (ReminderEntity) o;
-		return id == that.id && sent == that.sent && Objects.equals(municipalityId, that.municipalityId) && Objects.equals(reminderId, that.reminderId) && Objects.equals(partyId, that.partyId) && Objects.equals(action, that.action) && Objects.equals(note, that.note) && Objects.equals(caseId, that.caseId) && Objects.equals(caseType, that.caseType) && Objects.equals(caseLink, that.caseLink) && Objects.equals(externalCaseId, that.externalCaseId) && Objects.equals(reminderDate, that.reminderDate) && Objects.equals(created, that.created) && Objects.equals(createdBy, that.createdBy) && Objects.equals(modified, that.modified) && Objects.equals(modifiedBy, that.modifiedBy);
+		return id == that.id && sent == that.sent && Objects.equals(municipalityId, that.municipalityId) && Objects.equals(reminderId, that.reminderId) && Objects.equals(partyId, that.partyId) && Objects.equals(action, that.action) && Objects.equals(note,
+			that.note) && Objects.equals(caseId, that.caseId) && Objects.equals(caseType, that.caseType) && Objects.equals(caseLink, that.caseLink) && Objects.equals(externalCaseId, that.externalCaseId) && Objects.equals(reminderDate, that.reminderDate)
+			&& Objects.equals(created, that.created) && Objects.equals(createdBy, that.createdBy) && Objects.equals(modified, that.modified) && Objects.equals(modifiedBy, that.modifiedBy);
 	}
 
 	@Override

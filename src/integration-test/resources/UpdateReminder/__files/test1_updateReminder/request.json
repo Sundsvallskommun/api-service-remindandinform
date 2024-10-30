@@ -1,10 +1,10 @@
 {
-	"action": "Updated action",
 	"note": "Updated note",
-	"caseId": "Updated caseId",
-	"caseType": "Updated caseType",
 	"externalCaseId": "Updated externalCaseId",
-	"caseLink": "Updated caseLink",
+	"caseId": "Updated caseId",
+	"action": "Updated action",
 	"modifiedBy": "Another User Identification",
-	"reminderDate": "2029-11-01"
+	"caseLink": "Updated caseLink",
+	"reminderDate": "2029-11-01",
+	"caseType": "Updated caseType"
 }
