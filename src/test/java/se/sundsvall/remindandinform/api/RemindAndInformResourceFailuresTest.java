@@ -93,7 +93,8 @@ class RemindAndInformResourceFailuresTest {
 			.expectBody()
 			.jsonPath(TITLE).isEqualTo("Bad Request")
 			.jsonPath(STATUS).isEqualTo(HttpStatus.BAD_REQUEST.value())
-			.jsonPath(DETAIL).isEqualTo("Required request body is missing: public org.springframework.http.ResponseEntity<java.lang.Void> se.sundsvall.remindandinform.api.RemindAndInformResource.createReminder(java.lang.String,se.sundsvall.remindandinform.api.model.ReminderRequest)");
+			.jsonPath(DETAIL).isEqualTo(
+				"Required request body is missing: public org.springframework.http.ResponseEntity<java.lang.Void> se.sundsvall.remindandinform.api.RemindAndInformResource.createReminder(java.lang.String,se.sundsvall.remindandinform.api.model.ReminderRequest)");
 
 		verifyNoInteractions(reminderServiceMock, sendRemindersLogicMock);
 	}
@@ -229,7 +230,8 @@ class RemindAndInformResourceFailuresTest {
 			.expectBody()
 			.jsonPath(TITLE).isEqualTo("Bad Request")
 			.jsonPath(STATUS).isEqualTo(HttpStatus.BAD_REQUEST.value())
-			.jsonPath(DETAIL).isEqualTo("Required request body is missing: public org.springframework.http.ResponseEntity<se.sundsvall.remindandinform.api.model.Reminder> se.sundsvall.remindandinform.api.RemindAndInformResource.updateReminder(java.lang.String,java.lang.String,se.sundsvall.remindandinform.api.model.UpdateReminderRequest)");
+			.jsonPath(DETAIL).isEqualTo(
+				"Required request body is missing: public org.springframework.http.ResponseEntity<se.sundsvall.remindandinform.api.model.Reminder> se.sundsvall.remindandinform.api.RemindAndInformResource.updateReminder(java.lang.String,java.lang.String,se.sundsvall.remindandinform.api.model.UpdateReminderRequest)");
 
 		verifyNoInteractions(reminderServiceMock, sendRemindersLogicMock);
 	}
@@ -347,7 +349,8 @@ class RemindAndInformResourceFailuresTest {
 			.expectBody()
 			.jsonPath(TITLE).isEqualTo(HttpStatus.BAD_REQUEST.getReasonPhrase())
 			.jsonPath(STATUS).isEqualTo(HttpStatus.BAD_REQUEST.value())
-			.jsonPath(DETAIL).isEqualTo("Required request body is missing: public org.springframework.http.ResponseEntity<java.lang.Void> se.sundsvall.remindandinform.api.RemindAndInformResource.sendReminders(java.lang.String,se.sundsvall.remindandinform.api.model.SendRemindersRequest)");
+			.jsonPath(DETAIL).isEqualTo(
+				"Required request body is missing: public org.springframework.http.ResponseEntity<java.lang.Void> se.sundsvall.remindandinform.api.RemindAndInformResource.sendReminders(java.lang.String,se.sundsvall.remindandinform.api.model.SendRemindersRequest)");
 
 		verifyNoInteractions(reminderServiceMock, sendRemindersLogicMock);
 	}

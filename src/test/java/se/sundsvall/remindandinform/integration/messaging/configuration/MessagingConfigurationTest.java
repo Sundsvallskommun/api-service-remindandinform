@@ -79,8 +79,8 @@ class MessagingConfigurationTest {
 
 		// Assert ErrorDecoder
 		Assertions.assertThat(errorDecoderCaptor.getValue())
-				.isInstanceOf(ProblemErrorDecoder.class)
-				.hasFieldOrPropertyWithValue("integrationName", CLIENT_ID);
+			.isInstanceOf(ProblemErrorDecoder.class)
+			.hasFieldOrPropertyWithValue("integrationName", CLIENT_ID);
 	}
 
 	@Test

@@ -1,11 +1,13 @@
 # RemindAndInform
 
 ## Beskrivning
+
 RemindAndInform är en tjänst där man kan registrera påminnelser som skickas ut vid angiven tidpunkt.
 
 ## Tekniska detaljer
 
 ### Integrationer
+
 Tjänsten integrerar mot:
 
 * Messaging
@@ -19,6 +21,6 @@ Tjänsten integrerar mot:
 [![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=Sundsvallskommun_api-service-remindandinform&metric=vulnerabilities)](https://sonarcloud.io/summary/overall?id=Sundsvallskommun_api-service-remindandinform)
 [![Bugs](https://sonarcloud.io/api/project_badges/measure?project=Sundsvallskommun_api-service-remindandinform&metric=bugs)](https://sonarcloud.io/summary/overall?id=Sundsvallskommun_api-service-remindandinform)
 
-
 ## 
+
 Copyright (c) 2023 Sundsvalls kommun

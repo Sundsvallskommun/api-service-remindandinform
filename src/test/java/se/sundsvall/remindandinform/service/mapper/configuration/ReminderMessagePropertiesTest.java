@@ -9,17 +9,16 @@ import se.sundsvall.remindandinform.Application;
 @SpringBootTest(classes = Application.class)
 @ActiveProfiles("junit")
 class ReminderMessagePropertiesTest {
-    @Autowired
-    private ReminderMessageProperties reminderMessageProperties;
+	@Autowired
+	private ReminderMessageProperties reminderMessageProperties;
 
-     @Test
-     void testProperties() { //NOSONAR
-         assert(reminderMessageProperties.getMessage()).equals("TestSmsMessageÅÄÖåäö");
-         assert(reminderMessageProperties.getEmailMessage()).equals("TestEmailMessageÅÄÖåäö");
-         assert(reminderMessageProperties.getSubject()).equals("TestSubjectÅÄÖåäö");
-         assert(reminderMessageProperties.getSenderEmailAddress()).equals("TestEmailAddressÅÄÖåäö");
-         assert(reminderMessageProperties.getSenderEmailName()).equals("TestEmailNameÅÄÖåäö");
-         assert(reminderMessageProperties.getSenderSmsName()).equals("TestSmsNameÅÄÖåäö");
-     }
+	@Test
+	void testProperties() { // NOSONAR
+		assert (reminderMessageProperties.getMessage()).equals("TestSmsMessageÅÄÖåäö");
+		assert (reminderMessageProperties.getEmailMessage()).equals("TestEmailMessageÅÄÖåäö");
+		assert (reminderMessageProperties.getSubject()).equals("TestSubjectÅÄÖåäö");
+		assert (reminderMessageProperties.getSenderEmailAddress()).equals("TestEmailAddressÅÄÖåäö");
+		assert (reminderMessageProperties.getSenderEmailName()).equals("TestEmailNameÅÄÖåäö");
+		assert (reminderMessageProperties.getSenderSmsName()).equals("TestSmsNameÅÄÖåäö");
+	}
 }
-

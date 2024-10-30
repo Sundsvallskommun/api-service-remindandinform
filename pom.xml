@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-		 xmlns="http://maven.apache.org/POM/4.0.0"
-		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>se.sundsvall.dept44</groupId>
 		<artifactId>dept44-service-parent</artifactId>
-		<version>6.0.2</version>
-		<relativePath/> <!-- lookup parent from repository -->
+		<version>6.0.3</version>
+		<relativePath />
+		<!-- lookup parent from repository -->
 	</parent>
 	<groupId>se.sundsvall</groupId>
 	<artifactId>api-service-remindandinform</artifactId>
@@ -17,8 +16,7 @@
 	<properties>
 		<!-- CI/CD properties -->
 		<!-- Service properties -->
-		<generated-sources-path>${project.build.directory}/generated-sources
-		</generated-sources-path>
+		<generated-sources-path>${project.build.directory}/generated-sources</generated-sources-path>
 		<generated-sources-java-path>src/main/java</generated-sources-java-path>
 		<shedlock.version>5.16.0</shedlock.version>
 	</properties>
@@ -83,9 +81,7 @@
 							<goal>generate</goal>
 						</goals>
 						<configuration>
-							<inputSpec>
-								${project.basedir}/src/main/resources/integrations/messaging.yaml
-							</inputSpec>
+							<inputSpec>${project.basedir}/src/main/resources/integrations/messaging.yaml</inputSpec>
 							<output>${generated-sources-path}</output>
 							<generatorName>spring</generatorName>
 							<generateApis>false</generateApis>
@@ -112,14 +108,14 @@
 				<executions>
 					<execution>
 						<id>add-generated-source</id>
-						<phase>generate-sources</phase>
 						<goals>
 							<goal>add-source</goal>
 						</goals>
+						<phase>generate-sources</phase>
 						<configuration>
 							<sources>
-								<source>${generated-sources-path}/models
-								</source> <!-- API model classes -->
+								<source>${generated-sources-path}/models</source>
+								<!-- API model classes -->
 							</sources>
 						</configuration>
 					</execution>

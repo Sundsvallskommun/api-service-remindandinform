@@ -154,8 +154,7 @@ class RemindAndInformResourceTest {
 			.withModifiedBy(MODIFIED_BY)
 			.withReminderDate(LocalDate.now());
 
-		when(reminderServiceMock.updateReminder(argThat(reminderRequest ->
-			PARTY_ID.equals(reminderRequest.getPartyId())), argThat(REMINDER_ID::equals), eq(MUNICIPALITY_ID)))
+		when(reminderServiceMock.updateReminder(argThat(reminderRequest -> PARTY_ID.equals(reminderRequest.getPartyId())), argThat(REMINDER_ID::equals), eq(MUNICIPALITY_ID)))
 			.thenReturn(Reminder.create());
 
 		// Act

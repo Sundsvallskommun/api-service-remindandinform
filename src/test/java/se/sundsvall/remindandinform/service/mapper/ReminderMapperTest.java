@@ -106,7 +106,6 @@ class ReminderMapperTest {
 		final var reminderDate = LocalDate.now();
 		final var municipalityId = "municipalityId";
 
-
 		// Parameters
 		final var updateReminderRequest = UpdateReminderRequest.create()
 			.withPartyId(partyId)

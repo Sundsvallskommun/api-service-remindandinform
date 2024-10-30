@@ -1,10 +1,10 @@
 {
-	"partyId": "81471222-5798-11e9-ae24-57fa13b361e1",
-	"action": "Renew application",
-	"caseId": "12345",
 	"externalCaseId": "67890",
-	"caseType": "Nybeställning",
-	"caseLink": "http://test.sundsvall.se/case1337",
 	"createdBy": "User Identification",
-	"reminderDate": "2021-12-01"
+	"caseId": "12345",
+	"action": "Renew application",
+	"caseLink": "http://test.sundsvall.se/case1337",
+	"partyId": "81471222-5798-11e9-ae24-57fa13b361e1",
+	"reminderDate": "2021-12-01",
+	"caseType": "Nybeställning"
 }
