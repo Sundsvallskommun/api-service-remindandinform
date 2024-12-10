@@ -1,64 +1,82 @@
 {
 	"request": {
 		"method": "POST",
-		"queryParameters": {"async": {"equalTo": "true"}},
-		"bodyPatterns": [{"equalToJson": {"messages": [
+		"queryParameters": {
+			"async": {
+				"equalTo": "true"
+			}
+		},
+		"bodyPatterns": [
 			{
-				"sender": {
-					"sms": {"name": "TestSmsNameÅÄÖåäö"},
-					"email": {
-						"address": "TestEmailAddressÅÄÖåäö",
-						"name": "TestEmailNameÅÄÖåäö"
-					}
-				},
-				"subject": "TestSubjectÅÄÖåäö",
-				"htmlMessage": "VGVzdEVtYWlsTWVzc2FnZcOFw4TDlsOlw6TDtg==",
-				"filters": {},
-				"message": "TestSmsMessageÅÄÖåäö",
-				"party": {
-					"externalReferences": [],
-					"partyId": "fbfbd90c-4c47-11ec-81d3-0242ac130003"
-				}
-			},
-			{
-				"sender": {
-					"sms": {"name": "TestSmsNameÅÄÖåäö"},
-					"email": {
-						"address": "TestEmailAddressÅÄÖåäö",
-						"name": "TestEmailNameÅÄÖåäö"
-					}
-				},
-				"subject": "TestSubjectÅÄÖåäö",
-				"htmlMessage": "VGVzdEVtYWlsTWVzc2FnZcOFw4TDlsOlw6TDtg==",
-				"filters": {},
-				"message": "TestSmsMessageÅÄÖåäö",
-				"party": {
-					"externalReferences": [],
-					"partyId": "fbfbd90c-4c47-11ec-81d3-0242ac130001"
-				}
-			},
-			{
-				"sender": {
-					"sms": {"name": "TestSmsNameÅÄÖåäö"},
-					"email": {
-						"address": "TestEmailAddressÅÄÖåäö",
-						"name": "TestEmailNameÅÄÖåäö"
-					}
-				},
-				"subject": "TestSubjectÅÄÖåäö",
-				"htmlMessage": "VGVzdEVtYWlsTWVzc2FnZcOFw4TDlsOlw6TDtg==",
-				"filters": {},
-				"message": "TestSmsMessageÅÄÖåäö",
-				"party": {
-					"externalReferences": [],
-					"partyId": "fbfbd90c-4c47-11ec-81d3-0242ac130002"
+				"equalToJson": {
+					"messages": [
+						{
+							"sender": {
+								"sms": {
+									"name": "TestSmsNameÅÄÖåäö"
+								},
+								"email": {
+									"address": "TestEmailAddressÅÄÖåäö",
+									"name": "TestEmailNameÅÄÖåäö"
+								}
+							},
+							"subject": "TestSubjectÅÄÖåäö",
+							"htmlMessage": "VGVzdEVtYWlsTWVzc2FnZcOFw4TDlsOlw6TDtg==",
+							"filters": {},
+							"message": "TestSmsMessageÅÄÖåäö",
+							"party": {
+								"externalReferences": [],
+								"partyId": "fbfbd90c-4c47-11ec-81d3-0242ac130003"
+							}
+						},
+						{
+							"sender": {
+								"sms": {
+									"name": "TestSmsNameÅÄÖåäö"
+								},
+								"email": {
+									"address": "TestEmailAddressÅÄÖåäö",
+									"name": "TestEmailNameÅÄÖåäö"
+								}
+							},
+							"subject": "TestSubjectÅÄÖåäö",
+							"htmlMessage": "VGVzdEVtYWlsTWVzc2FnZcOFw4TDlsOlw6TDtg==",
+							"filters": {},
+							"message": "TestSmsMessageÅÄÖåäö",
+							"party": {
+								"externalReferences": [],
+								"partyId": "fbfbd90c-4c47-11ec-81d3-0242ac130001"
+							}
+						},
+						{
+							"sender": {
+								"sms": {
+									"name": "TestSmsNameÅÄÖåäö"
+								},
+								"email": {
+									"address": "TestEmailAddressÅÄÖåäö",
+									"name": "TestEmailNameÅÄÖåäö"
+								}
+							},
+							"subject": "TestSubjectÅÄÖåäö",
+							"htmlMessage": "VGVzdEVtYWlsTWVzc2FnZcOFw4TDlsOlw6TDtg==",
+							"filters": {},
+							"message": "TestSmsMessageÅÄÖåäö",
+							"party": {
+								"externalReferences": [],
+								"partyId": "fbfbd90c-4c47-11ec-81d3-0242ac130002"
+							}
+						}
+					]
 				}
 			}
-		]}}],
+		],
 		"urlPath": "/api-messaging/2281/messages"
 	},
 	"response": {
-		"headers": {"Content-Type": "application/json"},
+		"headers": {
+			"Content-Type": "application/json"
+		},
 		"bodyFileName": "test1_sendReminders/mocking/api-messaging-messages-response.json",
 		"status": 200
 	},

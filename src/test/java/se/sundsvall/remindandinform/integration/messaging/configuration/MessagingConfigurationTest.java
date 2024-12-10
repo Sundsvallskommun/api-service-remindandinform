@@ -1,5 +1,10 @@
 package se.sundsvall.remindandinform.integration.messaging.configuration;
 
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import static se.sundsvall.remindandinform.integration.messaging.configuration.MessagingConfiguration.CLIENT_ID;
+
 import feign.codec.ErrorDecoder;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -18,11 +23,6 @@ import org.springframework.test.context.ActiveProfiles;
 import se.sundsvall.dept44.configuration.feign.FeignMultiCustomizer;
 import se.sundsvall.dept44.configuration.feign.decoder.ProblemErrorDecoder;
 import se.sundsvall.remindandinform.Application;
-
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-import static se.sundsvall.remindandinform.integration.messaging.configuration.MessagingConfiguration.CLIENT_ID;
 
 @SpringBootTest(classes = Application.class)
 @ActiveProfiles("junit")

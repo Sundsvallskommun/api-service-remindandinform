@@ -10,25 +10,22 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import generated.se.sundsvall.messaging.DeliveryResult;
+import generated.se.sundsvall.messaging.MessageResult;
 import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
 import se.sundsvall.remindandinform.integration.db.ReminderRepository;
 import se.sundsvall.remindandinform.integration.db.model.ReminderEntity;
 import se.sundsvall.remindandinform.integration.messaging.MessagingClient;
 import se.sundsvall.remindandinform.service.mapper.configuration.ReminderMessageProperties;
-
-import generated.se.sundsvall.messaging.DeliveryResult;
-import generated.se.sundsvall.messaging.MessageResult;
 
 @ExtendWith(MockitoExtension.class)
 class SendRemindersLogicTest {

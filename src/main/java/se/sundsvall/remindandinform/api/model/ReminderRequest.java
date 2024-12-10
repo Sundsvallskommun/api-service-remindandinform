@@ -2,16 +2,13 @@ package se.sundsvall.remindandinform.api.model;
 
 import static io.swagger.v3.oas.annotations.media.Schema.RequiredMode.REQUIRED;
 
-import java.time.LocalDate;
-import java.util.Objects;
-
+import com.fasterxml.jackson.annotation.JsonFormat;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-
-import com.fasterxml.jackson.annotation.JsonFormat;
-
-import io.swagger.v3.oas.annotations.media.Schema;
+import java.time.LocalDate;
+import java.util.Objects;
 import se.sundsvall.dept44.common.validators.annotation.ValidUuid;
 
 @Schema(description = "Reminder creation request model")
