@@ -13,9 +13,9 @@ import org.json.JSONObject;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import se.sundsvall.remindandinform.Application;
 import se.sundsvall.remindandinform.api.model.ReminderRequest;
@@ -72,10 +72,10 @@ class RemindAndInformResourceFailuresTest {
 
 	private static final String PATH = "/" + MUNICIPALITY_ID + "/reminders";
 
-	@MockBean
+	@MockitoBean
 	private ReminderService reminderServiceMock;
 
-	@MockBean
+	@MockitoBean
 	private SendRemindersLogic sendRemindersLogicMock;
 
 	@Autowired
