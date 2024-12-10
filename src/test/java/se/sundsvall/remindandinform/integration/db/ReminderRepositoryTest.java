@@ -5,7 +5,6 @@ import static org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTest
 
 import java.time.LocalDate;
 import java.util.List;
-
 import org.assertj.core.api.recursive.comparison.RecursiveComparisonConfiguration;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -13,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.ActiveProfiles;
-
 import se.sundsvall.remindandinform.integration.db.model.ReminderEntity;
 
 @DataJpaTest

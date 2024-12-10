@@ -1,12 +1,10 @@
 package se.sundsvall.remindandinform.api.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import io.swagger.v3.oas.annotations.media.Schema;
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.util.Objects;
-
-import com.fasterxml.jackson.annotation.JsonFormat;
-
-import io.swagger.v3.oas.annotations.media.Schema;
 
 @Schema(description = "Reminder model")
 public class Reminder {

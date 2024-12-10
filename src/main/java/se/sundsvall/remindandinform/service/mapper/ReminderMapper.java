@@ -4,25 +4,22 @@ import static java.lang.String.format;
 import static java.util.Collections.emptyList;
 import static java.util.Optional.ofNullable;
 
-import java.nio.charset.StandardCharsets;
-import java.util.Base64;
-import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
-
-import org.springframework.web.util.HtmlUtils;
-
-import se.sundsvall.remindandinform.api.model.Reminder;
-import se.sundsvall.remindandinform.api.model.ReminderRequest;
-import se.sundsvall.remindandinform.api.model.UpdateReminderRequest;
-import se.sundsvall.remindandinform.integration.db.model.ReminderEntity;
-import se.sundsvall.remindandinform.service.mapper.configuration.ReminderMessageProperties;
-
 import generated.se.sundsvall.messaging.Email;
 import generated.se.sundsvall.messaging.Message;
 import generated.se.sundsvall.messaging.MessageParty;
 import generated.se.sundsvall.messaging.MessageSender;
 import generated.se.sundsvall.messaging.Sms;
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
+import java.util.List;
+import java.util.Objects;
+import java.util.UUID;
+import org.springframework.web.util.HtmlUtils;
+import se.sundsvall.remindandinform.api.model.Reminder;
+import se.sundsvall.remindandinform.api.model.ReminderRequest;
+import se.sundsvall.remindandinform.api.model.UpdateReminderRequest;
+import se.sundsvall.remindandinform.integration.db.model.ReminderEntity;
+import se.sundsvall.remindandinform.service.mapper.configuration.ReminderMessageProperties;
 
 public final class ReminderMapper {
 

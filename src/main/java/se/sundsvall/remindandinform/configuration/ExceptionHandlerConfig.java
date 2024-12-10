@@ -5,7 +5,6 @@ import static org.zalando.problem.Status.BAD_REQUEST;
 import java.net.URI;
 import java.time.format.DateTimeParseException;
 import java.util.Optional;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Configuration;

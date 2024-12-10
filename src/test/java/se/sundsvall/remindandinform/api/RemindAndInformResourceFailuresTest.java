@@ -8,7 +8,6 @@ import static org.springframework.http.MediaType.APPLICATION_PROBLEM_JSON_VALUE;
 
 import java.time.LocalDate;
 import java.util.UUID;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.jupiter.api.Test;
@@ -18,7 +17,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.reactive.server.WebTestClient;
-
 import se.sundsvall.remindandinform.Application;
 import se.sundsvall.remindandinform.api.model.ReminderRequest;
 import se.sundsvall.remindandinform.api.model.SendRemindersRequest;

@@ -9,11 +9,9 @@ import static se.sundsvall.remindandinform.service.mapper.ReminderMapper.toRemin
 
 import java.util.List;
 import java.util.UUID;
-
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.zalando.problem.Problem;
-
 import se.sundsvall.remindandinform.api.model.Reminder;
 import se.sundsvall.remindandinform.api.model.ReminderRequest;
 import se.sundsvall.remindandinform.api.model.UpdateReminderRequest;
