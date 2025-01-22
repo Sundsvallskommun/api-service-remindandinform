@@ -9,12 +9,11 @@ import generated.se.sundsvall.messaging.MessageRequest;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
-import net.javacrumbs.shedlock.spring.annotation.SchedulerLock;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import se.sundsvall.dept44.scheduling.Dept44Scheduled;
 import se.sundsvall.remindandinform.api.model.Reminder;
 import se.sundsvall.remindandinform.integration.db.ReminderRepository;
 import se.sundsvall.remindandinform.integration.messaging.MessagingClient;
@@ -39,8 +38,10 @@ public class SendRemindersLogic {
 		this.reminderMessageProperties = reminderMessageProperties;
 	}
 
-	@Scheduled(cron = "${sendReminders.cron.expr}")
-	@SchedulerLock(name = "sendReminders", lockAtMostFor = "${sendReminders.shedlock-lock-at-most-for}")
+	@Dept44Scheduled(cron = "${sendReminders.cron.expr}",
+		name = "${sendReminders.name}",
+		lockAtMostFor = "${sendReminders.shedlock-lock-at-most-for}",
+		maximumExecutionTime = "${sendReminders.maximum-execution-time")
 	public void sendReminders() {
 
 		reminderMessageProperties.getMunicipalityIds().forEach(municipalityId -> sendReminders(now(systemDefault()), municipalityId));
