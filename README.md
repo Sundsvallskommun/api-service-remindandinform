@@ -31,9 +31,10 @@ cd api-service-remindandinform
 
    *Messaging*
 
-   - Purpose: Used to send the actual reminders.
-   - Repository: https://github.com/Sundsvallskommun/api-service-messaging
-   - Setup Instructions: See documentation in repository above for installation and configuration steps.
+	- Purpose: Used to send the actual reminders.
+	- Repository: https://github.com/Sundsvallskommun/api-service-messaging
+	- Setup Instructions: See documentation in repository above for installation and configuration steps.
+
 4. **Build and run the application:**
 
 - Using Maven:
@@ -64,7 +65,6 @@ See the [API Documentation](#api-documentation) for detailed information on avai
 
 ```bash
 curl -X 'GET' 'https://localhost:8080/2281/reminders/parties/11a8e3cd-89e7-4053-8dd2-a95ffa8b12c1'
-
 ```
 
 ## Configuration
@@ -98,8 +98,7 @@ spring:
             database:
               action: validate
   flyway:
-    enabled: false
-    baseline-on-migrate: true
+    enabled: <true|false> # Enable if you want to run Flyway migrations
 ```
 
 - **Integration Settings**
@@ -117,7 +116,62 @@ spring:
 		provider:
 		  messaging:
 		  	token-uri: <token-uri>
+integration:
+  messaging:
+    url: <messaging-url>
 ```
+
+- **Scheduler Settings**
+
+```yaml
+reminder:
+  message: <reminder-message>
+  emailMessage: <reminder-email-message>
+  senderEmailAddress: <sender-email-address>
+  senderEmailName: <sender-email-name>
+  senderSmsName: <sender-sms-name>
+  subject: <reminder-subject>
+  municipality-ids: <comma separated list of municipality IDs>
+sendReminders:
+  name: <name-of-scheduled-job>
+  cron:
+    expr: <cron-expression>
+  shedlock-lock-at-most-for: <ISO8601-duration format>
+  maximum-execution-time: <ISO8601-duration format>
+```
+
+### Database Initialization
+
+The project is set up with [Flyway](https://github.com/flyway/flyway) for database migrations. Flyway is disabled by
+default so you will have to enable it to automatically populate the database schema upon application startup.
+
+```yaml
+spring:
+  flyway:
+    enabled: true
+```
+
+- **No additional setup is required** for database initialization, as long as the database connection settings are
+  correctly configured.
+
+### Additional Notes
+
+- **Application Profiles:**
+
+  Use Spring profiles (`dev`, `prod`, etc.) to manage different configurations for different environments.
+
+- **Logging Configuration:**
+
+  Adjust logging levels if necessary.
+
+## Contributing
+
+Contributions are welcome! Please
+see [CONTRIBUTING.md](https://github.com/Sundsvallskommun/.github/blob/main/.github/CONTRIBUTING.md) for guidelines.
+
+## License
+
+This project is licensed under the [MIT License](LICENSE).
 
 ## Status
 
