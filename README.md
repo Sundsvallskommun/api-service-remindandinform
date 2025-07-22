@@ -31,10 +31,9 @@ cd api-service-remindandinform
 
    *Messaging*
 
-	- Purpose: Used to send the actual reminders.
-	- Repository: https://github.com/Sundsvallskommun/api-service-messaging
-	- Setup Instructions: See documentation in repository above for installation and configuration steps.
-
+   - Purpose: Used to send the actual reminders.
+   - Repository: https://github.com/Sundsvallskommun/api-service-messaging
+   - Setup Instructions: See documentation in repository above for installation and configuration steps.
 4. **Build and run the application:**
 
 - Using Maven:
