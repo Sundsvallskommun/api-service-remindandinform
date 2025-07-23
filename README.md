@@ -108,13 +108,13 @@ spring:
     oauth2:
       client:
         registration:
-		  messaging:
-		    client-id: <client-id>
-		    client-secret: <client-secret>
-		    authorization-grant-type: client_credentials
-		provider:
-		  messaging:
-		  	token-uri: <token-uri>
+          messaging:
+            client-id: <client-id>
+            client-secret: <client-secret>
+            authorization-grant-type: client_credentials
+        provider:
+          messaging:
+            token-uri: <token-uri>
 integration:
   messaging:
     url: <messaging-url>
