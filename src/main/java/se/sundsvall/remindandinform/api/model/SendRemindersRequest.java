@@ -10,7 +10,7 @@ import java.util.Objects;
 @Schema(description = "Request model for sending reminders of a specified date")
 public class SendRemindersRequest {
 
-	@Schema(description = "Date for reminding", example = "2021-11-01", requiredMode = REQUIRED)
+	@Schema(description = "Date for reminding", examples = "2021-11-01", requiredMode = REQUIRED)
 	@NotNull
 	private LocalDate reminderDate;
 
