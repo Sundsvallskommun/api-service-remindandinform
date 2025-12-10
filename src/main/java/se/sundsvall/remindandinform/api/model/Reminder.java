@@ -9,44 +9,44 @@ import java.util.Objects;
 @Schema(description = "Reminder model")
 public class Reminder {
 
-	@Schema(description = "Reminder ID", example = "R-81471222-5798-11e9-ae24-57fa13b361e1")
+	@Schema(description = "Reminder ID", examples = "R-81471222-5798-11e9-ae24-57fa13b361e1")
 	private String reminderId;
 
-	@Schema(description = "Party ID (e.g. a personId or an organizationId)", example = "81471222-5798-11e9-ae24-57fa13b361e2")
+	@Schema(description = "Party ID (e.g. a personId or an organizationId)", examples = "81471222-5798-11e9-ae24-57fa13b361e2")
 	private String partyId;
 
-	@Schema(description = "What should be done", example = "Renew application")
+	@Schema(description = "What should be done", examples = "Renew application")
 	private String action;
 
-	@Schema(description = "Reminder note", example = "A short note about the reminder")
+	@Schema(description = "Reminder note", examples = "A short note about the reminder")
 	private String note;
 
-	@Schema(description = "Case ID", example = "12345")
+	@Schema(description = "Case ID", examples = "12345")
 	private String caseId;
 
-	@Schema(description = "Case Type", example = "Byggärende")
+	@Schema(description = "Case Type", examples = "Byggärende")
 	private String caseType;
 
-	@Schema(description = "Link to the case", example = "http://test.sundsvall.se/case12345")
+	@Schema(description = "Link to the case", examples = "http://test.sundsvall.se/case12345")
 	private String caseLink;
 
-	@Schema(description = "External Case ID", example = "2229")
+	@Schema(description = "External Case ID", examples = "2229")
 	private String externalCaseId;
 
-	@Schema(description = "Date for reminding", example = "2021-11-01")
+	@Schema(description = "Date for reminding", examples = "2021-11-01")
 	@JsonFormat(pattern = "yyyy-MM-dd")
 	private LocalDate reminderDate;
 
-	@Schema(description = "Timestamp when reminder was created", example = "2021-10-15T07:43:13.225+02:00")
+	@Schema(description = "Timestamp when reminder was created", examples = "2021-10-15T07:43:13.225+02:00")
 	private OffsetDateTime created;
 
-	@Schema(description = "Identity of the individual that created the reminder", example = "Albert Einstein")
+	@Schema(description = "Identity of the individual that created the reminder", examples = "Albert Einstein")
 	private String createdBy;
 
-	@Schema(description = "Timestamp when reminder was last modified", example = "2021-10-22T11:28:37.431+02:00")
+	@Schema(description = "Timestamp when reminder was last modified", examples = "2021-10-22T11:28:37.431+02:00")
 	private OffsetDateTime modified;
 
-	@Schema(description = "Identity of the individual that last modified the reminder", example = "Albert Einstein")
+	@Schema(description = "Identity of the individual that last modified the reminder", examples = "Albert Einstein")
 	private String modifiedBy;
 
 	public static Reminder create() {

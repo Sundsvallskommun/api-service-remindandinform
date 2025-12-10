@@ -13,39 +13,39 @@ import se.sundsvall.dept44.common.validators.annotation.ValidUuid;
 @Schema(description = "Reminder update request model")
 public class UpdateReminderRequest {
 
-	@Schema(description = "PartyId (e.g. a personId or an organizationId)", example = "81471222-5798-11e9-ae24-57fa13b361e2")
+	@Schema(description = "PartyId (e.g. a personId or an organizationId)", examples = "81471222-5798-11e9-ae24-57fa13b361e2")
 	@ValidUuid(nullable = true)
 	private String partyId;
 
-	@Schema(description = "What should be done", example = "Renew application")
+	@Schema(description = "What should be done", examples = "Renew application")
 	@Size(max = 8192)
 	private String action;
 
-	@Schema(description = "Reminder note", example = "A short note about the reminder")
+	@Schema(description = "Reminder note", examples = "A short note about the reminder")
 	@Size(max = 2048)
 	private String note;
 
-	@Schema(description = "Id for the case", example = "12345")
+	@Schema(description = "Id for the case", examples = "12345")
 	@Size(max = 255)
 	private String caseId;
 
-	@Schema(description = "Type of the case", example = "Byggärende")
+	@Schema(description = "Type of the case", examples = "Byggärende")
 	@Size(max = 255)
 	private String caseType;
 
-	@Schema(description = "Link to the case", example = "http://test.sundsvall.se/case1337")
+	@Schema(description = "Link to the case", examples = "http://test.sundsvall.se/case1337")
 	@Size(max = 512)
 	private String caseLink;
 
-	@Schema(description = "External id for the case", example = "2229")
+	@Schema(description = "External id for the case", examples = "2229")
 	@Size(max = 255)
 	private String externalCaseId;
 
-	@Schema(description = "Date for reminding", example = "2021-11-01")
+	@Schema(description = "Date for reminding", examples = "2021-11-01")
 	@JsonFormat(pattern = "yyyy-MM-dd")
 	private LocalDate reminderDate;
 
-	@Schema(description = "Identity (username or given name) of the individual that is modifying the reminder post", example = "Albert Einstein", requiredMode = REQUIRED)
+	@Schema(description = "Identity (username or given name) of the individual that is modifying the reminder post", examples = "Albert Einstein", requiredMode = REQUIRED)
 	@NotBlank
 	@Size(max = 255)
 	private String modifiedBy;
