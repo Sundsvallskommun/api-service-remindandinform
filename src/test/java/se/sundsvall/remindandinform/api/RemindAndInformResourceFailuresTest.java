@@ -1,11 +1,5 @@
 package se.sundsvall.remindandinform.api;
 
-import static org.apache.commons.lang3.StringUtils.repeat;
-import static org.mockito.Mockito.verifyNoInteractions;
-import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
-import static org.springframework.http.MediaType.APPLICATION_JSON;
-import static org.springframework.http.MediaType.APPLICATION_PROBLEM_JSON_VALUE;
-
 import java.time.LocalDate;
 import java.util.UUID;
 import org.json.JSONException;
@@ -23,6 +17,12 @@ import se.sundsvall.remindandinform.api.model.SendRemindersRequest;
 import se.sundsvall.remindandinform.api.model.UpdateReminderRequest;
 import se.sundsvall.remindandinform.service.ReminderService;
 import se.sundsvall.remindandinform.service.logic.SendRemindersLogic;
+
+import static org.apache.commons.lang3.StringUtils.repeat;
+import static org.mockito.Mockito.verifyNoInteractions;
+import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
+import static org.springframework.http.MediaType.APPLICATION_JSON;
+import static org.springframework.http.MediaType.APPLICATION_PROBLEM_JSON_VALUE;
 
 @SpringBootTest(classes = Application.class, webEnvironment = RANDOM_PORT)
 @ActiveProfiles("junit")

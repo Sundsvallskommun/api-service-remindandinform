@@ -1,7 +1,5 @@
 package se.sundsvall.remindandinform.configuration;
 
-import static org.zalando.problem.Status.BAD_REQUEST;
-
 import java.net.URI;
 import java.time.format.DateTimeParseException;
 import java.util.Optional;
@@ -14,6 +12,8 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.zalando.problem.Problem;
+
+import static org.zalando.problem.Status.BAD_REQUEST;
 
 @Configuration
 public class ExceptionHandlerConfig {

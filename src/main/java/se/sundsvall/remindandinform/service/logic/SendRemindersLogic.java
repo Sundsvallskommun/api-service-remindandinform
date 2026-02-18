@@ -1,9 +1,5 @@
 package se.sundsvall.remindandinform.service.logic;
 
-import static java.time.LocalDate.now;
-import static java.time.ZoneId.systemDefault;
-import static se.sundsvall.remindandinform.service.mapper.ReminderMapper.toMessage;
-
 import generated.se.sundsvall.messaging.Message;
 import generated.se.sundsvall.messaging.MessageRequest;
 import java.time.LocalDate;
@@ -19,6 +15,10 @@ import se.sundsvall.remindandinform.integration.db.ReminderRepository;
 import se.sundsvall.remindandinform.integration.messaging.MessagingClient;
 import se.sundsvall.remindandinform.service.mapper.ReminderMapper;
 import se.sundsvall.remindandinform.service.mapper.configuration.ReminderMessageProperties;
+
+import static java.time.LocalDate.now;
+import static java.time.ZoneId.systemDefault;
+import static se.sundsvall.remindandinform.service.mapper.ReminderMapper.toMessage;
 
 @Service
 @Transactional
