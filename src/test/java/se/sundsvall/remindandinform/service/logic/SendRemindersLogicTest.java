@@ -1,15 +1,5 @@
 package se.sundsvall.remindandinform.service.logic;
 
-import static generated.se.sundsvall.messaging.MessageStatus.SENT;
-import static generated.se.sundsvall.messaging.MessageType.MESSAGE;
-import static java.util.UUID.randomUUID;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
 import generated.se.sundsvall.messaging.DeliveryResult;
 import generated.se.sundsvall.messaging.MessageResult;
 import java.time.LocalDate;
@@ -26,6 +16,16 @@ import se.sundsvall.remindandinform.integration.db.ReminderRepository;
 import se.sundsvall.remindandinform.integration.db.model.ReminderEntity;
 import se.sundsvall.remindandinform.integration.messaging.MessagingClient;
 import se.sundsvall.remindandinform.service.mapper.configuration.ReminderMessageProperties;
+
+import static generated.se.sundsvall.messaging.MessageStatus.SENT;
+import static generated.se.sundsvall.messaging.MessageType.MESSAGE;
+import static java.util.UUID.randomUUID;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class SendRemindersLogicTest {

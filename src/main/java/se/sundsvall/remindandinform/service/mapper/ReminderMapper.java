@@ -1,9 +1,5 @@
 package se.sundsvall.remindandinform.service.mapper;
 
-import static java.lang.String.format;
-import static java.util.Collections.emptyList;
-import static java.util.Optional.ofNullable;
-
 import generated.se.sundsvall.messaging.Email;
 import generated.se.sundsvall.messaging.Message;
 import generated.se.sundsvall.messaging.MessageParty;
@@ -20,6 +16,10 @@ import se.sundsvall.remindandinform.api.model.ReminderRequest;
 import se.sundsvall.remindandinform.api.model.UpdateReminderRequest;
 import se.sundsvall.remindandinform.integration.db.model.ReminderEntity;
 import se.sundsvall.remindandinform.service.mapper.configuration.ReminderMessageProperties;
+
+import static java.lang.String.format;
+import static java.util.Collections.emptyList;
+import static java.util.Optional.ofNullable;
 
 public final class ReminderMapper {
 

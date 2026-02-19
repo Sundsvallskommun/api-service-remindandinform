@@ -1,12 +1,5 @@
 package se.sundsvall.remindandinform.service;
 
-import static java.lang.String.format;
-import static org.zalando.problem.Status.NOT_FOUND;
-import static se.sundsvall.remindandinform.service.mapper.ReminderMapper.toMergedReminderEntity;
-import static se.sundsvall.remindandinform.service.mapper.ReminderMapper.toReminder;
-import static se.sundsvall.remindandinform.service.mapper.ReminderMapper.toReminderEntity;
-import static se.sundsvall.remindandinform.service.mapper.ReminderMapper.toReminders;
-
 import java.util.List;
 import java.util.UUID;
 import org.springframework.stereotype.Service;
@@ -16,6 +9,13 @@ import se.sundsvall.remindandinform.api.model.Reminder;
 import se.sundsvall.remindandinform.api.model.ReminderRequest;
 import se.sundsvall.remindandinform.api.model.UpdateReminderRequest;
 import se.sundsvall.remindandinform.integration.db.ReminderRepository;
+
+import static java.lang.String.format;
+import static org.zalando.problem.Status.NOT_FOUND;
+import static se.sundsvall.remindandinform.service.mapper.ReminderMapper.toMergedReminderEntity;
+import static se.sundsvall.remindandinform.service.mapper.ReminderMapper.toReminder;
+import static se.sundsvall.remindandinform.service.mapper.ReminderMapper.toReminderEntity;
+import static se.sundsvall.remindandinform.service.mapper.ReminderMapper.toReminders;
 
 @Service
 @Transactional

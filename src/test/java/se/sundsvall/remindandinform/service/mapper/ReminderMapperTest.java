@@ -1,9 +1,5 @@
 package se.sundsvall.remindandinform.service.mapper;
 
-import static java.util.UUID.randomUUID;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.when;
-
 import jakarta.xml.bind.DatatypeConverter;
 import java.time.LocalDate;
 import java.util.List;
@@ -16,6 +12,10 @@ import se.sundsvall.remindandinform.api.model.ReminderRequest;
 import se.sundsvall.remindandinform.api.model.UpdateReminderRequest;
 import se.sundsvall.remindandinform.integration.db.model.ReminderEntity;
 import se.sundsvall.remindandinform.service.mapper.configuration.ReminderMessageProperties;
+
+import static java.util.UUID.randomUUID;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class ReminderMapperTest {
