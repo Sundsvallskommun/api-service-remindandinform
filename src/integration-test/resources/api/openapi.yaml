@@ -7,26 +7,26 @@ info:
     url: https://opensource.org/licenses/MIT
   version: "4.0"
 servers:
-  - url: http://localhost:49591
-    description: Generated server url
+- url: http://localhost:64891
+  description: Generated server url
 tags:
-  - name: Reminder
-    description: Remind operations
+- name: Reminder
+  description: Remind operations
 paths:
   /{municipalityId}/reminders:
     post:
       tags:
-        - Reminder
+      - Reminder
       summary: Create a new reminder.
       operationId: createReminder
       parameters:
-        - name: municipalityId
-          in: path
-          description: Municipality id
-          required: true
-          schema:
-            type: string
-          example: 2281
+      - name: municipalityId
+        in: path
+        description: Municipality id
+        required: true
+        schema:
+          type: string
+        example: 2281
       requestBody:
         content:
           application/json:
@@ -47,8 +47,8 @@ paths:
             application/problem+json:
               schema:
                 oneOf:
-                  - $ref: "#/components/schemas/Problem"
-                  - $ref: "#/components/schemas/ConstraintViolationProblem"
+                - $ref: "#/components/schemas/Problem"
+                - $ref: "#/components/schemas/ConstraintViolationProblem"
         "500":
           description: Internal Server error
           content:
@@ -58,17 +58,17 @@ paths:
   /{municipalityId}/reminders/send:
     post:
       tags:
-        - Reminder
+      - Reminder
       summary: Send reminders.
       operationId: sendReminders
       parameters:
-        - name: municipalityId
-          in: path
-          description: Municipality id
-          required: true
-          schema:
-            type: string
-          example: 2281
+      - name: municipalityId
+        in: path
+        description: Municipality id
+        required: true
+        schema:
+          type: string
+        example: 2281
       requestBody:
         content:
           application/json:
@@ -84,8 +84,8 @@ paths:
             application/problem+json:
               schema:
                 oneOf:
-                  - $ref: "#/components/schemas/Problem"
-                  - $ref: "#/components/schemas/ConstraintViolationProblem"
+                - $ref: "#/components/schemas/Problem"
+                - $ref: "#/components/schemas/ConstraintViolationProblem"
         "500":
           description: Internal Server error
           content:
@@ -95,25 +95,24 @@ paths:
   /{municipalityId}/reminders/{reminderId}:
     get:
       tags:
-        - Reminder
+      - Reminder
       summary: Returns a reminder by reminder-id
       operationId: getReminderByReminderId
       parameters:
-        - name: municipalityId
-          in: path
-          description: Municipality id
-          required: true
-          schema:
-            type: string
-          example: 2281
-        - name: reminderId
-          in: path
-          description: Reminder ID
-          required: true
-          schema:
-            type: string
-            minLength: 1
-          example: R-81471222-5798-11e9-ae24-57fa13b361e1
+      - name: municipalityId
+        in: path
+        description: Municipality id
+        required: true
+        schema:
+          type: string
+        example: 2281
+      - name: reminderId
+        in: path
+        description: Reminder ID
+        required: true
+        schema:
+          type: string
+        example: R-81471222-5798-11e9-ae24-57fa13b361e1
       responses:
         "200":
           description: Successful operation
@@ -127,8 +126,8 @@ paths:
             application/problem+json:
               schema:
                 oneOf:
-                  - $ref: "#/components/schemas/Problem"
-                  - $ref: "#/components/schemas/ConstraintViolationProblem"
+                - $ref: "#/components/schemas/Problem"
+                - $ref: "#/components/schemas/ConstraintViolationProblem"
         "404":
           description: Not Found
           content:
@@ -143,25 +142,24 @@ paths:
                 $ref: "#/components/schemas/Problem"
     delete:
       tags:
-        - Reminder
+      - Reminder
       summary: Deletes a reminder.
       operationId: deleteReminder
       parameters:
-        - name: municipalityId
-          in: path
-          description: Municipality id
-          required: true
-          schema:
-            type: string
-          example: 2281
-        - name: reminderId
-          in: path
-          description: Reminder ID
-          required: true
-          schema:
-            type: string
-            minLength: 1
-          example: R-81471222-5798-11e9-ae24-57fa13b361e1
+      - name: municipalityId
+        in: path
+        description: Municipality id
+        required: true
+        schema:
+          type: string
+        example: 2281
+      - name: reminderId
+        in: path
+        description: Reminder ID
+        required: true
+        schema:
+          type: string
+        example: R-81471222-5798-11e9-ae24-57fa13b361e1
       responses:
         "204":
           description: Successful operation
@@ -171,8 +169,8 @@ paths:
             application/problem+json:
               schema:
                 oneOf:
-                  - $ref: "#/components/schemas/Problem"
-                  - $ref: "#/components/schemas/ConstraintViolationProblem"
+                - $ref: "#/components/schemas/Problem"
+                - $ref: "#/components/schemas/ConstraintViolationProblem"
         "404":
           description: Not Found
           content:
@@ -187,25 +185,24 @@ paths:
                 $ref: "#/components/schemas/Problem"
     patch:
       tags:
-        - Reminder
+      - Reminder
       summary: Manage updates of a reminder.
       operationId: updateReminder
       parameters:
-        - name: municipalityId
-          in: path
-          description: Municipality id
-          required: true
-          schema:
-            type: string
-          example: 2281
-        - name: reminderId
-          in: path
-          description: Reminder ID
-          required: true
-          schema:
-            type: string
-            minLength: 1
-          example: R-81471222-5798-11e9-ae24-57fa13b361e1
+      - name: municipalityId
+        in: path
+        description: Municipality id
+        required: true
+        schema:
+          type: string
+        example: 2281
+      - name: reminderId
+        in: path
+        description: Reminder ID
+        required: true
+        schema:
+          type: string
+        example: R-81471222-5798-11e9-ae24-57fa13b361e1
       requestBody:
         content:
           application/json:
@@ -225,8 +222,8 @@ paths:
             application/problem+json:
               schema:
                 oneOf:
-                  - $ref: "#/components/schemas/Problem"
-                  - $ref: "#/components/schemas/ConstraintViolationProblem"
+                - $ref: "#/components/schemas/Problem"
+                - $ref: "#/components/schemas/ConstraintViolationProblem"
         "404":
           description: Not Found
           content:
@@ -242,24 +239,24 @@ paths:
   /{municipalityId}/reminders/parties/{partyId}:
     get:
       tags:
-        - Reminder
+      - Reminder
       summary: Returns all reminders for a person or an organization.
       operationId: getRemindersByPartyId
       parameters:
-        - name: municipalityId
-          in: path
-          description: Municipality id
-          required: true
-          schema:
-            type: string
-          example: 2281
-        - name: partyId
-          in: path
-          description: Party ID
-          required: true
-          schema:
-            type: string
-          example: 81471222-5798-11e9-ae24-57fa13b361e1
+      - name: municipalityId
+        in: path
+        description: Municipality id
+        required: true
+        schema:
+          type: string
+        example: 2281
+      - name: partyId
+        in: path
+        description: Party ID
+        required: true
+        schema:
+          type: string
+        example: 81471222-5798-11e9-ae24-57fa13b361e1
       responses:
         "200":
           description: Successful operation
@@ -275,8 +272,8 @@ paths:
             application/problem+json:
               schema:
                 oneOf:
-                  - $ref: "#/components/schemas/Problem"
-                  - $ref: "#/components/schemas/ConstraintViolationProblem"
+                - $ref: "#/components/schemas/Problem"
+                - $ref: "#/components/schemas/ConstraintViolationProblem"
         "404":
           description: Not Found
           content:
@@ -292,7 +289,7 @@ paths:
   /api-docs:
     get:
       tags:
-        - API
+      - API
       summary: OpenAPI
       operationId: getApiDocs
       responses:
@@ -314,182 +311,54 @@ components:
           type: string
         detail:
           type: string
-        status:
-          $ref: "#/components/schemas/StatusType"
         instance:
           type: string
           format: uri
         type:
           type: string
           format: uri
-        parameters:
-          type: object
-          additionalProperties: {}
-    StatusType:
-      type: object
-      properties:
-        reasonPhrase:
-          type: string
-        statusCode:
+        status:
           type: integer
           format: int32
     ConstraintViolationProblem:
       type: object
       properties:
-        cause:
-          $ref: "#/components/schemas/ThrowableProblem"
-        stackTrace:
-          type: array
-          items:
-            type: object
-            properties:
-              classLoaderName:
-                type: string
-              moduleName:
-                type: string
-              moduleVersion:
-                type: string
-              methodName:
-                type: string
-              fileName:
-                type: string
-              lineNumber:
-                type: integer
-                format: int32
-              className:
-                type: string
-              nativeMethod:
-                type: boolean
         type:
           type: string
           format: uri
         status:
-          $ref: "#/components/schemas/StatusType"
+          type: integer
+          format: int32
         violations:
           type: array
           items:
             $ref: "#/components/schemas/Violation"
         title:
           type: string
-        message:
-          type: string
+        causeAsProblem:
+          $ref: "#/components/schemas/ThrowableProblem"
         detail:
           type: string
         instance:
           type: string
           format: uri
-        parameters:
-          type: object
-          additionalProperties: {}
-        suppressed:
-          type: array
-          items:
-            type: object
-            properties:
-              stackTrace:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    classLoaderName:
-                      type: string
-                    moduleName:
-                      type: string
-                    moduleVersion:
-                      type: string
-                    methodName:
-                      type: string
-                    fileName:
-                      type: string
-                    lineNumber:
-                      type: integer
-                      format: int32
-                    className:
-                      type: string
-                    nativeMethod:
-                      type: boolean
-              message:
-                type: string
-              localizedMessage:
-                type: string
-        localizedMessage:
-          type: string
     ThrowableProblem:
       type: object
       properties:
-        cause: {}
-        stackTrace:
-          type: array
-          items:
-            type: object
-            properties:
-              classLoaderName:
-                type: string
-              moduleName:
-                type: string
-              moduleVersion:
-                type: string
-              methodName:
-                type: string
-              fileName:
-                type: string
-              lineNumber:
-                type: integer
-                format: int32
-              className:
-                type: string
-              nativeMethod:
-                type: boolean
-        message:
-          type: string
-        title:
-          type: string
-        detail:
-          type: string
-        status:
-          $ref: "#/components/schemas/StatusType"
-        instance:
-          type: string
-          format: uri
         type:
           type: string
           format: uri
-        parameters:
-          type: object
-          additionalProperties: {}
-        suppressed:
-          type: array
-          items:
-            type: object
-            properties:
-              stackTrace:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    classLoaderName:
-                      type: string
-                    moduleName:
-                      type: string
-                    moduleVersion:
-                      type: string
-                    methodName:
-                      type: string
-                    fileName:
-                      type: string
-                    lineNumber:
-                      type: integer
-                      format: int32
-                    className:
-                      type: string
-                    nativeMethod:
-                      type: boolean
-              message:
-                type: string
-              localizedMessage:
-                type: string
-        localizedMessage:
+        title:
           type: string
+        status:
+          type: integer
+          format: int32
+        detail:
+          type: string
+        instance:
+          type: string
+          format: uri
+        causeAsProblem: {}
     Violation:
       type: object
       properties:
@@ -505,47 +374,47 @@ components:
           type: string
           description: PartyId (e.g. a personId or an organizationId)
           examples:
-            - 81471222-5798-11e9-ae24-57fa13b361e2
+          - 81471222-5798-11e9-ae24-57fa13b361e2
         action:
           type: string
           description: What should be done
           examples:
-            - Renew application
+          - Renew application
           maxLength: 8192
           minLength: 0
         note:
           type: string
           description: Reminder note
           examples:
-            - A short note about the reminder
+          - A short note about the reminder
           maxLength: 2048
           minLength: 0
         caseId:
           type: string
           description: Id for the case
           examples:
-            - "12345"
+          - "12345"
           maxLength: 255
           minLength: 0
         caseType:
           type: string
           description: Type of the case
           examples:
-            - Byggärende
+          - Byggärende
           maxLength: 255
           minLength: 0
         caseLink:
           type: string
           description: Link to the case
           examples:
-            - http://test.sundsvall.se/case1337
+          - http://test.sundsvall.se/case1337
           maxLength: 512
           minLength: 0
         externalCaseId:
           type: string
           description: External id for the case
           examples:
-            - "2229"
+          - "2229"
           maxLength: 255
           minLength: 0
         reminderDate:
@@ -553,20 +422,20 @@ components:
           format: date
           description: Date for reminding
           examples:
-            - 2021-11-01
+          - 2021-11-01
         createdBy:
           type: string
           description: Identity (username or given name) of the individual that is
             creating the reminder post
           examples:
-            - Albert Einstein
+          - Albert Einstein
           maxLength: 255
           minLength: 0
       required:
-        - action
-        - createdBy
-        - partyId
-        - reminderDate
+      - action
+      - createdBy
+      - partyId
+      - reminderDate
     SendRemindersRequest:
       type: object
       description: Request model for sending reminders of a specified date
@@ -576,9 +445,9 @@ components:
           format: date
           description: Date for reminding
           examples:
-            - 2021-11-01
+          - 2021-11-01
       required:
-        - reminderDate
+      - reminderDate
     UpdateReminderRequest:
       type: object
       description: Reminder update request model
@@ -587,47 +456,47 @@ components:
           type: string
           description: PartyId (e.g. a personId or an organizationId)
           examples:
-            - 81471222-5798-11e9-ae24-57fa13b361e2
+          - 81471222-5798-11e9-ae24-57fa13b361e2
         action:
           type: string
           description: What should be done
           examples:
-            - Renew application
+          - Renew application
           maxLength: 8192
           minLength: 0
         note:
           type: string
           description: Reminder note
           examples:
-            - A short note about the reminder
+          - A short note about the reminder
           maxLength: 2048
           minLength: 0
         caseId:
           type: string
           description: Id for the case
           examples:
-            - "12345"
+          - "12345"
           maxLength: 255
           minLength: 0
         caseType:
           type: string
           description: Type of the case
           examples:
-            - Byggärende
+          - Byggärende
           maxLength: 255
           minLength: 0
         caseLink:
           type: string
           description: Link to the case
           examples:
-            - http://test.sundsvall.se/case1337
+          - http://test.sundsvall.se/case1337
           maxLength: 512
           minLength: 0
         externalCaseId:
           type: string
           description: External id for the case
           examples:
-            - "2229"
+          - "2229"
           maxLength: 255
           minLength: 0
         reminderDate:
@@ -635,17 +504,17 @@ components:
           format: date
           description: Date for reminding
           examples:
-            - 2021-11-01
+          - 2021-11-01
         modifiedBy:
           type: string
           description: Identity (username or given name) of the individual that is
             modifying the reminder post
           examples:
-            - Albert Einstein
+          - Albert Einstein
           maxLength: 255
           minLength: 0
       required:
-        - modifiedBy
+      - modifiedBy
     Reminder:
       type: object
       description: Reminder model
@@ -654,68 +523,68 @@ components:
           type: string
           description: Reminder ID
           examples:
-            - R-81471222-5798-11e9-ae24-57fa13b361e1
+          - R-81471222-5798-11e9-ae24-57fa13b361e1
         partyId:
           type: string
           description: Party ID (e.g. a personId or an organizationId)
           examples:
-            - 81471222-5798-11e9-ae24-57fa13b361e2
+          - 81471222-5798-11e9-ae24-57fa13b361e2
         action:
           type: string
           description: What should be done
           examples:
-            - Renew application
+          - Renew application
         note:
           type: string
           description: Reminder note
           examples:
-            - A short note about the reminder
+          - A short note about the reminder
         caseId:
           type: string
           description: Case ID
           examples:
-            - "12345"
+          - "12345"
         caseType:
           type: string
           description: Case Type
           examples:
-            - Byggärende
+          - Byggärende
         caseLink:
           type: string
           description: Link to the case
           examples:
-            - http://test.sundsvall.se/case12345
+          - http://test.sundsvall.se/case12345
         externalCaseId:
           type: string
           description: External Case ID
           examples:
-            - "2229"
+          - "2229"
         reminderDate:
           type: string
           format: date
           description: Date for reminding
           examples:
-            - 2021-11-01
+          - 2021-11-01
         created:
           type: string
           format: date-time
           description: Timestamp when reminder was created
           examples:
-            - 2021-10-15T07:43:13.225+02:00
+          - 2021-10-15T07:43:13.225+02:00
         createdBy:
           type: string
           description: Identity of the individual that created the reminder
           examples:
-            - Albert Einstein
+          - Albert Einstein
         modified:
           type: string
           format: date-time
           description: Timestamp when reminder was last modified
           examples:
-            - 2021-10-22T11:28:37.431+02:00
+          - 2021-10-22T11:28:37.431+02:00
         modifiedBy:
           type: string
           description: Identity of the individual that last modified the reminder
           examples:
-            - Albert Einstein
+          - Albert Einstein
   securitySchemes: {}

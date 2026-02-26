@@ -8,14 +8,13 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.List;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.dataformat.yaml.YAMLMapper;
+import tools.jackson.dataformat.yaml.YAMLMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
-import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.boot.resttestclient.TestRestTemplate;
 import org.springframework.core.io.Resource;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -23,8 +22,10 @@ import org.springframework.web.util.UriComponentsBuilder;
 import se.sundsvall.remindandinform.Application;
 
 import net.javacrumbs.jsonunit.core.Option;
+import org.springframework.boot.resttestclient.autoconfigure.AutoConfigureTestRestTemplate;
 
 @ActiveProfiles("it")
+@AutoConfigureTestRestTemplate
 @SpringBootTest(
 	webEnvironment = WebEnvironment.RANDOM_PORT,
 	classes = Application.class,
@@ -81,10 +82,6 @@ class OpenApiSpecificationIT {
 	 * @return a JSON string
 	 */
 	private String toJson(final String yaml) {
-		try {
-			return YAML_MAPPER.readTree(yaml).toString();
-		} catch (final JsonProcessingException e) {
-			throw new IllegalStateException("Unable to convert YAML to JSON", e);
-		}
+		return YAML_MAPPER.readTree(yaml).toString();
 	}
 }
