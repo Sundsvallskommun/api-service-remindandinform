@@ -25,7 +25,6 @@ spring:
     driver-class-name: org.mariadb.jdbc.Driver
   jpa:
     open-in-view: false
-    database-platform: org.hibernate.dialect.MariaDB106Dialect
     properties:
       jakarta:
         persistence:

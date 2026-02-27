@@ -4,14 +4,14 @@ import java.util.List;
 import java.util.UUID;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.zalando.problem.Problem;
+import se.sundsvall.dept44.problem.Problem;
 import se.sundsvall.remindandinform.api.model.Reminder;
 import se.sundsvall.remindandinform.api.model.ReminderRequest;
 import se.sundsvall.remindandinform.api.model.UpdateReminderRequest;
 import se.sundsvall.remindandinform.integration.db.ReminderRepository;
 
 import static java.lang.String.format;
-import static org.zalando.problem.Status.NOT_FOUND;
+import static org.springframework.http.HttpStatus.NOT_FOUND;
 import static se.sundsvall.remindandinform.service.mapper.ReminderMapper.toMergedReminderEntity;
 import static se.sundsvall.remindandinform.service.mapper.ReminderMapper.toReminder;
 import static se.sundsvall.remindandinform.service.mapper.ReminderMapper.toReminderEntity;

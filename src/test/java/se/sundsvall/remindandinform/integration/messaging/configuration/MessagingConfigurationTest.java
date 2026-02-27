@@ -3,6 +3,7 @@ package se.sundsvall.remindandinform.integration.messaging.configuration;
 import feign.codec.ErrorDecoder;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.InjectMocks;
@@ -10,6 +11,7 @@ import org.mockito.Mock;
 import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 import org.mockito.Spy;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.oauth2.client.registration.ClientRegistration;
@@ -24,6 +26,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static se.sundsvall.remindandinform.integration.messaging.configuration.MessagingConfiguration.CLIENT_ID;
 
+@ExtendWith(MockitoExtension.class)
 @SpringBootTest(classes = Application.class)
 @ActiveProfiles("junit")
 class MessagingConfigurationTest {

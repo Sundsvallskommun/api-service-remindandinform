@@ -11,8 +11,7 @@ import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.zalando.problem.DefaultProblem;
-import org.zalando.problem.Status;
+import se.sundsvall.dept44.problem.ThrowableProblem;
 import se.sundsvall.remindandinform.api.model.ReminderRequest;
 import se.sundsvall.remindandinform.api.model.UpdateReminderRequest;
 import se.sundsvall.remindandinform.integration.db.ReminderRepository;
@@ -25,6 +24,7 @@ import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 @ExtendWith(MockitoExtension.class)
 class ReminderServiceTest {
@@ -78,11 +78,11 @@ class ReminderServiceTest {
 
 		when(reminderRepositoryMock.findByPartyIdAndMunicipalityId(PARTY_ID, MUNICIPALITY_ID)).thenReturn(Collections.emptyList());
 
-		final var problem = assertThrows(DefaultProblem.class, () -> reminderService.findRemindersByPartyIdAndMunicipalityId(PARTY_ID, MUNICIPALITY_ID));
+		final var problem = assertThrows(ThrowableProblem.class, () -> reminderService.findRemindersByPartyIdAndMunicipalityId(PARTY_ID, MUNICIPALITY_ID));
 
-		assertThat(problem.getTitle()).isEqualTo(Status.NOT_FOUND.getReasonPhrase());
+		assertThat(problem.getTitle()).isEqualTo(NOT_FOUND.getReasonPhrase());
 		assertThat(problem.getDetail()).isEqualTo("No reminders found for partyId:'partyId' and municipalityId: 'municipalityId'");
-		assertThat(problem.getStatus()).isEqualTo(Status.NOT_FOUND);
+		assertThat(problem.getStatus()).isEqualTo(NOT_FOUND);
 
 		verify(reminderRepositoryMock).findByPartyIdAndMunicipalityId(PARTY_ID, MUNICIPALITY_ID);
 	}
@@ -169,11 +169,11 @@ class ReminderServiceTest {
 
 		when(reminderRepositoryMock.findByReminderIdAndMunicipalityId(REMINDER_ID, MUNICIPALITY_ID)).thenReturn(Optional.empty());
 
-		final var problem = assertThrows(DefaultProblem.class, () -> reminderService.deleteReminderByReminderIdAndMunicipalityId(REMINDER_ID, MUNICIPALITY_ID));
+		final var problem = assertThrows(ThrowableProblem.class, () -> reminderService.deleteReminderByReminderIdAndMunicipalityId(REMINDER_ID, MUNICIPALITY_ID));
 
-		assertThat(problem.getTitle()).isEqualTo(Status.NOT_FOUND.getReasonPhrase());
+		assertThat(problem.getTitle()).isEqualTo(NOT_FOUND.getReasonPhrase());
 		assertThat(problem.getDetail()).isEqualTo("No reminder found for reminderId:'reminderId'");
-		assertThat(problem.getStatus()).isEqualTo(Status.NOT_FOUND);
+		assertThat(problem.getStatus()).isEqualTo(NOT_FOUND);
 
 		verify(reminderRepositoryMock, times(0)).deleteByReminderId(REMINDER_ID);
 	}
