@@ -7,7 +7,7 @@ info:
     url: https://opensource.org/licenses/MIT
   version: "4.0"
 servers:
-- url: http://localhost:64891
+- url: http://localhost:55308
   description: Generated server url
 tags:
 - name: Reminder
@@ -112,6 +112,7 @@ paths:
         required: true
         schema:
           type: string
+          minLength: 1
         example: R-81471222-5798-11e9-ae24-57fa13b361e1
       responses:
         "200":
@@ -159,6 +160,7 @@ paths:
         required: true
         schema:
           type: string
+          minLength: 1
         example: R-81471222-5798-11e9-ae24-57fa13b361e1
       responses:
         "204":
@@ -202,6 +204,7 @@ paths:
         required: true
         schema:
           type: string
+          minLength: 1
         example: R-81471222-5798-11e9-ae24-57fa13b361e1
       requestBody:
         content:
