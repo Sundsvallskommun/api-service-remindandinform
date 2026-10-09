@@ -48,7 +48,7 @@ class RemindAndInformResourceTest {
 
 	private static final String CREATED_BY = "createdBy";
 
-	private static final String PARTY_ID = "81471222-5798-11e9-ae24-57fa13b361e";
+	private static final String PARTY_ID = "81471222-5798-11e9-ae24-57fa13b361ef";
 
 	private static final String MODIFIED_BY = "modifiedBy";
 
