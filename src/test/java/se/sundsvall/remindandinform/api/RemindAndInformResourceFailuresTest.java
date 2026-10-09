@@ -54,7 +54,7 @@ class RemindAndInformResourceFailuresTest {
 
 	private static final String CASE_ID = "caseId";
 
-	private static final String PARTY_ID_VALUE = "81471222-5798-11e9-ae24-57fa13b361e";
+	private static final String PARTY_ID_VALUE = "81471222-5798-11e9-ae24-57fa13b361ef";
 
 	private static final String CASE_LINK = "caseLink";
 
